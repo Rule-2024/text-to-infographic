@@ -1,0 +1,83 @@
+You are an expert in TypeScript, Node.js, Next.js App Router, React, Shadcn UI, Radix UI and Tailwind.
+Code Style and Structure
+- Write concise, technical TypeScript code with accurate examples.
+- Use functional and declarative programming patterns; avoid classes.
+- Prefer iteration and modularization over code duplication.
+- Use descriptive variable names with auxiliary verbs (e.g., isLoading, hasError).
+- Structure files: exported component, subcomponents, helpers, static content, types.
+Naming Conventions
+- Use lowercase with dashes for directories (e.g., components/auth-wizard).
+- Favor named exports for components.
+TypeScript Usage
+- Use TypeScript for all code; prefer interfaces over types.
+- Avoid enums; use maps instead.
+- Use functional components with TypeScript interfaces.
+Syntax and Formatting
+- Use the "function" keyword for pure functions.
+- Avoid unnecessary curly braces in conditionals; use concise syntax for simple statements.
+- Use declarative JSX.
+UI and Styling
+- Use Shadcn UI, Radix, and Tailwind for components and styling.
+- Implement responsive design with Tailwind CSS; use a mobile-first approach.
+Performance Optimization
+- Minimize 'use client', 'useEffect', and 'setState'; favor React Server Components (RSC).
+- Wrap client components in Suspense with fallback.
+- Use dynamic loading for non-critical components.
+- Optimize images: use WebP format, include size data, implement lazy loading.
+Key Conventions
+- Use 'nuqs' for URL search parameter state management.
+- Optimize Web Vitals (LCP, CLS, FID).
+- Limit 'use client': 
+  - Favor server components and Next.js SSR.
+  - Use only for Web API access in small components.
+  - Avoid for data fetching or state management.
+Error Handling
+- Use early returns for error conditions.
+- Implement guard clauses to handle preconditions and invalid states early.
+- Create user-friendly error messages for AI content generation failures.
+- Implement error boundaries using error.tsx and global-error.tsx files.
+SEO Optimization & AI Content
+- Metadata Management:
+  - Implement dynamic metadata using Next.js Metadata API
+  - Create reusable metadata patterns for AI-generated content
+  - Use template strings for combining fixed and dynamic content in titles
+- Content Structure:
+  - Use semantic HTML (article, section, nav)
+  - Maintain proper heading hierarchy (H1-H6)
+  - Create component templates for consistent AI content presentation
+- Sitemap & Indexing:
+  - Implement next-sitemap with dynamic configuration
+  - Add priority values based on content importance
+  - Schedule regular content refreshes to improve crawl frequency
+- Structured Data:
+  - Create utility functions for common Schema.org types (Article, FAQ, Product)
+  - Inject structured data based on content type
+  - Validate implementation with testing tools
+- AI Content Quality:
+  - Implement content filtering for automatically generated text
+  - Create content validation against SEO best practices
+  - Store content versions for performance comparison
+Data Management
+- Content Storage:
+  - Use appropriate database (Supabase, MongoDB, etc.) for AI content
+  - Implement content versioning and rollback capabilities
+  - Structure database for efficient content retrieval
+- Caching Strategy:
+  - Configure ISR (Incremental Static Regeneration) for frequency-appropriate updates
+  - Implement edge caching for global performance
+  - Use stale-while-revalidate pattern for dynamic content
+- Refresh Cycles:
+  - Identify content freshness requirements by type
+  - Implement automated content refreshes based on performance metrics
+  - Track and log content update performance
+Security
+- Store API keys in environment variables
+- Sanitize user inputs before sending to AI models
+- Implement rate limiting for generated content
+- Add content moderation for user-influenced AI generations
+Monitoring
+- Add Core Web Vitals RUM tracking
+- Implement simple analytics for content performance
+- Set up automated SEO checks (meta tags, links, etc.)
+- Track key engagement metrics by content type
+Follow Next.js docs for Data Fetching, Rendering, and Routing best practices.
