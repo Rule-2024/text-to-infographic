@@ -9,45 +9,45 @@ import type { TextInputForm as TextInputFormType } from '@/lib/types/infographic
 export function TextInputForm() {
   const router = useRouter();
   
-  // 表单状态
+  // Form state
   const [formData, setFormData] = useState<TextInputFormType>({
     content: '',
     mode: 'full',
     size: '16-9'
   });
   
-  // 提交状态
+  // Submission state
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
   
-  // 字数计数
+  // Character count
   const remainingChars = getRemainingCharCount(formData.content, MAX_TEXT_LENGTH);
   
-  // 处理文本变化
+  // Handle text change
   const handleTextChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
     const text = e.target.value;
     setFormData(prev => ({ ...prev, content: text }));
     setError(null);
   };
   
-  // 处理选择项变化
+  // Handle select change
   const handleSelectChange = (e: ChangeEvent<HTMLSelectElement>) => {
     const { name, value } = e.target;
     setFormData(prev => ({ ...prev, [name]: value }));
   };
   
-  // 处理表单提交
+  // Handle form submission
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     
-    // 验证表单
+    // Validate form
     if (!formData.content.trim()) {
-      setError('请输入文本内容');
+      setError('Please enter text content');
       return;
     }
     
     if (formData.content.length > MAX_TEXT_LENGTH) {
-      setError(`文本内容超过${MAX_TEXT_LENGTH}字限制`);
+      setError(`Text content exceeds ${MAX_TEXT_LENGTH} character limit`);
       return;
     }
     
@@ -55,7 +55,7 @@ export function TextInputForm() {
       setIsSubmitting(true);
       setError(null);
       
-      // 调用API
+      // Call API
       const response = await fetch('/api/infographic', {
         method: 'POST',
         headers: {
@@ -66,19 +66,19 @@ export function TextInputForm() {
       
       if (!response.ok) {
         const data = await response.json();
-        throw new Error(data.error || '提交失败');
+        throw new Error(data.error || 'Submission failed');
       }
       
       const data = await response.json();
       
-      // 重定向到处理页面或预览页面
+      // Redirect to processing or preview page
       if (data.status === 'completed') {
         router.push(`/preview?id=${data.id}`);
       } else {
         router.push(`/processing?id=${data.id}`);
       }
     } catch (err) {
-      setError(err instanceof Error ? err.message : '提交失败，请重试');
+      setError(err instanceof Error ? err.message : 'Submission failed, please try again');
     } finally {
       setIsSubmitting(false);
     }
@@ -91,7 +91,7 @@ export function TextInputForm() {
           htmlFor="content" 
           className="block text-sm font-medium"
         >
-          文本内容 (最多{MAX_TEXT_LENGTH}字)
+          Text Content (max {MAX_TEXT_LENGTH} characters)
         </label>
         <textarea
           id="content"
@@ -101,10 +101,10 @@ export function TextInputForm() {
           onChange={handleTextChange}
           disabled={isSubmitting}
           className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-          placeholder="在此输入文本，或上传文件..."
+          placeholder="Enter text here or upload a file..."
         />
         <p className={`text-xs ${remainingChars <= 0 ? 'text-destructive' : 'text-muted-foreground'}`}>
-          当前 {formData.content.length}/{MAX_TEXT_LENGTH} 字
+          Current {formData.content.length}/{MAX_TEXT_LENGTH} characters
         </p>
         {error && (
           <p className="text-sm text-destructive">{error}</p>
@@ -114,7 +114,7 @@ export function TextInputForm() {
       <div className="grid gap-6 md:grid-cols-2">
         <div className="space-y-2">
           <label htmlFor="mode" className="block text-sm font-medium">
-            处理模式
+            Processing Mode
           </label>
           <select 
             id="mode"
@@ -134,7 +134,7 @@ export function TextInputForm() {
         
         <div className="space-y-2">
           <label htmlFor="size" className="block text-sm font-medium">
-            尺寸选择
+            Size Selection
           </label>
           <select 
             id="size"
@@ -159,7 +159,7 @@ export function TextInputForm() {
           disabled={isSubmitting}
           className="rounded-lg bg-primary px-6 py-3 font-medium text-primary-foreground shadow-sm hover:bg-primary/90 focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-50"
         >
-          {isSubmitting ? '处理中...' : '生成信息图'}
+          {isSubmitting ? 'Processing...' : 'Generate Infographic'}
         </button>
       </div>
     </form>
