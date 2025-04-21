@@ -87,15 +87,23 @@
 ### 前端
 
 - **框架**：Next.js App Router + TypeScript
-- **UI组件**：Shadcn UI + Radix UI
+- **UI组件库**：Shadcn UI + Radix UI
 - **样式**：Tailwind CSS响应式设计
 - **SEO优化**：融入关键词的页面内容和元数据
+- **信息图预览**：使用iframe渲染DeepSeek生成的HTML内容，提供完整预览体验
 
 ### 后端
 
 - **数据库**：Supabase存储生成记录和使用统计
-- **AI处理**：预留API接口调用AI服务
-- **导出系统**：图像和PDF生成
+- **AI处理**：
+  - 预留API接口调用DeepSeek AI服务
+  - 接收DeepSeek生成的HTML格式信息图内容
+  - HTML内容净化，防止XSS攻击
+- **导出系统**：
+  - HTML到图像转换服务(PNG、JPG)
+  - HTML到PDF转换服务
+  - 支持服务端渲染高质量导出
+  - 也支持客户端紧急导出选项
 
 ## 限制和约束
 
@@ -106,6 +114,7 @@
 - 简单预设色彩方案，无自定义选项
 - 无模板选择功能
 - 无后期编辑功能
+- DeepSeek生成HTML格式信息图，系统负责转换为其他导出格式
 
 ## SEO优化重点
 

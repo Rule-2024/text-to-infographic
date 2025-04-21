@@ -133,19 +133,34 @@ text-to-infographic/
 - **提示词系统**：
   - 提示词模板化管理，存储于`lib/ai/prompt-templates/`
   - 针对不同处理模式和尺寸的专用提示词变体
+  - 优化提示词以使DeepSeek生成HTML/CSS格式的信息图
 - **API调用**：
   - 封装的API客户端服务
   - 请求排队和重试策略
   - 错误处理和回退机制
+  - 处理并保存DeepSeek返回的HTML内容
 
 #### 信息图渲染模块
 
-- **图像处理**：
-  - 服务端渲染信息图
-  - 客户端图像预览和优化
+- **HTML预览系统**：
+  - 使用安全的iframe渲染DeepSeek生成的HTML内容
+  - 实现HTML内容净化，防止XSS攻击
+  - 使用Content Security Policy限制iframe权限
+  - 创建响应式的iframe容器适应不同设备大小
+- **格式转换系统**：
+  - HTML到图像转换服务：
+    - 服务端集成Puppeteer/Playwright进行高质量渲染
+    - 支持不同分辨率和比例的截图生成
+  - HTML到PDF转换服务：
+    - 服务端PDF生成确保高质量输出
+    - 添加适当的元数据和页眉页脚
+  - 客户端备选方案：
+    - 使用html2canvas和jsPDF作为备选导出方案
+    - 在服务端渲染不可用时提供降级体验
 - **导出系统**：
   - 多格式支持（PNG、JPG、PDF）
   - 临时下载链接生成
+  - 生成文件名和元数据管理
 
 #### 数据存储模块
 
@@ -259,7 +274,14 @@ text-to-infographic/
     "lodash": "^4.17.21",
     "uuid": "^9.0.0",
     "nanoid": "^4.0.2",
-    "js-file-download": "^0.4.12"
+    "js-file-download": "^0.4.12",
+    
+    // HTML到图像/PDF转换
+    "puppeteer": "^21.0.0",
+    "html-to-image": "^1.11.0",
+    "jspdf": "^2.5.1",
+    "dompurify": "^3.0.5",
+    "html-to-text": "^9.0.5"
   },
   "devDependencies": {
     "@types/react": "^18.2.14",
