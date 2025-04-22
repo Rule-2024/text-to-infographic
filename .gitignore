@@ -38,3 +38,4 @@ DOCS/提示词（原始版）.txt
 DOCS/prompt-templates/横版提示词.txt
 DOCS/prompt-templates/A4横版提示词.txt
 
+.env.example

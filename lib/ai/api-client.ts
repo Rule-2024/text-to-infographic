@@ -11,26 +11,26 @@
  */
 export async function generateInfographicHtml(prompt: string): Promise<string> {
   try {
-    // 获取API密钥
+    // 获取 DeepSeek API 密钥和基础 URL
     const apiKey = process.env.AI_API_KEY;
-    const apiUrl = process.env.AI_API_URL;
+    const baseUrl = process.env.AI_API_URL || 'https://api.deepseek.com';
 
-    if (!apiKey || !apiUrl) {
-      throw new Error('API密钥或URL未配置');
-    }
+    if (!apiKey) throw new Error('AI_API_KEY 未配置');
 
-    // 调用AI服务API
-    const response = await fetch(apiUrl, {
+    const response = await fetch(`${baseUrl}/chat/completions`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
         'Authorization': `Bearer ${apiKey}`
       },
       body: JSON.stringify({
-        prompt: prompt,
-        max_tokens: 4000,  // 根据实际API调整
-        temperature: 0.7,  // 控制创造性，可调整
-        // 其他API特定参数
+        model: 'deepseek-chat',
+        messages: [
+          { role: 'system', content: 'You are a professional infographic generator.' },
+          { role: 'user', content: prompt }
+        ],
+        temperature: 0.7,
+        stream: false
       }),
     });
 
@@ -41,13 +41,10 @@ export async function generateInfographicHtml(prompt: string): Promise<string> {
 
     const data = await response.json();
     
-    // 根据实际API响应结构提取HTML内容
-    // 例如: const html = data.choices[0].message.content;
-    const html = data.choices?.[0]?.message?.content || '';
+    // 提取 HTML 内容
+    const html = data.choices?.[0]?.message?.content;
     
-    if (!html) {
-      throw new Error('AI返回的内容为空');
-    }
+    if (!html) throw new Error('DeepSeek 未返回 HTML');
     
     return html;
   } catch (error) {
