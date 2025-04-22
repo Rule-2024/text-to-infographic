@@ -1,26 +1,16 @@
 'use client';
 
-import { useEffect, useState } from 'react';
-import { useRouter, useSearchParams } from 'next/navigation';
-
-interface ProcessingStatus {
-  status: 'pending' | 'processing' | 'completed' | 'failed';
-  progress: number;
-  result?: string;
-}
+import { useSearchParams, useRouter } from 'next/navigation';
+import { useState, useEffect } from 'react';
+import Link from 'next/link';
 
 export default function ProcessingPage() {
-  const router = useRouter();
   const searchParams = useSearchParams();
+  const router = useRouter();
   const id = searchParams.get('id');
   
-  const [status, setStatus] = useState<ProcessingStatus>({
-    status: 'processing',
-    progress: 0
-  });
-  
-  // 是否已取消
-  const [isCanceled, setIsCanceled] = useState(false);
+  const [progress, setProgress] = useState(0);
+  const [error, setError] = useState<string | null>(null);
   
   useEffect(() => {
     if (!id) {
@@ -28,9 +18,10 @@ export default function ProcessingPage() {
       return;
     }
     
-    if (isCanceled) return;
+    // 设置轮询间隔
+    const pollInterval = 2000; // 2秒
+    let timeoutId: NodeJS.Timeout;
     
-    // 定义轮询状态的函数
     const checkStatus = async () => {
       try {
         const response = await fetch(`/api/infographic/${id}/status`);
@@ -40,63 +31,89 @@ export default function ProcessingPage() {
         }
         
         const data = await response.json();
-        setStatus(data);
         
-        // 如果处理已完成，重定向到预览页面
         if (data.status === 'completed') {
+          // 生成完成，跳转到预览页面
           router.push(`/preview?id=${id}`);
+          return;
         } else if (data.status === 'failed') {
-          router.push(`/create?error=生成失败，请重试`);
+          // 生成失败，显示错误
+          setError(data.error || '生成失败，请重试');
+          return;
         }
-      } catch (error) {
-        console.error('获取处理状态失败:', error);
+        
+        // 更新进度
+        setProgress(data.progress || 0);
+        
+        // 继续轮询
+        timeoutId = setTimeout(checkStatus, pollInterval);
+      } catch (err) {
+        setError('检查状态失败，请刷新页面重试');
       }
     };
     
-    // 立即检查一次
+    // 开始轮询
     checkStatus();
-    
-    // 设置定时轮询
-    const intervalId = setInterval(checkStatus, 2000);
     
     // 清理函数
     return () => {
-      clearInterval(intervalId);
+      if (timeoutId) clearTimeout(timeoutId);
     };
-  }, [id, router, isCanceled]);
+  }, [id, router]);
   
-  // 处理取消按钮点击
-  const handleCancel = () => {
-    setIsCanceled(true);
+  // 取消生成
+  const handleCancel = async () => {
     router.push('/create');
   };
   
+  // 发生错误时的显示
+  if (error) {
+    return (
+      <div className="flex h-screen items-center justify-center">
+        <div className="max-w-md rounded-lg border bg-card p-8 text-center shadow-sm">
+          <h2 className="mb-4 text-2xl font-bold text-destructive">生成失败</h2>
+          <p className="mb-6 text-muted-foreground">{error}</p>
+          <Link 
+            href="/create" 
+            className="rounded-lg bg-primary px-6 py-3 font-medium text-primary-foreground"
+          >
+            返回创建
+          </Link>
+        </div>
+      </div>
+    );
+  }
+  
   return (
-    <main className="flex min-h-screen flex-col items-center justify-center px-4 py-12">
-      <div className="mx-auto max-w-md text-center">
-        <h1 className="mb-8 text-2xl font-bold md:text-3xl">
-          正在生成您的信息图...
-        </h1>
+    <main className="flex h-screen items-center justify-center">
+      <div className="max-w-md rounded-lg border bg-card p-8 text-center shadow-sm">
+        <h1 className="mb-4 text-2xl font-bold">生成信息图中...</h1>
         
-        <div className="mb-8 space-y-4">
-          <div className="relative h-4 overflow-hidden rounded-full bg-secondary">
-            <div 
-              className="absolute left-0 top-0 h-4 rounded-full bg-primary transition-all duration-500"
-              style={{ width: `${status.progress}%` }}
-            />
+        <div className="mb-8">
+          <div className="mb-2 flex justify-between text-sm">
+            <span>进度</span>
+            <span>{progress}%</span>
           </div>
-          <p className="text-lg font-medium">{status.progress}%</p>
+          <div className="h-2 w-full rounded-full bg-gray-200">
+            <div 
+              className="h-full rounded-full bg-primary transition-all duration-300 ease-in-out" 
+              style={{ width: `${progress}%` }}
+            ></div>
+          </div>
         </div>
         
-        <p className="mb-8 text-center text-muted-foreground">
-          正在处理您的文本并设计信息图，这可能需要几秒钟...
+        <p className="mb-6 text-sm text-muted-foreground">
+          {progress < 30 && '正在分析文本内容...'}
+          {progress >= 30 && progress < 60 && '正在设计信息图布局...'}
+          {progress >= 60 && progress < 90 && '正在生成信息图...'}
+          {progress >= 90 && '即将完成，准备预览...'}
         </p>
         
         <button
           onClick={handleCancel}
-          className="w-full rounded-lg border border-destructive bg-destructive/10 px-4 py-2 text-sm font-medium text-destructive hover:bg-destructive/20"
+          className="rounded-lg border bg-card px-4 py-2 font-medium shadow-sm hover:bg-accent"
         >
-          取消生成
+          取消
         </button>
       </div>
     </main>

@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { checkGenerationStatus } from '@/services/ai/mock-service';
+import { checkGenerationStatus } from '@/services/ai';
 
 // GET /api/infographic/:id/status - 获取生成任务的状态
 export async function GET(

@@ -1,7 +1,6 @@
 import { NextResponse } from 'next/server';
-import { generateInfographic } from '@/services/ai/mock-service';
+import { generateInfographic } from '@/services/ai';
 import { MAX_TEXT_LENGTH } from '@/lib/constants/infographic';
-import { generateId } from '@/lib/utils';
 import { TextInputForm } from '@/lib/types/infographic';
 
 // POST /api/infographic - 创建新的信息图生成任务
@@ -33,17 +32,13 @@ export async function POST(request: Request) {
       size: body.size || '16-9'
     };
     
-    // 生成唯一ID
-    const generationId = generateId();
-    
-    // 调用AI服务（在MVP阶段，这是一个模拟服务）
-    const result = await generateInfographic(input);
+    // 调用信息图生成服务(根据环境变量自动选择真实服务或模拟服务)
+    const generationId = await generateInfographic(input);
     
     // 返回结果
     return NextResponse.json({
       id: generationId,
-      result,
-      status: 'completed'
+      status: 'processing'
     });
   } catch (error) {
     console.error('信息图生成失败:', error);
