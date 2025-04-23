@@ -32,6 +32,7 @@ export const metadata: Metadata = {
 }
 
 import { Faq } from '@/components/faq';
+import { Cta } from '@/components/cta';
 
 export default function HomePage() {
   return (
@@ -188,9 +189,8 @@ export default function HomePage() {
         {/* FAQ部分 - 对SEO非常有帮助 */}
         <Faq />
 
-        <p className="mt-12 text-sm text-muted-foreground">
-          Free to use, no login required
-        </p>
+        {/* CTA部分 */}
+        <Cta />
       </div>
     </main>
   )
