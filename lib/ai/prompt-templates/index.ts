@@ -1,6 +1,6 @@
 /**
- * 提示词模板索引文件
- * 统一导出所有提示词模板，方便统一引用
+ * Prompt template index file
+ * Export all prompt templates for unified reference
  */
 
 import { getLandscape16x9Prompt } from './landscape-16-9';
@@ -18,9 +18,9 @@ export {
 };
 
 /**
- * 根据尺寸标识符获取对应的提示词生成函数
- * @param size 尺寸标识: 'mobile', '16:9'
- * @returns 对应的提示词生成函数
+ * Get the prompt generation function based on size identifier
+ * @param size Size identifier: 'mobile', '16:9'
+ * @returns Corresponding prompt generation function
  */
 export function getPromptBySize(size: string): (content: string, mode: 'full' | 'summary') => string {
   switch (size.toLowerCase()) {
@@ -34,13 +34,13 @@ export function getPromptBySize(size: string): (content: string, mode: 'full' | 
       return getLandscape16x9Prompt;
     case 'a4':
     case 'a4-landscape':
-    case 'a4横版':
+    case 'a4-landscape-cn':
       return getA4LandscapePrompt;
     case 'portrait':
     case '9:16':
     case 'tiktok':
       return getPortrait9x16Prompt;
     default:
-      return getMobilePrompt; // 默认使用移动端提示词
+      return getMobilePrompt; // Default to mobile prompt
   }
-} 
+}

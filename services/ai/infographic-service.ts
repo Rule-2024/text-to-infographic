@@ -1,6 +1,6 @@
 /**
- * 信息图生成服务
- * 用于替代mock服务，实现真实AI调用
+ * Infographic Generation Service
+ * Used to replace mock service, implementing real AI calls
  */
 import { TextInputForm } from "@/lib/types/infographic";
 import { buildPrompt, processGeneratedHtml } from "@/lib/ai/prompt-builder";
@@ -11,8 +11,8 @@ interface GenerationResult {
   timestamp: number;
 }
 
-// 内存缓存，存储生成结果
-// 注意：实际生产环境应使用数据库或缓存服务
+// In-memory cache for storing generation results
+// Note: In a production environment, a database or caching service should be used
 const generationCache = new Map<string, GenerationResult>();
 const generationStatus = new Map<string, {
   status: 'pending' | 'processing' | 'completed' | 'failed';
@@ -21,85 +21,85 @@ const generationStatus = new Map<string, {
 }>();
 
 /**
- * 生成信息图
- * 
- * @param input 用户输入表单数据
- * @returns 生成任务ID
+ * Generate infographic
+ *
+ * @param input User input form data
+ * @returns Generation task ID
  */
 export async function generateInfographic(input: TextInputForm): Promise<string> {
-  // 生成唯一ID (使用uuid或nanoId)
+  // Generate unique ID (using uuid or nanoId)
   const generationId = crypto.randomUUID();
-  
-  // 设置初始状态
-  generationStatus.set(generationId, { 
-    status: 'pending', 
-    progress: 0 
+
+  // Set initial status
+  generationStatus.set(generationId, {
+    status: 'pending',
+    progress: 0
   });
-  
-  // 异步执行生成过程
+
+  // Execute generation process asynchronously
   (async () => {
     try {
-      generationStatus.set(generationId, { 
-        status: 'processing', 
-        progress: 10 
+      generationStatus.set(generationId, {
+        status: 'processing',
+        progress: 10
       });
-      
-      // 构建提示词
+
+      // Build prompt
       const prompt = buildPrompt(input);
-      
-      // 更新进度
-      generationStatus.set(generationId, { 
-        status: 'processing', 
-        progress: 30 
+
+      // Update progress
+      generationStatus.set(generationId, {
+        status: 'processing',
+        progress: 30
       });
-      
-      // 调用AI服务生成HTML
+
+      // Call AI service to generate HTML
       const html = await withRetry(
         () => generateInfographicHtml(prompt),
-        2, // 最多重试2次
-        2000 // 初始重试延迟2秒
+        2, // Maximum 2 retries
+        2000 // Initial retry delay 2 seconds
       );
-      
-      // 更新进度
-      generationStatus.set(generationId, { 
-        status: 'processing', 
-        progress: 80 
+
+      // Update progress
+      generationStatus.set(generationId, {
+        status: 'processing',
+        progress: 80
       });
-      
-      // 处理生成的HTML
+
+      // Process generated HTML
       const processedHtml = processGeneratedHtml(html);
-      
-      // 缓存结果
+
+      // Cache result
       generationCache.set(generationId, {
         html: processedHtml,
         timestamp: Date.now()
       });
-      
-      // 更新状态为完成
-      generationStatus.set(generationId, { 
-        status: 'completed', 
-        progress: 100 
+
+      // Update status to completed
+      generationStatus.set(generationId, {
+        status: 'completed',
+        progress: 100
       });
-      
+
     } catch (error) {
-      console.error('信息图生成失败:', error);
-      generationStatus.set(generationId, { 
-        status: 'failed', 
+      console.error('Infographic generation failed:', error);
+      generationStatus.set(generationId, {
+        status: 'failed',
         progress: 0,
-        error: error instanceof Error ? error.message : '未知错误'
+        error: error instanceof Error ? error.message : 'Unknown error'
       });
     }
   })();
-  
-  // 立即返回ID
+
+  // Return ID immediately
   return generationId;
 }
 
 /**
- * 检查生成状态
- * 
- * @param id 生成任务ID
- * @returns 任务状态和结果
+ * Check generation status
+ *
+ * @param id Generation task ID
+ * @returns Task status and result
  */
 export async function checkGenerationStatus(id: string): Promise<{
   status: 'pending' | 'processing' | 'completed' | 'failed';
@@ -107,40 +107,40 @@ export async function checkGenerationStatus(id: string): Promise<{
   result?: string;
   error?: string;
 }> {
-  // 获取状态
+  // Get status
   const status = generationStatus.get(id);
-  
+
   if (!status) {
     return {
       status: 'failed',
       progress: 0,
-      error: '找不到生成任务'
+      error: 'Generation task not found'
     };
   }
-  
-  // 如果已完成，返回结果
+
+  // If completed, return result
   if (status.status === 'completed') {
     const cached = generationCache.get(id);
-    
+
     if (!cached) {
       return {
         status: 'failed',
         progress: 0,
-        error: '结果已过期或丢失'
+        error: 'Result expired or lost'
       };
     }
-    
+
     return {
       status: 'completed',
       progress: 100,
       result: cached.html
     };
   }
-  
-  // 返回进行中的状态
+
+  // Return in-progress status
   return {
     status: status.status,
     progress: status.progress,
     error: status.error
   };
-} 
+}

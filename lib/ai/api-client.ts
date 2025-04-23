@@ -1,21 +1,21 @@
 /**
- * AI API客户端
- * 处理与AI服务的通信
+ * AI API Client
+ * Handle communication with AI services
  */
 
 /**
- * 调用AI服务生成信息图HTML
- * 
- * @param prompt 完整的提示词
- * @returns 生成的HTML内容
+ * Call AI service to generate infographic HTML
+ *
+ * @param prompt Complete prompt
+ * @returns Generated HTML content
  */
 export async function generateInfographicHtml(prompt: string): Promise<string> {
   try {
-    // 获取 DeepSeek API 密钥和基础 URL
+    // Get DeepSeek API key and base URL
     const apiKey = process.env.AI_API_KEY;
     const baseUrl = process.env.AI_API_URL || 'https://api.deepseek.com';
 
-    if (!apiKey) throw new Error('AI_API_KEY 未配置');
+    if (!apiKey) throw new Error('AI_API_KEY not configured');
 
     const response = await fetch(`${baseUrl}/chat/completions`, {
       method: 'POST',
@@ -36,44 +36,44 @@ export async function generateInfographicHtml(prompt: string): Promise<string> {
 
     if (!response.ok) {
       const errorData = await response.json().catch(() => ({}));
-      throw new Error(`API请求失败: ${response.status} ${JSON.stringify(errorData)}`);
+      throw new Error(`API request failed: ${response.status} ${JSON.stringify(errorData)}`);
     }
 
     const data = await response.json();
-    
-    // 提取 HTML 内容
+
+    // Extract HTML content
     const html = data.choices?.[0]?.message?.content;
-    
-    if (!html) throw new Error('DeepSeek 未返回 HTML');
-    
+
+    if (!html) throw new Error('DeepSeek did not return HTML');
+
     return html;
   } catch (error) {
-    console.error('调用AI服务失败:', error);
-    throw new Error(`生成信息图失败: ${error instanceof Error ? error.message : '未知错误'}`);
+    console.error('AI service call failed:', error);
+    throw new Error(`Infographic generation failed: ${error instanceof Error ? error.message : 'Unknown error'}`);
   }
 }
 
 /**
- * 重试逻辑的包装函数
- * 
- * @param fn 要执行的异步函数
- * @param retries 重试次数
- * @param delay 重试间隔(毫秒)
- * @returns 函数执行结果
+ * Wrapper function for retry logic
+ *
+ * @param fn Async function to execute
+ * @param retries Number of retries
+ * @param delay Retry interval (milliseconds)
+ * @returns Function execution result
  */
 export async function withRetry<T>(
-  fn: () => Promise<T>, 
-  retries = 3, 
+  fn: () => Promise<T>,
+  retries = 3,
   delay = 1000
 ): Promise<T> {
   try {
     return await fn();
   } catch (error) {
     if (retries <= 0) throw error;
-    
-    console.log(`操作失败，${delay}ms后重试，剩余重试次数: ${retries-1}`);
+
+    console.log(`Operation failed, retrying in ${delay}ms, remaining retries: ${retries-1}`);
     await new Promise(resolve => setTimeout(resolve, delay));
-    
-    return withRetry(fn, retries - 1, delay * 1.5); // 指数退避
+
+    return withRetry(fn, retries - 1, delay * 1.5); // Exponential backoff
   }
-} 
+}

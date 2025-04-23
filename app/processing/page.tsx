@@ -8,114 +8,114 @@ export default function ProcessingPage() {
   const searchParams = useSearchParams();
   const router = useRouter();
   const id = searchParams.get('id');
-  
+
   const [progress, setProgress] = useState(0);
   const [error, setError] = useState<string | null>(null);
-  
+
   useEffect(() => {
     if (!id) {
       router.push('/create');
       return;
     }
-    
-    // 设置轮询间隔
-    const pollInterval = 2000; // 2秒
+
+    // Set polling interval
+    const pollInterval = 2000; // 2 seconds
     let timeoutId: NodeJS.Timeout;
-    
+
     const checkStatus = async () => {
       try {
         const response = await fetch(`/api/infographic/${id}/status`);
-        
+
         if (!response.ok) {
-          throw new Error('获取状态失败');
+          throw new Error('Failed to fetch status');
         }
-        
+
         const data = await response.json();
-        
+
         if (data.status === 'completed') {
-          // 生成完成，跳转到预览页面
+          // Generation complete, redirect to preview page
           router.push(`/preview?id=${id}`);
           return;
         } else if (data.status === 'failed') {
-          // 生成失败，显示错误
-          setError(data.error || '生成失败，请重试');
+          // Generation failed, show error
+          setError(data.error || 'Generation failed, please try again');
           return;
         }
-        
-        // 更新进度
+
+        // Update progress
         setProgress(data.progress || 0);
-        
-        // 继续轮询
+
+        // Continue polling
         timeoutId = setTimeout(checkStatus, pollInterval);
       } catch (err) {
-        setError('检查状态失败，请刷新页面重试');
+        setError('Failed to check status, please refresh the page and try again');
       }
     };
-    
-    // 开始轮询
+
+    // Start polling
     checkStatus();
-    
-    // 清理函数
+
+    // Cleanup function
     return () => {
       if (timeoutId) clearTimeout(timeoutId);
     };
   }, [id, router]);
-  
-  // 取消生成
+
+  // Cancel generation
   const handleCancel = async () => {
     router.push('/create');
   };
-  
-  // 发生错误时的显示
+
+  // Display when error occurs
   if (error) {
     return (
       <div className="flex h-screen items-center justify-center">
         <div className="max-w-md rounded-lg border bg-card p-8 text-center shadow-sm">
-          <h2 className="mb-4 text-2xl font-bold text-destructive">生成失败</h2>
+          <h2 className="mb-4 text-2xl font-bold text-destructive">Generation Failed</h2>
           <p className="mb-6 text-muted-foreground">{error}</p>
-          <Link 
-            href="/create" 
+          <Link
+            href="/create"
             className="rounded-lg bg-primary px-6 py-3 font-medium text-primary-foreground"
           >
-            返回创建
+            Back to Create
           </Link>
         </div>
       </div>
     );
   }
-  
+
   return (
     <main className="flex h-screen items-center justify-center">
       <div className="max-w-md rounded-lg border bg-card p-8 text-center shadow-sm">
-        <h1 className="mb-4 text-2xl font-bold">生成信息图中...</h1>
-        
+        <h1 className="mb-4 text-2xl font-bold">Generating Infographic...</h1>
+
         <div className="mb-8">
           <div className="mb-2 flex justify-between text-sm">
-            <span>进度</span>
+            <span>Progress</span>
             <span>{progress}%</span>
           </div>
           <div className="h-2 w-full rounded-full bg-gray-200">
-            <div 
-              className="h-full rounded-full bg-primary transition-all duration-300 ease-in-out" 
+            <div
+              className="h-full rounded-full bg-primary transition-all duration-300 ease-in-out"
               style={{ width: `${progress}%` }}
             ></div>
           </div>
         </div>
-        
+
         <p className="mb-6 text-sm text-muted-foreground">
-          {progress < 30 && '正在分析文本内容...'}
-          {progress >= 30 && progress < 60 && '正在设计信息图布局...'}
-          {progress >= 60 && progress < 90 && '正在生成信息图...'}
-          {progress >= 90 && '即将完成，准备预览...'}
+          {progress < 30 && 'Analyzing text content...'}
+          {progress >= 30 && progress < 60 && 'Designing infographic layout...'}
+          {progress >= 60 && progress < 90 && 'Generating infographic...'}
+          {progress >= 90 && 'Almost done, preparing preview...'}
         </p>
-        
+
         <button
           onClick={handleCancel}
           className="rounded-lg border bg-card px-4 py-2 font-medium shadow-sm hover:bg-accent"
         >
-          取消
+          Cancel
         </button>
       </div>
     </main>
   );
-} 
+}

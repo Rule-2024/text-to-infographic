@@ -3,49 +3,49 @@ import { generateInfographic } from '@/services/ai';
 import { MAX_TEXT_LENGTH } from '@/lib/constants/infographic';
 import { TextInputForm } from '@/lib/types/infographic';
 
-// POST /api/infographic - 创建新的信息图生成任务
+// POST /api/infographic - Create a new infographic generation task
 export async function POST(request: Request) {
   try {
-    // 解析请求体
+    // Parse request body
     const body = await request.json();
-    
-    // 验证必要字段
+
+    // Validate required fields
     if (!body.content) {
       return NextResponse.json(
-        { error: '缺少文本内容' },
+        { error: 'Missing text content' },
         { status: 400 }
       );
     }
-    
-    // 验证文本长度
+
+    // Validate text length
     if (body.content.length > MAX_TEXT_LENGTH) {
       return NextResponse.json(
-        { error: `文本内容超过${MAX_TEXT_LENGTH}字限制` },
+        { error: `Text content exceeds ${MAX_TEXT_LENGTH} character limit` },
         { status: 400 }
       );
     }
-    
-    // 准备输入数据
+
+    // Prepare input data
     const input: TextInputForm = {
       content: body.content,
       mode: body.mode || 'full',
       size: body.size || '16-9'
     };
-    
-    // 调用信息图生成服务(根据环境变量自动选择真实服务或模拟服务)
+
+    // Call infographic generation service (automatically selects real or mock service based on environment variables)
     const generationId = await generateInfographic(input);
-    
-    // 返回结果
+
+    // Return result
     return NextResponse.json({
       id: generationId,
       status: 'processing'
     });
   } catch (error) {
-    console.error('信息图生成失败:', error);
-    
+    console.error('Infographic generation failed:', error);
+
     return NextResponse.json(
-      { error: '处理请求时出错' },
+      { error: 'Error processing request' },
       { status: 500 }
     );
   }
-} 
+}

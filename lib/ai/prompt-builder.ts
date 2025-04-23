@@ -1,38 +1,38 @@
 /**
- * 提示词构建器
- * 根据用户输入和选择构建适合的提示词
+ * Prompt Builder
+ * Build appropriate prompts based on user input and selections
  */
 
 import { TextInputForm } from "@/lib/types/infographic";
 import { getPromptBySize } from "./prompt-templates";
 
 /**
- * 构建提示词
- * 根据用户输入和设置构建适合的提示词
- * 
- * @param input 用户输入表单数据
- * @returns 构建好的提示词
+ * Build prompt
+ * Construct appropriate prompt based on user input and settings
+ *
+ * @param input User input form data
+ * @returns Constructed prompt
  */
 export function buildPrompt(input: TextInputForm): string {
-  // 获取匹配尺寸的提示词生成函数
+  // Get the prompt generator function matching the size
   const promptGenerator = getPromptBySize(input.size);
-  
-  // 生成提示词
+
+  // Generate the prompt
   const prompt = promptGenerator(input.content, input.mode);
-  
-  // 返回构建好的提示词
+
+  // Return the constructed prompt
   return prompt;
 }
 
 /**
- * 分析生成的HTML结果
- * 可以用于检查、清理或准备HTML结果
- * 
- * @param html 生成的HTML内容
- * @returns 处理后的HTML
+ * Analyze generated HTML result
+ * Can be used to check, clean, or prepare HTML results
+ *
+ * @param html Generated HTML content
+ * @returns Processed HTML
  */
 export function processGeneratedHtml(html: string): string {
-  // MVP阶段简单返回原始HTML
-  // 后续可以添加清理、验证或增强逻辑
+  // For MVP stage, simply return the original HTML
+  // Later can add cleaning, validation, or enhancement logic
   return html;
-} 
+}

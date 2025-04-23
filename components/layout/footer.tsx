@@ -2,7 +2,7 @@ export function Footer() {
   return (
     <footer className="border-t bg-background/80 backdrop-blur-sm">
       <div className="container px-6 py-8">
-        {/* 顶部区域与链接 */}
+        {/* Top area with links */}
         <div className="grid grid-cols-1 gap-8 md:grid-cols-3 mb-8">
           <div>
             <h3 className="text-lg font-semibold mb-4 gradient-heading">Text to Infographic</h3>
@@ -54,10 +54,10 @@ export function Footer() {
           </div>
         </div>
 
-        {/* 分隔线 */}
+        {/* Divider */}
         <div className="h-px w-full bg-gradient-to-r from-transparent via-border to-transparent my-6"></div>
 
-        {/* 底部版权信息 */}
+        {/* Bottom copyright info */}
         <div className="flex flex-col md:flex-row justify-between items-center">
           <p className="text-sm text-muted-foreground mb-4 md:mb-0">
             © 2024 Text to Infographic. All rights reserved.

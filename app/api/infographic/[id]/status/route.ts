@@ -1,31 +1,31 @@
 import { NextResponse } from 'next/server';
 import { checkGenerationStatus } from '@/services/ai';
 
-// GET /api/infographic/:id/status - 获取生成任务的状态
+// GET /api/infographic/:id/status - Get the status of a generation task
 export async function GET(
   request: Request,
   { params }: { params: { id: string } }
 ) {
   try {
     const id = params.id;
-    
+
     if (!id) {
       return NextResponse.json(
-        { error: '缺少生成任务ID' },
+        { error: 'Missing generation task ID' },
         { status: 400 }
       );
     }
-    
-    // 检查生成状态
+
+    // Check generation status
     const status = await checkGenerationStatus(id);
-    
+
     return NextResponse.json(status);
   } catch (error) {
-    console.error('获取生成状态失败:', error);
-    
+    console.error('Failed to get generation status:', error);
+
     return NextResponse.json(
-      { error: '处理请求时出错' },
+      { error: 'Error processing request' },
       { status: 500 }
     );
   }
-} 
+}
