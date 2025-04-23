@@ -31,6 +31,8 @@ export const metadata: Metadata = {
   },
 }
 
+import { Faq } from '@/components/faq';
+
 export default function HomePage() {
   return (
     <main className="flex min-h-screen flex-col items-center justify-center p-4 sm:p-8 md:p-24 bg-gradient-to-b from-background to-muted">
@@ -133,7 +135,7 @@ export default function HomePage() {
         </div>
 
         {/* 额外特点 */}
-        <div className="mt-24 mb-8 max-w-4xl">
+        <div className="mt-24 mb-0 max-w-4xl">
           <h2 className="text-3xl md:text-4xl font-bold mb-12 text-center gradient-heading">Why Choose Our Text to Infographic Tool?</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             <div className="glass-card p-7 card-shadow">
@@ -184,36 +186,7 @@ export default function HomePage() {
         </div>
 
         {/* FAQ部分 - 对SEO非常有帮助 */}
-        <div className="mt-16 max-w-4xl w-full">
-          <h2 className="text-2xl font-bold mb-8 text-center gradient-heading">Frequently Asked Questions</h2>
-
-          <div className="space-y-6">
-            <div className="glass-card p-6 card-shadow">
-              <h3 className="text-lg font-semibold mb-2">How does the text to infographic AI tool work?</h3>
-              <p className="text-muted-foreground">Our AI-powered tool analyzes your text, identifies key points and relationships, and automatically generates a visually appealing infographic that represents your content. The entire process takes just seconds.</p>
-            </div>
-
-            <div className="glass-card p-6 card-shadow">
-              <h3 className="text-lg font-semibold mb-2">Is this text to infographic converter really free?</h3>
-              <p className="text-muted-foreground">Yes, our text to infographic generator is completely free to use. There are no hidden fees, no credit card required, and no login needed to create and download your infographics.</p>
-            </div>
-
-            <div className="glass-card p-6 card-shadow">
-              <h3 className="text-lg font-semibold mb-2">What types of text can I convert to infographics?</h3>
-              <p className="text-muted-foreground">You can convert virtually any text up to 5000 characters, including articles, reports, essays, blog posts, research papers, and more. Our AI adapts to different content types to create appropriate infographic styles.</p>
-            </div>
-
-            <div className="glass-card p-6 card-shadow">
-              <h3 className="text-lg font-semibold mb-2">Can I customize the infographics generated from my text?</h3>
-              <p className="text-muted-foreground">While the current version focuses on automatic generation, you can choose different output sizes including 16:9 (for presentations), A4 landscape, A4 portrait, and mobile-friendly vertical formats. More customization options will be available in future updates.</p>
-            </div>
-
-            <div className="glass-card p-6 card-shadow">
-              <h3 className="text-lg font-semibold mb-2">How do I download my text-to-infographic conversion?</h3>
-              <p className="text-muted-foreground">After your infographic is generated, you'll see download options on the preview page. You can save your infographic in PNG, JPG, or PDF formats with just one click.</p>
-            </div>
-          </div>
-        </div>
+        <Faq />
 
         <p className="mt-12 text-sm text-muted-foreground">
           Free to use, no login required
