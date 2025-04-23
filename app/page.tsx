@@ -36,7 +36,7 @@ import { Cta } from '@/components/cta';
 
 export default function HomePage() {
   return (
-    <main className="flex min-h-screen flex-col items-center justify-center p-4 sm:p-8 md:p-24 bg-gradient-to-b from-background to-muted">
+    <main className="flex min-h-screen flex-col items-center justify-center p-4 sm:p-8 md:p-24 pb-12 bg-gradient-to-b from-background to-muted">
       {/* 背景装饰元素 */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <div className="absolute -top-40 -right-40 w-80 h-80 bg-primary/5 rounded-full blur-3xl"></div>
@@ -103,7 +103,7 @@ export default function HomePage() {
         </a>
 
         {/* 特点卡片 */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl mt-8">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl mt-8 mb-24">
           <div className="glass-card p-6 card-shadow">
             <div className="w-12 h-12 mb-4 rounded-full bg-primary/10 flex items-center justify-center">
               <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -136,7 +136,7 @@ export default function HomePage() {
         </div>
 
         {/* 额外特点 */}
-        <div className="mt-24 mb-24 max-w-4xl">
+        <div className="mt-0 mb-24 max-w-4xl">
           <h2 className="text-3xl md:text-4xl font-bold mb-12 text-center gradient-heading">Why Choose Our Text to Infographic Tool?</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             <div className="glass-card p-7 card-shadow">

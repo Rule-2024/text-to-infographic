@@ -2,10 +2,10 @@
 
 export function Footer() {
   return (
-    <footer className="border-t bg-background/80 backdrop-blur-sm">
+    <footer className="border-t border-border/50 bg-background/80 backdrop-blur-sm -mt-20">
       <div className="container px-6 py-8">
         {/* Top Logo & Brand Intro */}
-        <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-10 gap-8">
+        <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-8 gap-8">
           <div className="flex items-center gap-4">
             <div className="relative h-14 w-14">
               <img src="/images/logo.svg" alt="Text to Infographic Logo" className="object-contain h-full w-full" />

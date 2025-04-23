@@ -4,7 +4,7 @@ import Link from 'next/link';
 
 export function Cta() {
   return (
-    <div className="mt-24 mb-8 max-w-4xl w-full">
+    <div className="mt-0 mb-24 max-w-4xl w-full">
       <div className="glass-card p-10 card-shadow text-center">
         <h2 className="text-3xl md:text-4xl font-bold mb-4 gradient-heading">
           Ready to Create Your Infographic?
