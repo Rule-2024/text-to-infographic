@@ -23,11 +23,27 @@ export default function ExportOptionsPage() {
         </div>
 
         <h1 className="mb-6 text-4xl font-bold tracking-tight md:text-5xl gradient-heading">
-          Export Options
+          AI Infographic Export Options
         </h1>
-        <p className="mb-12 text-lg text-muted-foreground">
-          Download your infographics in multiple formats to suit your specific needs, whether for digital sharing, presentations, or printing.
+        <p className="mb-6 text-lg text-muted-foreground">
+          Download your AI-generated infographics in multiple formats to suit your specific needs, whether for digital sharing, presentations, or printing - all with our free text to infographic tool.
         </p>
+
+        {/* SEO关键词标签 */}
+        <div className="flex flex-wrap gap-3 mb-12">
+          <span className="bg-primary/20 text-primary font-medium text-sm px-4 py-1.5 rounded-full">
+            Multiple Export Formats
+          </span>
+          <span className="bg-secondary/20 text-secondary font-medium text-sm px-4 py-1.5 rounded-full">
+            Free Downloads
+          </span>
+          <span className="bg-purple-100 text-purple-600 font-medium text-sm px-4 py-1.5 rounded-full">
+            Custom Size Options
+          </span>
+          <span className="bg-blue-100 text-blue-600 font-medium text-sm px-4 py-1.5 rounded-full">
+            Easy Sharing
+          </span>
+        </div>
 
         {/* 导出选项详情 */}
         <div className="space-y-12 mb-16">
@@ -56,7 +72,7 @@ export default function ExportOptionsPage() {
                   Best for: Web & Digital Sharing
                 </div>
               </div>
-              
+
               <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-100 text-center">
                 <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-secondary/10 flex items-center justify-center">
                   <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8 text-secondary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -71,7 +87,7 @@ export default function ExportOptionsPage() {
                   Best for: Social Media & Email
                 </div>
               </div>
-              
+
               <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-100 text-center">
                 <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-purple-100 flex items-center justify-center">
                   <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8 text-purple-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -111,7 +127,7 @@ export default function ExportOptionsPage() {
                   </p>
                 </div>
               </div>
-              
+
               <div className="flex flex-col md:flex-row gap-4 items-center p-4 bg-green-50 rounded-lg">
                 <div className="w-full md:w-1/4 aspect-[1.414] bg-white rounded border border-green-200 flex items-center justify-center text-green-600 font-medium">
                   A4-L
@@ -123,7 +139,7 @@ export default function ExportOptionsPage() {
                   </p>
                 </div>
               </div>
-              
+
               <div className="flex flex-col md:flex-row gap-4 items-center p-4 bg-amber-50 rounded-lg">
                 <div className="w-full md:w-1/4 aspect-[0.7] bg-white rounded border border-amber-200 flex items-center justify-center text-amber-600 font-medium">
                   A4-P
@@ -135,7 +151,7 @@ export default function ExportOptionsPage() {
                   </p>
                 </div>
               </div>
-              
+
               <div className="flex flex-col md:flex-row gap-4 items-center p-4 bg-purple-50 rounded-lg">
                 <div className="w-full md:w-1/4 aspect-[0.5625] bg-white rounded border border-purple-200 flex items-center justify-center text-purple-600 font-medium">
                   750px
@@ -172,7 +188,7 @@ export default function ExportOptionsPage() {
                   Generate a shareable link that allows others to view your infographic online without downloading it. Perfect for quick sharing via email, messaging apps, or social media.
                 </p>
               </div>
-              
+
               <div className="bg-white p-4 rounded-lg shadow-sm border border-gray-100">
                 <h3 className="font-medium text-lg mb-2 flex items-center gap-2">
                   <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-green-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">

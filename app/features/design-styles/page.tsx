@@ -23,11 +23,27 @@ export default function DesignStylesPage() {
         </div>
 
         <h1 className="mb-6 text-4xl font-bold tracking-tight md:text-5xl gradient-heading">
-          Design Styles
+          AI Infographic Design Styles
         </h1>
-        <p className="mb-12 text-lg text-muted-foreground">
-          Our AI automatically applies professional design principles to create visually appealing infographics that effectively communicate your content.
+        <p className="mb-6 text-lg text-muted-foreground">
+          Our free AI text to infographic tool automatically applies professional design principles to create visually appealing infographics that effectively communicate your content.
         </p>
+
+        {/* SEO关键词标签 */}
+        <div className="flex flex-wrap gap-3 mb-12">
+          <span className="bg-primary/20 text-primary font-medium text-sm px-4 py-1.5 rounded-full">
+            Free Infographic Templates
+          </span>
+          <span className="bg-secondary/20 text-secondary font-medium text-sm px-4 py-1.5 rounded-full">
+            AI-Generated Designs
+          </span>
+          <span className="bg-purple-100 text-purple-600 font-medium text-sm px-4 py-1.5 rounded-full">
+            Professional Color Schemes
+          </span>
+          <span className="bg-blue-100 text-blue-600 font-medium text-sm px-4 py-1.5 rounded-full">
+            Automatic Layout Selection
+          </span>
+        </div>
 
         {/* 设计风格展示 */}
         <div className="space-y-12 mb-16">

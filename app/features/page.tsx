@@ -15,11 +15,33 @@ export default function FeaturesPage() {
       {/* 主要内容 */}
       <div className="relative z-10 w-full max-w-5xl">
         <h1 className="mb-8 text-4xl font-bold tracking-tight md:text-5xl text-center gradient-heading">
-          Features
+          AI Text to Infographic Features
         </h1>
         <p className="mb-12 text-lg text-center text-muted-foreground max-w-3xl mx-auto">
-          Discover the powerful features that make our Text to Infographic tool the best choice for creating stunning visual content from your text.
+          Discover the powerful features that make our free AI text to infographic tool the best choice for creating stunning visual content from your text, no login required.
         </p>
+
+        {/* SEO优化标签 */}
+        <div className="flex flex-wrap justify-center gap-3 mb-10">
+          <span className="bg-primary/20 text-primary font-medium text-sm px-4 py-1.5 rounded-full flex items-center">
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+            </svg>
+            Free Infographic Maker
+          </span>
+          <span className="bg-secondary/20 text-secondary font-medium text-sm px-4 py-1.5 rounded-full flex items-center">
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+            </svg>
+            AI-Powered Design
+          </span>
+          <span className="bg-purple-100 text-purple-600 font-medium text-sm px-4 py-1.5 rounded-full flex items-center">
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+            </svg>
+            No Login Required
+          </span>
+        </div>
 
         {/* 特性卡片网格 */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16">
