@@ -18,6 +18,9 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
+      <head>
+        <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+      </head>
       <body className={inter.className}>
         <div className="flex min-h-screen flex-col">
           <Header />
@@ -29,4 +32,4 @@ export default function RootLayout({
       </body>
     </html>
   )
-} 
+}

@@ -9,20 +9,22 @@ export function Header() {
       <div className="container flex h-16 items-center justify-between px-4">
         <div className="flex items-center gap-2">
           <Link href="/" className="flex items-center gap-2">
-            <Image src="/images/logo.png" alt="Logo" width={120} height={40} priority />
+            <div className="relative h-10 w-10">
+              <Image src="/images/logo.svg" alt="Logo" fill className="object-contain" priority />
+            </div>
             <span className="sr-only">Home</span>
           </Link>
         </div>
-        
+
         <nav className="flex items-center gap-4">
-          <Link 
-            href="/create" 
+          <Link
+            href="/create"
             className="text-sm font-medium hover:text-primary"
           >
             Create
           </Link>
-          <Link 
-            href="/auth/sign-in" 
+          <Link
+            href="/auth/sign-in"
             className="rounded-lg border border-input bg-background px-4 py-2 text-sm font-medium hover:bg-accent hover:text-accent-foreground"
           >
             Sign In
@@ -31,4 +33,4 @@ export function Header() {
       </div>
     </header>
   )
-} 
+}
