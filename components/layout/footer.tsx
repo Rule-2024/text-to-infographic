@@ -1,68 +1,38 @@
+'use client'
+
 export function Footer() {
   return (
     <footer className="border-t bg-background/80 backdrop-blur-sm">
       <div className="container px-6 py-8">
-        {/* Top area with links */}
-        <div className="grid grid-cols-1 gap-8 md:grid-cols-3 mb-8">
-          <div>
-            <h3 className="text-lg font-semibold mb-4 gradient-heading">Text to Infographic</h3>
-            <p className="text-sm text-muted-foreground max-w-xs">
-              Transform your text into stunning infographics with the power of AI. No design skills required.
-            </p>
+        {/* Top Logo & Brand Intro */}
+        <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-10 gap-8">
+          <div className="flex items-center gap-4">
+            <div className="relative h-14 w-14">
+              <img src="/images/logo.svg" alt="Text to Infographic Logo" className="object-contain h-full w-full" />
+            </div>
+            <div>
+              <h3 className="text-2xl font-bold gradient-heading mb-1">Text to Infographic</h3>
+              <p className="text-sm text-muted-foreground max-w-xs leading-relaxed">
+                Harness the power of AI to instantly turn your text into professional, beautiful infographics. No design skills required. 100% free.
+              </p>
+            </div>
           </div>
-
-          <div>
-            <h4 className="text-sm font-semibold mb-4 uppercase tracking-wider">Resources</h4>
-            <ul className="space-y-2">
-              <li>
-                <a href="#" className="text-sm text-muted-foreground hover:text-primary transition-colors duration-200">
-                  Documentation
-                </a>
-              </li>
-              <li>
-                <a href="#" className="text-sm text-muted-foreground hover:text-primary transition-colors duration-200">
-                  Examples
-                </a>
-              </li>
-              <li>
-                <a href="#" className="text-sm text-muted-foreground hover:text-primary transition-colors duration-200">
-                  Tutorials
-                </a>
-              </li>
-            </ul>
-          </div>
-
-          <div>
-            <h4 className="text-sm font-semibold mb-4 uppercase tracking-wider">Legal</h4>
-            <ul className="space-y-2">
-              <li>
-                <a href="#" className="text-sm text-muted-foreground hover:text-primary transition-colors duration-200">
-                  Privacy Policy
-                </a>
-              </li>
-              <li>
-                <a href="#" className="text-sm text-muted-foreground hover:text-primary transition-colors duration-200">
-                  Terms of Service
-                </a>
-              </li>
-              <li>
-                <a href="#" className="text-sm text-muted-foreground hover:text-primary transition-colors duration-200">
-                  About Us
-                </a>
-              </li>
-            </ul>
+          <div className="flex gap-6 mt-4 md:mt-0">
+            <a href="#" className="text-sm text-muted-foreground hover:text-primary transition-colors duration-200">Documentation</a>
+            <a href="#" className="text-sm text-muted-foreground hover:text-primary transition-colors duration-200">Examples</a>
+            <a href="#" className="text-sm text-muted-foreground hover:text-primary transition-colors duration-200">Tutorials</a>
+            <a href="#" className="text-sm text-muted-foreground hover:text-primary transition-colors duration-200">About Us</a>
           </div>
         </div>
 
         {/* Divider */}
         <div className="h-px w-full bg-gradient-to-r from-transparent via-border to-transparent my-6"></div>
 
-        {/* Bottom copyright info */}
-        <div className="flex flex-col md:flex-row justify-between items-center">
-          <p className="text-sm text-muted-foreground mb-4 md:mb-0">
-            © 2024 Text to Infographic. All rights reserved.
+        {/* Copyright & Social */}
+        <div className="flex flex-col md:flex-row justify-between items-center gap-4">
+          <p className="text-sm text-muted-foreground">
+            © 2025 Text to Infographic. All rights reserved.
           </p>
-
           <div className="flex space-x-4">
             <a href="#" aria-label="Twitter" className="text-muted-foreground hover:text-primary transition-colors duration-200">
               <svg className="h-5 w-5" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
