@@ -19,7 +19,9 @@ export default function RootLayout({
   return (
     <html lang="en">
       <head>
-        <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+        <link rel="icon" href="/images/tab-icon.svg" type="image/svg+xml" sizes="32x32" />
+        <link rel="icon" href="/images/android-chrome-512x512.png" type="image/png" sizes="512x512" />
+        <link rel="apple-touch-icon" href="/images/apple-icon.png" />
       </head>
       <body className={inter.className}>
         <div className="flex min-h-screen flex-col">
