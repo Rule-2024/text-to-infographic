@@ -16,10 +16,10 @@ export function Faq() {
   };
 
   return (
-    <div className="mt-24 mb-8 max-w-4xl w-full">
+    <div className="mt-0 mb-24 max-w-4xl w-full">
       {/* 添加一个顶部锚点，用于从其他页面跳转时定位 */}
-      <div id="faq-section-top" className="h-16"></div>
-      <div id="faq-section">
+      <div id="faq-section-top" className="h-0"></div>
+      <div id="faq-section" className="scroll-mt-16">
       <h2 className="text-3xl md:text-4xl font-bold mb-12 text-center gradient-heading">Frequently Asked Questions</h2>
 
       <div className="space-y-8">

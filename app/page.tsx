@@ -136,7 +136,7 @@ export default function HomePage() {
         </div>
 
         {/* 额外特点 */}
-        <div className="mt-24 mb-0 max-w-4xl">
+        <div className="mt-24 mb-24 max-w-4xl">
           <h2 className="text-3xl md:text-4xl font-bold mb-12 text-center gradient-heading">Why Choose Our Text to Infographic Tool?</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             <div className="glass-card p-7 card-shadow">

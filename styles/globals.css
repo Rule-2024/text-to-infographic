@@ -88,6 +88,14 @@
   body {
     @apply bg-background text-foreground;
   }
+  /* 添加滚动行为相关的样式 */
+  html {
+    scroll-behavior: smooth;
+  }
+  /* 添加滚动定位的偏移量，考虑到导航栏的高度 */
+  #faq-section {
+    scroll-margin-top: 5rem; /* 大约相当于导航栏高度加上一些额外空间 */
+  }
 }
 
 /* 自定义样式 */

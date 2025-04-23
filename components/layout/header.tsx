@@ -29,20 +29,12 @@ export function Header() {
       // 滚动到FAQ部分
       const faqSection = document.querySelector('#faq-section');
       if (faqSection) {
-        // 获取导航栏高度
-        const navHeight = document.querySelector('header')?.offsetHeight || 0;
-        // 获取FAQ区块的位置
-        const faqPosition = faqSection.getBoundingClientRect().top + window.pageYOffset;
-        // 滚动到FAQ区块，减去导航栏高度和额外的偏移量以确保标题完全可见
-        window.scrollTo({
-          top: faqPosition - navHeight - 20, // 额外的20px空间
-          behavior: 'smooth'
-        });
+        // 使用scrollIntoView和scroll-margin-top CSS属性来处理滚动
+        faqSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
       }
     } else {
       // 如果不在首页，跳转到首页并添加hash
-      // 使用一个稍微不同的hash值，以确保标题可见
-      window.location.href = '/#faq-section-top';
+      window.location.href = '/#faq-section';
     }
   };
 
