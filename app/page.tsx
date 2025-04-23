@@ -42,9 +42,46 @@ export default function HomePage() {
 
       {/* 主要内容 */}
       <div className="relative z-10 mb-12 text-center">
-        <h1 className="mb-6 text-4xl font-bold tracking-tight md:text-6xl gradient-heading">
+        <h1 className="mb-4 text-4xl font-bold tracking-tight md:text-6xl gradient-heading">
           Text to Infographic AI Generator
         </h1>
+
+        {/* 显眼的优势标语 */}
+        <div className="flex flex-nowrap justify-center gap-2 mb-6 max-w-4xl mx-auto overflow-x-auto md:overflow-visible py-2 px-1">
+          <div className="bg-gradient-to-r from-primary/90 to-primary text-white font-medium text-sm px-3 py-1.5 rounded-full shadow-md hover:shadow-lg transition-all duration-300 hover:scale-105 whitespace-nowrap">
+            <span className="flex items-center">
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-3.5 w-3.5 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+              </svg>
+              100% Free
+            </span>
+          </div>
+          <div className="bg-gradient-to-r from-secondary/90 to-secondary text-white font-medium text-sm px-3 py-1.5 rounded-full shadow-md hover:shadow-lg transition-all duration-300 hover:scale-105 whitespace-nowrap">
+            <span className="flex items-center">
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-3.5 w-3.5 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+              </svg>
+              No Login Required
+            </span>
+          </div>
+          <div className="bg-gradient-to-r from-purple-500 to-purple-600 text-white font-medium text-sm px-3 py-1.5 rounded-full shadow-md hover:shadow-lg transition-all duration-300 hover:scale-105 whitespace-nowrap">
+            <span className="flex items-center">
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-3.5 w-3.5 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+              </svg>
+              No Design Skills Needed
+            </span>
+          </div>
+          <div className="bg-gradient-to-r from-blue-500 to-blue-600 text-white font-medium text-sm px-3 py-1.5 rounded-full shadow-md hover:shadow-lg transition-all duration-300 hover:scale-105 whitespace-nowrap">
+            <span className="flex items-center">
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-3.5 w-3.5 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+              </svg>
+              Unlimited Generations
+            </span>
+          </div>
+        </div>
+
         <p className="max-w-2xl mx-auto text-xl text-muted-foreground">
           Instantly convert your text to beautiful infographics using AI,
           <span className="block mt-2">100% free with no design experience needed</span>
