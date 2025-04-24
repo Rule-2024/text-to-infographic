@@ -25,7 +25,7 @@ export const metadata: Metadata = {
 
 export default function CreatePage() {
   return (
-    <main className="flex min-h-screen flex-col items-center p-4 sm:p-8 md:p-16 bg-gradient-to-b from-background to-muted">
+    <main className="flex min-h-screen flex-col items-center p-4 sm:p-8 md:p-16 pb-24 bg-gradient-to-b from-background to-muted">
       {/* 背景装饰元素 */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <div className="absolute -top-40 -right-40 w-80 h-80 bg-primary/5 rounded-full blur-3xl"></div>
@@ -64,31 +64,32 @@ export default function CreatePage() {
           </span>
         </div>
 
+        {/* 安全和速度信息 */}
+        <div className="flex justify-center space-x-8 text-sm mb-6">
+          <div className="flex items-center bg-primary/10 text-primary px-4 py-2 rounded-full">
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+            </svg>
+            <span className="font-medium">Secure Processing</span>
+          </div>
+          <div className="flex items-center bg-secondary/10 text-secondary px-4 py-2 rounded-full">
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+            <span className="font-medium">Results in Seconds</span>
+          </div>
+        </div>
+
         {/* 表单卡片 */}
-        <div className="glass-card p-8 card-shadow mb-8 animate-fadeIn">
+        <div className="glass-card p-8 card-shadow mb-12 animate-fadeIn">
           <TextInputForm />
         </div>
 
         {/* 底部信息 */}
-        <div className="text-center space-y-4">
+        <div className="text-center mb-16">
           <p className="text-sm text-muted-foreground">
-            No login required. <span className="text-primary">Sign in</span> to unlock more features (coming soon)
+            No login required. <span className="text-primary font-medium hover:underline cursor-pointer">Sign in</span> to unlock more features (coming soon)
           </p>
-
-          <div className="flex justify-center space-x-8 text-sm text-muted-foreground">
-            <div className="flex items-center">
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
-              </svg>
-              <span>Secure Processing</span>
-            </div>
-            <div className="flex items-center">
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2 text-secondary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-              </svg>
-              <span>Results in Seconds</span>
-            </div>
-          </div>
         </div>
       </div>
     </main>
