@@ -136,7 +136,7 @@ export function TextInputForm() {
         )}
 
         <p className="text-xs text-muted-foreground">
-          Enter your text content to convert into an infographic. You can paste articles, reports, essays, or any text up to 5000 characters.
+          Enter your text content to convert into an infographic. You can paste articles, reports, essays, or any text up to 10000 characters.
         </p>
       </div>
 

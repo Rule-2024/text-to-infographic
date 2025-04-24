@@ -1,7 +1,7 @@
 import { SizeConfig } from "../types/infographic";
 
 // 最大文本长度限制
-export const MAX_TEXT_LENGTH = 5000;
+export const MAX_TEXT_LENGTH = 10000;
 
 // 处理模式选项
 export const PROCESSING_MODES = [
@@ -46,4 +46,4 @@ export const EXPORT_FORMATS = [
   { value: 'png', label: 'PNG', mimeType: 'image/png' },
   { value: 'jpg', label: 'JPG', mimeType: 'image/jpeg' },
   { value: 'pdf', label: 'PDF', mimeType: 'application/pdf' }
-]; 
+];
