@@ -3,6 +3,7 @@
 import { useSearchParams } from 'next/navigation';
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
+import { ExportDialog } from '@/components/export/export-dialog';
 
 export default function PreviewPage() {
   const searchParams = useSearchParams();
@@ -11,6 +12,7 @@ export default function PreviewPage() {
   const [htmlContent, setHtmlContent] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
+  const [showExportDialog, setShowExportDialog] = useState(false);
 
   // Get generation result
   useEffect(() => {
@@ -86,9 +88,9 @@ export default function PreviewPage() {
         <div className="space-x-4">
           <button
             className="rounded-lg border bg-card px-4 py-2 font-medium shadow-sm hover:bg-accent"
-            onClick={() => window.print()}
+            onClick={() => setShowExportDialog(true)}
           >
-            Export/Print
+            Export
           </button>
           <Link
             href="/create"
@@ -113,6 +115,14 @@ export default function PreviewPage() {
           </div>
         )}
       </div>
+
+      {/* 导出对话框 */}
+      {showExportDialog && htmlContent && (
+        <ExportDialog
+          htmlContent={htmlContent}
+          onClose={() => setShowExportDialog(false)}
+        />
+      )}
     </main>
   );
 }
