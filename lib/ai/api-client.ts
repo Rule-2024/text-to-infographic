@@ -13,24 +13,27 @@ export async function generateInfographicHtml(prompt: string): Promise<string> {
   try {
     // Get DeepSeek API key and base URL
     const apiKey = process.env.AI_API_KEY;
-    const baseUrl = process.env.AI_API_URL || 'https://api.deepseek.com';
+    const baseUrl = process.env.AI_API_URL || 'https://api.lkeap.cloud.tencent.com/v1/chat/completions';
+    const model = process.env.AI_API_MODEL || 'deepseek-v3-0324';
 
     if (!apiKey) throw new Error('AI_API_KEY not configured');
 
-    const response = await fetch(`${baseUrl}/chat/completions`, {
+    // 腾讯云DeepSeek API使用OpenAI兼容接口
+    const response = await fetch(baseUrl, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
         'Authorization': `Bearer ${apiKey}`
       },
       body: JSON.stringify({
-        model: 'deepseek-chat',
+        model: model, // 使用环境变量中配置的模型，默认为deepseek-v3-0324
         messages: [
           { role: 'system', content: 'You are a professional infographic generator.' },
           { role: 'user', content: prompt }
         ],
         temperature: 0.7,
-        stream: false
+        stream: false,
+        max_tokens: 8192 // 设置较大的输出长度以确保完整的信息图HTML
       }),
     });
 

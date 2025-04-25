@@ -34,7 +34,7 @@
 - [x] 添加导出为不同格式的功能
 
 ## 技术要点
-- 使用DeepSeek或其他AI服务生成HTML格式的信息图
+- 使用腾讯云DeepSeek-V3-0324或其他AI服务生成HTML格式的信息图
 - 根据用户选择的处理模式(全文/总结)和尺寸选择合适的提示词
 - 确保生成的信息图适合所选尺寸，且内容完整
 - 提供PNG、JPG和PDF格式导出
@@ -43,9 +43,16 @@
 
 ### 环境变量配置
 复制`.env.example`到`.env`，并配置以下变量：
-- `AI_API_KEY`: AI服务的API密钥
-- `AI_API_URL`: AI服务的API端点
+- `AI_API_KEY`: 腾讯云DeepSeek API的密钥（在腾讯云控制台创建）
+- `AI_API_URL`: API端点（默认为`https://api.lkeap.cloud.tencent.com/v1/chat/completions`）
+- `AI_API_MODEL`: 使用的模型（可选值：`deepseek-v3-0324`, `deepseek-v3`, `deepseek-r1`，默认为`deepseek-v3-0324`）
 - `USE_MOCK_SERVICE`: 设为`true`使用模拟服务(开发测试用)，设为`false`使用真实AI服务
+
+### 腾讯云DeepSeek API说明
+本项目使用腾讯云DeepSeek API生成信息图。DeepSeek-V3-0324模型具有以下特点：
+- 671B参数MoE模型，在编程与技术能力、上下文理解与长文本处理等方面优势突出
+- 支持128K上下文长度，最大输出16k
+- 通过OpenAI兼容接口调用，便于集成
 
 ### 开发环境运行
 ```bash
@@ -62,4 +69,4 @@ npm run dev
 3. 选择处理模式(全文/总结)和输出尺寸
 4. 点击"生成信息图"
 5. 等待处理完成，预览生成的信息图
-6. 导出为需要的格式 
+6. 导出为需要的格式
