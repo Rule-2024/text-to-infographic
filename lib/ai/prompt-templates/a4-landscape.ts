@@ -112,7 +112,7 @@ ${content}
 * HTML5、CSS3、Google Fonts、Font Awesome、CSS变量
 
 ### CSS关键变量与类
-```css
+\`\`\`css
 :root {
   /* 颜色变量 */
   --primary-color: #2c5aa0;
@@ -236,7 +236,7 @@ ${content}
   margin-right: 10px;
   flex-shrink: 0;
 }
-```
+\`\`\`
 
 ### 输出要求
 - 创建完整的HTML文档，包含内联CSS样式
