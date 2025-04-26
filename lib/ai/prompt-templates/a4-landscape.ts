@@ -1,6 +1,6 @@
 /**
  * A4横版提示词模板 (1123×794px)
- * 从DOCS/prompt-templates/A4横版提示词.txt提取和优化
+ * 从DOCS/prompt-templates/A4横版提示词-精简版.md提取和优化
  */
 
 /**
@@ -10,415 +10,241 @@
  * @returns 完整的提示词
  */
 export function getA4LandscapePrompt(content: string, mode: 'full' | 'summary'): string {
-  const processingMode = mode === 'full' 
-    ? '全文处理：保留原文完整逻辑结构和重要细节' 
+  const processingMode = mode === 'full'
+    ? '全文处理：保留原文完整逻辑结构和重要细节'
     : '总结处理：提炼核心观点和关键支撑点';
 
   return `
-# A4横版信息图设计师提示词
+# A4横版信息图设计师提示词（精简版）
 
 ## 核心定位
-创建一个视觉吸引力强、信息密度高、结构清晰的A4横版信息图，将文本内容转化为结构化的可视化展示，同时保持原始内容的完整性和语言特性。
+你是一位专精于A4横版信息图设计的视觉设计师，擅长将复杂文本内容转化为基于HTML的专业信息图。你的设计既符合现代审美又信息明确，特别注重视觉吸引力和信息传递效率。
 
-## 尺寸要求
-* 宽度: 297mm (约1123像素@96dpi)
-* 高度: 210mm (约794像素@96dpi)
-* 比例: A4横版
-* 安全边距: 四周15mm
-* 打印适配: 确保无出血和安全边距
+## 【核心尺寸要求】
+- **尺寸规格**：A4横版(Landscape)
+- **设计宽度**：1123px（对应A4横版的297mm，分辨率96dpi）
+- **设计高度**：794px（对应A4横版的210mm，分辨率96dpi）
+- **安全边距**：四周30px安全区域（不放置关键内容）
+- **视觉完整性**：单页设计，所有内容必须在一页内完整呈现
+- **内容适配**：必须确保所有内容完整呈现在指定尺寸内，不得截断或溢出
 
 ## 设计任务
-根据用户提供的原始文本内容，创建一个专业的A4横版信息图，包含以下元素：
-1. 醒目的主标题和副标题
-2. 结构清晰的内容布局
-3. 适当的图标、图表和视觉元素
-4. 协调的配色方案
-5. 清晰的排版层次
-6. 完全打印友好设计
+创建一个基于HTML的、符合A4横版尺寸(1123×794px)的高质量信息图，高效呈现以下内容并使用${processingMode}：
 
-### 视觉设计流程
-#### 1. 内容分析阶段
-* **信息结构分析**：识别文本的标题、子标题、段落、列表等结构
-* **关键点提取**：识别并突出核心观点和关键数据
-* **内容分组**：将相关内容组织到逻辑块中
-* **视觉层次规划**：为不同级别的信息确定视觉权重
-* **语言识别**：保持原始文本的语言特性（如中文、英文等）
-* **内容密度评估**：评估信息量与A4页面空间的匹配度
+${content}
 
-#### 2. 视觉设计实现阶段
-* **网格系统**：建立基于A4尺寸的网格系统作为设计基础
-* **色彩系统**：创建适合打印的CMYK兼容色彩系统
-* **排版系统**：为各级标题和正文建立一致的字体系统
-* **图标系统**：根据内容选择或创建主题一致的图标
-* **数据可视化**：将数字和统计数据转化为图表
-* **空间分配**：确保内容分布均衡，避免过度拥挤
-* **视觉重点**：创建明确的视觉焦点引导阅读路径
+## 信息图设计流程
 
-#### 3. 专业优化阶段
-* **视觉平衡**：调整元素位置和大小确保整体平衡
-* **一致性检查**：确保设计元素在整个信息图中保持一致
-* **信息层次**：通过大小、颜色、位置强化信息层次
-* **简洁性**：移除不必要的装饰，确保每个元素都有目的
-* **阅读流畅性**：确保观众可以轻松理解阅读路径
-* **打印兼容性**：确保所有元素在打印时清晰可见
-* **语言适配**：确保设计适应原始文本的语言特性
+### 1. 内容分析与规划
+- **语言识别与适配**：分析并适配文本语言，选择适合的字体和排版
+- **核心内容提取**：识别标题、副标题，提取3-7个关键信息点
+- **内容处理策略**：根据处理模式(全文/总结)调整内容深度
+- **A4空间优化策略**：
+  * 使用2-3列布局最大化利用横版A4空间
+  * 关键信息位于视觉热区(左上角和中心区域)
+  * 通过减小段落间距(4-6px)而非字体大小创造更多空间
+- **视觉叙事规划**：选择适合内容的叙事结构(线性/对比/分类/层级)
+- **布局规划**：根据内容特性选择布局模式，优化A4尺寸比例的布局
 
-### 视觉设计指南
+### 2. 视觉设计实现
+- **基础设置**：创建符合A4横版比例的HTML画布，设置30px安全边距
+- **色彩系统**：设计3-5种颜色的配色方案，确保打印兼容性
+- **打印友好色块**：使用低饱和度色块划分内容区域，确保黑白打印效果
+- **排版系统**：根据文档语言选择合适字体，优化字体大小与层次
+- **打印兼容内容驱动图标系统**：
+  * 智能分析文本内容，自动匹配最相关图标
+  * 选择线条粗细适中(1.5-2px)的图标确保打印清晰
+  * 图标尺寸不小于12×12px，确保打印后可辨识
+  * 关键图标添加浅色背景确保在灰度打印时突出
+  * 对文本中的关键词、动作词和核心概念提取并映射到对应图标
+  * 根据内容主题选择相应领域的专业图标
+  * 全面图标覆盖：每个段落、列表项和关键点都配置匹配图标
+  * 标题图标层级：主标题配大型主题图标，次级标题使用相关联的图标
 
-#### 色彩系统
-* **打印安全色**：使用CMYK安全色彩范围
-* **高对比度**：确保文本与背景之间有足够对比度（至少7:1）
-* **色彩一致性**：在整个信息图中保持一致的色彩方案
-* **黑色处理**：使用富黑色(rich black)而非纯黑色提高打印质量
-* **色彩限制**：主要使用3-4种核心颜色，避免过度使用色彩
-* **墨水覆盖率**：总墨水覆盖率控制在270%以下
+- **打印友好图标配色策略**：
+  * 图标可使用多种协调色彩，但确保黑白打印时仍有清晰区分度
+  * 关键图标使用高对比度颜色确保灰度打印时可辨识
+  * 相关内容的图标使用类似色系，建立视觉关联
+  * 重点内容图标添加简单边框或背景，增强打印时的识别度
+  * 确保所有图标在黑白打印时保持清晰可辨
 
-#### 排版系统
-* **字体选择**：使用打印友好的衬线或无衬线字体
-* **标题层级**：为不同级别的标题使用不同大小和字重
-* **行高控制**：正文行高设置为120-140%提高可读性
-* **对齐规则**：保持一致的文本对齐方式（推荐左对齐）
-* **字重变化**：通过字重变化创建视觉层次
-* **字体大小范围**：
-  - 主标题: 24-28pt
-  - 副标题: 18-20pt
-  - 小标题: 14-16pt
-  - 正文: 10-12pt
-  - 说明文字: 8-9pt
-  - 注释: 6-7pt
+- **打印优化图标风格保障**：
+  * 统一使用一套图标库，风格一致
+  * 避免过于复杂的图标，确保打印时不会模糊或细节丢失
+  * 保持图标大小比例关系一致
+  * 图标设计简洁明了，避免细小的装饰元素
+  * 同类信息使用相同图标系列，增强关联性识别
 
-#### 图表系统
-* **简化图表**：确保图表在打印时清晰可辨
-* **高对比度**：图表元素之间保持足够对比度
-* **标签清晰**：所有图表标签清晰易读
-* **图例明确**：提供清晰的图例说明数据含义
-* **避免细线**：线条粗细至少0.25pt以确保打印清晰
-* **填充模式**：使用打印友好的填充模式区分数据
+### 3. 专业优化与精调
+- **视觉平衡调整**：优化视觉权重分布，确保整体平衡
+- **内容密度优化**：控制内容密度，避免过度拥挤，同时最大化信息量
+- **视觉一致性检查**：统一颜色、字体和图标风格，确保视觉一致性
+- **语言和文化适应性**：尊重原文语言和文化特性
+- **打印可访问性优化**：确保对比度满足打印要求，测试黑白打印效果
+- **打印适配优化**：确保内容在打印时清晰可见，边界不被裁切
+- **内容完整性检查**：确保所有内容在A4尺寸内完整显示
 
-### 技术实现
+## 设计准则
 
-#### HTML基础结构
-<!DOCTYPE html>
-<html lang="zh">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>信息图 - A4横版</title>
-  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-  <style>
-    :root {
-      /* 色彩变量 - 打印友好色彩 */
-      --primary-color: #003366;
-      --secondary-color: #336699;
-      --accent-color: #990000;
-      --background-color: #ffffff;
-      --text-color: #333333;
-      --light-text: #666666;
-      --border-color: #cccccc;
-      
-      /* 间距变量 */
-      --spacing-xs: 4px;
-      --spacing-sm: 8px;
-      --spacing-md: 12px;
-      --spacing-lg: 16px;
-      --spacing-xl: 24px;
-      
-      /* 字体大小变量 */
-      --font-xxs: 6pt;
-      --font-xs: 8pt;
-      --font-sm: 10pt;
-      --font-md: 12pt;
-      --font-lg: 16pt;
-      --font-xl: 20pt;
-      --font-xxl: 24pt;
-      
-      /* 打印尺寸变量 */
-      --page-width: 297mm;
-      --page-height: 210mm;
-      --margin: 15mm;
-      --content-width: calc(var(--page-width) - 2 * var(--margin));
-      --content-height: calc(var(--page-height) - 2 * var(--margin));
-    }
-    
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-    
-    body {
-      font-family: 'Noto Sans SC', sans-serif;
-      color: var(--text-color);
-      background-color: #f0f0f0;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      min-height: 100vh;
-      padding: 20px;
-    }
-    
-    .infographic-container {
-      width: var(--page-width);
-      height: var(--page-height);
-      background-color: var(--background-color);
-      position: relative;
-      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-      padding: var(--margin);
-      overflow: hidden;
-    }
-    
-    /* 主标题样式 */
-    .main-title {
-      font-size: var(--font-xxl);
-      font-weight: 700;
-      color: var(--primary-color);
-      margin-bottom: var(--spacing-lg);
-      text-align: center;
-    }
-    
-    .subtitle {
-      font-size: var(--font-xl);
-      font-weight: 500;
-      color: var(--secondary-color);
-      margin-bottom: var(--spacing-xl);
-      text-align: center;
-    }
-    
-    /* 段落样式 */
-    p {
-      font-size: var(--font-sm);
-      line-height: 1.4;
-      margin-bottom: var(--spacing-md);
-      text-align: justify;
-    }
-    
-    /* 图标样式 */
-    .icon {
-      color: var(--secondary-color);
-      margin-right: var(--spacing-sm);
-    }
-    
-    /* 卡片样式 */
-    .card {
-      background-color: white;
-      border-radius: 2mm;
-      padding: var(--spacing-lg);
-      margin-bottom: var(--spacing-lg);
-      box-shadow: 0 1mm 2mm rgba(0, 0, 0, 0.05);
-      border: 0.25pt solid var(--border-color);
-    }
-    
-    .card-title {
-      font-size: var(--font-lg);
-      font-weight: 700;
-      color: var(--primary-color);
-      margin-bottom: var(--spacing-md);
-      display: flex;
-      align-items: center;
-    }
-    
-    /* 列表样式 */
-    ul, ol {
-      margin-left: var(--spacing-xl);
-      margin-bottom: var(--spacing-md);
-    }
-    
-    li {
-      font-size: var(--font-sm);
-      line-height: 1.4;
-      margin-bottom: var(--spacing-xs);
-    }
-    
-    /* 表格样式 */
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      margin-bottom: var(--spacing-lg);
-      page-break-inside: avoid;
-    }
-    
-    th, td {
-      border: 0.5pt solid var(--border-color);
-      padding: var(--spacing-sm);
-      text-align: left;
-      font-size: var(--font-sm);
-    }
-    
-    th {
-      background-color: var(--secondary-color);
-      color: white;
-      font-weight: 600;
-    }
-    
-    /* 引用样式 */
-    blockquote {
-      border-left: 1mm solid var(--accent-color);
-      padding-left: var(--spacing-md);
-      font-style: italic;
-      margin: var(--spacing-md) 0;
-      color: var(--light-text);
-    }
-    
-    /* 布局辅助类 */
-    .flex-container {
-      display: flex;
-    }
-    
-    .flex-column {
-      flex-direction: column;
-    }
-    
-    .flex-row {
-      flex-direction: row;
-    }
-    
-    .space-between {
-      justify-content: space-between;
-    }
-    
-    .align-center {
-      align-items: center;
-    }
-    
-    .grid-container {
-      display: grid;
-      grid-gap: var(--spacing-md);
-    }
-    
-    .two-column {
-      grid-template-columns: 1fr 1fr;
-    }
-    
-    .three-column {
-      grid-template-columns: 1fr 1fr 1fr;
-    }
-    
-    .four-column {
-      grid-template-columns: 1fr 1fr 1fr 1fr;
-    }
-    
-    /* 打印优化类 */
-    @media print {
-      @page {
-        size: A4 landscape;
-        margin: 0;
-      }
-      
-      body {
-        background: none;
-        padding: 0;
-        margin: 0;
-      }
-      
-      .infographic-container {
-        width: 297mm;
-        height: 210mm;
-        box-shadow: none;
-        page-break-after: always;
-        margin: 0;
-      }
-      
-      /* 避免元素被分割到不同页面 */
-      .card, .section, h1, h2, h3, table, figure {
-        page-break-inside: avoid;
-      }
-      
-      /* 确保链接URL在打印时可见 */
-      a[href]:after {
-        content: " (" attr(href) ")";
-        font-size: var(--font-xxs);
-        color: var(--light-text);
-      }
-    }
-    
-    /* 打印标记和出血 */
-    .crop-marks {
-      display: none;
-    }
-    
-    @media print {
-      .crop-marks {
-        display: block;
-        position: absolute;
-        width: 5mm;
-        height: 5mm;
-        border: none;
-      }
-      
-      .crop-top-left {
-        top: 5mm;
-        left: 5mm;
-        border-top: 0.25pt solid black;
-        border-left: 0.25pt solid black;
-      }
-      
-      .crop-top-right {
-        top: 5mm;
-        right: 5mm;
-        border-top: 0.25pt solid black;
-        border-right: 0.25pt solid black;
-      }
-      
-      .crop-bottom-left {
-        bottom: 5mm;
-        left: 5mm;
-        border-bottom: 0.25pt solid black;
-        border-left: 0.25pt solid black;
-      }
-      
-      .crop-bottom-right {
-        bottom: 5mm;
-        right: 5mm;
-        border-bottom: 0.25pt solid black;
-        border-right: 0.25pt solid black;
-      }
-    }
-  </style>
-</head>
-<body>
-  <div class="infographic-container">
-    <!-- 裁切标记，仅在打印时显示 -->
-    <div class="crop-marks crop-top-left"></div>
-    <div class="crop-marks crop-top-right"></div>
-    <div class="crop-marks crop-bottom-left"></div>
-    <div class="crop-marks crop-bottom-right"></div>
-    
-    <!-- 内容将在这里动态生成 -->
-  </div>
-</body>
-</html>
+### 打印友好视觉平衡原则
+* 遵循黄金比例布局，注意视觉权重分布
+* 为打印预留足够边距，避免内容裁切
 
-### 打印优化技术
-* **纸张规格适配**：精确匹配A4尺寸(297×210mm)
-* **打印安全区域**：核心内容保持在安全边距内
-* **出血处理**：为边缘延伸元素预留3mm出血
-* **高分辨率支持**：所有元素支持至少300dpi打印
-* **墨水管理**：控制总墨水覆盖率，避免过度饱和
-* **字体嵌入**：确保特殊字体在打印时正确显示
-* **打印标记**：选择性添加裁切标记便于专业打印
+### 信息层次原则
+* 创建3-4级清晰的信息层次结构，设计明确的视觉流程
+* 确保层次在打印后仍然清晰可见
 
-### CSS布局技术
-* **Flexbox布局**：灵活排列内容元素
-* **Grid布局**：创建结构化的多列内容区域
-* **打印媒体查询**：使用@media print优化打印表现
-* **页面断点控制**：使用page-break-inside避免元素被分割
-* **绝对单位**：使用mm和pt等打印单位确保一致性
-* **盒模型控制**：使用box-sizing确保精确尺寸计算
+### 视觉叙事原则
+* 使用符合内容主题的视觉隐喻，创建明确的阅读路径
+* 通过重复和变化创造视觉节奏
 
-## 输出格式
-请创建一个完整的HTML文档，包含内联CSS样式，确保以下特点：
+### 打印友好色彩原则
+* 选择在打印后仍能保持区分度的颜色
+* 确保黑白打印时不同元素仍有明显区别
 
-1. 严格符合A4横版尺寸(297×210mm)
-2. 所有内容在一页内完整显示，不出现截断、溢出或分页
-3. 包含清晰的标题和副标题，使用与输入文本相同的语言
-4. 内容结构良好，视觉层次分明
-5. 使用打印友好的色彩和排版系统
-6. 预留15mm安全边距，确保内容在打印时不被裁切
-7. 所有文本使用与原文相同的语言且清晰可读
-8. 同时兼顾屏幕显示与高质量打印输出
-9. 打印时包含必要的裁切标记和出血处理
-10. **全文模式特别注意**: 必须展示所有关键内容，通过优化布局和表达方式而非删减实质内容来适应空间限制
+### 语言适配原则
+* 保持与输入文本相同的语言，选择专门设计的字体
+* 尊重语言的自然阅读方向和排版规则
+
+## 技术实现与规范
+
+### 基础技术栈
+* HTML5、CSS3、Google Fonts、Font Awesome、CSS变量
+
+### CSS关键变量与类
+```css
+:root {
+  /* 颜色变量 */
+  --primary-color: #2c5aa0;
+  --secondary-color: #4b8b3b;
+  --accent-color: #d15226;
+  --neutral-color: #f5f7fa;
+  --text-primary: #333333;
+  --text-secondary: #666666;
+  --background-color: #ffffff;
+
+  /* 图标颜色RGB值 - 用于半透明效果 */
+  --primary-color-rgb: 44, 90, 160;
+  --secondary-color-rgb: 75, 139, 59;
+  --accent-color-rgb: 209, 82, 38;
+
+  /* 间距变量 */
+  --spacing-xs: 8px;
+  --spacing-sm: 16px;
+  --spacing-md: 24px;
+  --spacing-lg: 32px;
+  --spacing-xl: 48px;
+
+  /* 字体大小变量 */
+  --font-main-title: 36px;
+  --font-subtitle: 28px;
+  --font-section-title: 22px;
+  --font-body: 18px;
+  --font-note: 14px;
+
+  /* 安全边距 */
+  --safe-margin: 30px;
+}
+
+/* 打印友好图标系统 */
+/* 基础图标样式 */
+.icon {
+  color: var(--primary-color);
+  margin-right: var(--spacing-xs);
+}
+
+/* 图标包装器 */
+.icon-wrapper {
+  display: inline-flex;
+  align-items: center;
+  margin-right: var(--spacing-sm);
+}
+
+.icon-wrapper .icon {
+  margin-right: 8px;
+  font-size: 1.2em;
+}
+
+/* 打印优化图标尺寸 */
+.icon-large {
+  font-size: 1.8em;
+  line-height: 1;
+}
+
+.icon-medium {
+  font-size: 1.4em;
+  line-height: 1;
+}
+
+.icon-small {
+  font-size: 1em;
+  line-height: 1;
+}
+
+/* 打印友好图标颜色 */
+.icon-primary {
+  color: var(--primary-color);
+}
+
+.icon-secondary {
+  color: var(--secondary-color);
+}
+
+.icon-accent {
+  color: var(--accent-color);
+}
+
+/* 打印增强图标效果 */
+.icon-print-enhance {
+  border: 1.5px solid var(--primary-color);
+  border-radius: 50%;
+  width: 28px;
+  height: 28px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* 打印友好图标背景 */
+.icon-bg {
+  background-color: rgba(var(--primary-color-rgb), 0.1);
+  padding: 6px;
+  border-radius: 4px;
+}
+
+/* 图标与标题组合 */
+.title-with-icon {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: var(--spacing-sm);
+}
+
+/* 图标列表增强 */
+.icon-list {
+  list-style: none;
+}
+
+.icon-list li {
+  display: flex;
+  align-items: flex-start;
+  margin-bottom: 8px;
+}
+
+.icon-list li .icon {
+  margin-top: 3px;
+  margin-right: 10px;
+  flex-shrink: 0;
+}
+```
+
+### 输出要求
+- 创建完整的HTML文档，包含内联CSS样式
+- 确保严格符合A4横版(1123×794px)尺寸要求，无内容截断或溢出
+- 使用与输入文本相同的语言
+- 优化设计确保打印效果良好，特别是图标和颜色在打印时的表现
+- 内容结构清晰，视觉层次分明
+- 充分利用图标系统增强信息图的美观度和信息传达效率
 
 生成的HTML信息图应当专业、简洁、信息丰富，能够有效传达原文内容的核心价值，同时完全保持原文的语言和文化特性。必须确保所有内容在A4尺寸内完整呈现，如内容过多应智能精简而非截断。对于全文模式，必须保持原文的完整逻辑结构和所有关键信息点，仅在表达方式上进行优化。HTML代码必须可以直接在现代浏览器中正确显示，设计成打开即可高质量打印，不依赖外部文件。
 `;
