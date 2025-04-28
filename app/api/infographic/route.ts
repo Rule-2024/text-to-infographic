@@ -28,8 +28,8 @@ export async function POST(request: Request) {
     // Prepare input data
     const input: TextInputForm = {
       content: body.content,
-      mode: body.mode || 'full',
-      size: body.size || '16-9'
+      mode: body.mode || 'summary',
+      size: body.size || '750'
     };
 
     // Call infographic generation service (automatically selects real or mock service based on environment variables)

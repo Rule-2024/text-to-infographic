@@ -12,8 +12,8 @@ export function TextInputForm() {
   // Form state
   const [formData, setFormData] = useState<TextInputFormType>({
     content: '',
-    mode: 'full',
-    size: '16-9'
+    mode: 'summary',
+    size: '750'
   });
 
   // Submission state
