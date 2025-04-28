@@ -141,13 +141,26 @@ export default function PreviewPage() {
           </div>
         </div>
 
-        <div className="glass-card card-shadow overflow-hidden mb-8">
+        <div className="glass-card card-shadow overflow-auto mb-8">
           {htmlContent ? (
             <iframe
               srcDoc={htmlContent}
-              className="h-[80vh] w-full"
+              className="w-full"
+              style={{ minHeight: '80vh', height: 'auto' }}
               sandbox="allow-same-origin"
               title="Infographic Preview"
+              onLoad={(e) => {
+                // 动态调整iframe高度以适应内容
+                const iframe = e.currentTarget;
+                try {
+                  const height = iframe.contentWindow?.document.body.scrollHeight;
+                  if (height && height > 0) {
+                    iframe.style.height = `${height}px`;
+                  }
+                } catch (err) {
+                  console.error('Failed to adjust iframe height:', err);
+                }
+              }}
             />
           ) : (
             <div className="flex h-[80vh] w-full items-center justify-center">
