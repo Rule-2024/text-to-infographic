@@ -10,6 +10,7 @@ const inter = Inter({ subsets: ['latin'] })
 export const metadata: Metadata = {
   title: 'Text to Infographic | AI Text to Infographic',
   description: 'Convert your text into high-quality infographics using AI, free and no login required.',
+  metadataBase: new URL('https://texttoinfographic.online'),
 }
 
 export default function RootLayout({
