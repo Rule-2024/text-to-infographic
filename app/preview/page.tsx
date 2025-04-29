@@ -143,25 +143,99 @@ export default function PreviewPage() {
 
         <div className="glass-card card-shadow overflow-auto mb-8">
           {htmlContent ? (
-            <iframe
-              srcDoc={htmlContent}
-              className="w-full"
-              style={{ minHeight: '80vh', height: 'auto' }}
-              sandbox="allow-same-origin"
-              title="Infographic Preview"
-              onLoad={(e) => {
-                // 动态调整iframe高度以适应内容
-                const iframe = e.currentTarget;
-                try {
-                  const height = iframe.contentWindow?.document.body.scrollHeight;
-                  if (height && height > 0) {
-                    iframe.style.height = `${height}px`;
+            <div className="relative">
+              <iframe
+                ref={(iframe) => {
+                  if (iframe) {
+                    // 设置初始高度
+                    iframe.style.height = '80vh';
+
+                    // 创建一个ResizeObserver来监视iframe内容变化
+                    const resizeObserver = new ResizeObserver(() => {
+                      try {
+                        if (iframe.contentWindow && iframe.contentDocument) {
+                          // 获取内容实际高度
+                          const docHeight = Math.max(
+                            iframe.contentDocument.body.scrollHeight,
+                            iframe.contentDocument.documentElement.scrollHeight,
+                            iframe.contentDocument.body.offsetHeight,
+                            iframe.contentDocument.documentElement.offsetHeight
+                          );
+
+                          // 设置iframe高度，确保完整显示内容
+                          if (docHeight > 0) {
+                            iframe.style.height = `${docHeight + 20}px`; // 添加一点额外空间
+                          }
+                        }
+                      } catch (err) {
+                        console.error('Failed to adjust iframe height:', err);
+                      }
+                    });
+
+                    // 监视iframe加载完成事件
+                    iframe.onload = () => {
+                      try {
+                        if (iframe.contentDocument && iframe.contentDocument.body) {
+                          // 开始观察iframe内容变化
+                          resizeObserver.observe(iframe.contentDocument.body);
+
+                          // 立即调整高度
+                          const docHeight = Math.max(
+                            iframe.contentDocument.body.scrollHeight,
+                            iframe.contentDocument.documentElement.scrollHeight,
+                            iframe.contentDocument.body.offsetHeight,
+                            iframe.contentDocument.documentElement.offsetHeight
+                          );
+
+                          if (docHeight > 0) {
+                            iframe.style.height = `${docHeight + 20}px`;
+                          }
+
+                          // 添加样式以确保内容完全可见
+                          const style = document.createElement('style');
+                          style.textContent = `
+                            body {
+                              margin: 0;
+                              padding: 0;
+                              overflow: visible !important;
+                            }
+                            * {
+                              max-width: 100% !important;
+                            }
+                          `;
+                          iframe.contentDocument.head.appendChild(style);
+                        }
+                      } catch (err) {
+                        console.error('Failed to setup iframe:', err);
+                      }
+                    };
                   }
-                } catch (err) {
-                  console.error('Failed to adjust iframe height:', err);
-                }
-              }}
-            />
+                }}
+                srcDoc={htmlContent}
+                className="w-full"
+                style={{ border: 'none' }}
+                sandbox="allow-same-origin"
+                title="Infographic Preview"
+              />
+              <div className="absolute bottom-4 right-4 flex gap-2">
+                <button
+                  onClick={() => {
+                    // 创建全屏预览
+                    const win = window.open('', '_blank');
+                    if (win) {
+                      win.document.write(htmlContent);
+                      win.document.close();
+                    }
+                  }}
+                  className="p-2 bg-white/80 rounded-full shadow-md hover:bg-white transition-colors"
+                  title="Open in new window"
+                >
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                  </svg>
+                </button>
+              </div>
+            </div>
           ) : (
             <div className="flex h-[80vh] w-full items-center justify-center">
               <p className="text-xl text-muted-foreground">No content to preview</p>

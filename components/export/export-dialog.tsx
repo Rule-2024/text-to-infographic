@@ -22,27 +22,52 @@ export function ExportDialog({ htmlContent, onClose }: ExportDialogProps) {
       setError(null);
       setProgress(10);
 
-      // Simulate progress updates
-      const progressInterval = setInterval(() => {
-        setProgress(prev => {
-          const newProgress = prev + 10;
-          return newProgress < 90 ? newProgress : prev;
-        });
-      }, 500);
+      // 创建真实的进度更新函数
+      let progressTimeout: NodeJS.Timeout;
 
-      // Export the infographic
+      const updateProgress = (value: number) => {
+        setProgress(value);
+        // 如果进度停滞，自动小幅增加以提供反馈
+        if (value < 90) {
+          progressTimeout = setTimeout(() => {
+            setProgress(prev => Math.min(prev + 2, 90));
+          }, 1000);
+        }
+      };
+
+      // 初始进度
+      updateProgress(10);
+
+      // 导出前显示提示
+      const exportStartTime = Date.now();
+
+      // 根据格式导出信息图
       await exportInfographic(htmlContent, format, filename);
 
-      // Clear interval and set progress to 100%
-      clearInterval(progressInterval);
+      // 计算实际导出时间
+      const exportDuration = Date.now() - exportStartTime;
+
+      // 清除超时
+      if (progressTimeout) clearTimeout(progressTimeout);
+
+      // 设置进度为100%
       setProgress(100);
 
-      // Close dialog after a short delay
-      setTimeout(() => {
-        onClose();
-      }, 1000);
+      // 如果导出非常快，添加短暂延迟以显示完成状态
+      const minDisplayTime = 800; // 最小显示时间（毫秒）
+      if (exportDuration < minDisplayTime) {
+        await new Promise(resolve => setTimeout(resolve, minDisplayTime - exportDuration));
+      }
+
+      // 关闭对话框
+      onClose();
     } catch (err) {
-      setError('Export failed. Please try again.');
+      // 清除任何进行中的超时
+      setProgress(0);
+
+      // 显示详细错误信息
+      const errorMessage = err instanceof Error ? err.message : 'Unknown error occurred';
+      setError(`Export failed: ${errorMessage}. Please try again.`);
       console.error('Export error:', err);
     } finally {
       setIsExporting(false);
