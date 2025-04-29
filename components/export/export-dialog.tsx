@@ -23,7 +23,7 @@ export function ExportDialog({ htmlContent, onClose }: ExportDialogProps) {
       setProgress(10);
 
       // 创建真实的进度更新函数
-      let progressTimeout: NodeJS.Timeout;
+      let progressTimeout: NodeJS.Timeout | undefined;
 
       const updateProgress = (value: number) => {
         setProgress(value);
