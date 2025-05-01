@@ -2,10 +2,10 @@
 
 export function Footer() {
   return (
-    <footer className="border-t border-border/50 bg-background/80 backdrop-blur-sm -mt-20">
+    <footer className="border-t bg-background/80 backdrop-blur-sm">
       <div className="container px-6 py-8">
-        {/* Top Logo & Brand Intro */}
-        <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-8 gap-8">
+        {/* 顶部Logo与品牌介绍 */}
+        <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-10 gap-8">
           <div className="flex items-center gap-4">
             <div className="relative h-14 w-14">
               <img src="/images/logo.svg" alt="Text to Infographic Logo" className="object-contain h-full w-full" />
@@ -13,7 +13,7 @@ export function Footer() {
             <div>
               <h3 className="text-2xl font-bold gradient-heading mb-1">Text to Infographic</h3>
               <p className="text-sm text-muted-foreground max-w-xs leading-relaxed">
-                Harness the power of AI to instantly turn your text into professional, beautiful infographics. No design skills required. 100% free.
+                利用AI的力量，将您的文本一键转化为专业美观的信息图。无需设计经验，100%免费。
               </p>
             </div>
           </div>
@@ -25,10 +25,10 @@ export function Footer() {
           </div>
         </div>
 
-        {/* Divider */}
+        {/* 分割线 */}
         <div className="h-px w-full bg-gradient-to-r from-transparent via-border to-transparent my-6"></div>
 
-        {/* Copyright & Social */}
+        {/* 底部版权与社交媒体 */}
         <div className="flex flex-col md:flex-row justify-between items-center gap-4">
           <p className="text-sm text-muted-foreground">
             © 2025 Text to Infographic. All rights reserved.
