@@ -24,6 +24,19 @@ export default function RootLayout({
         <link rel="icon" href="/images/tab-icon.svg" type="image/svg+xml" sizes="32x32" />
         <link rel="icon" href="/images/android-chrome-512x512.png" type="image/png" sizes="512x512" />
         <link rel="apple-touch-icon" href="/images/apple-icon.png" />
+        
+        {/* Google Analytics */}
+        <script async src="https://www.googletagmanager.com/gtag/js?id=G-FR53PF6BGP"></script>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              window.dataLayer = window.dataLayer || [];
+              function gtag(){dataLayer.push(arguments);}
+              gtag('js', new Date());
+              gtag('config', 'G-FR53PF6BGP');
+            `
+          }}
+        />
       </head>
       <body className={inter.className}>
         <div className="flex min-h-screen flex-col">
