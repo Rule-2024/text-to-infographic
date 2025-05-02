@@ -13,7 +13,7 @@ export function Footer() {
             <div>
               <h3 className="text-2xl font-bold gradient-heading mb-1">Text to Infographic</h3>
               <p className="text-sm text-muted-foreground max-w-xs leading-relaxed">
-                利用AI的力量，将您的文本一键转化为专业美观的信息图。无需设计经验，100%免费。
+                Harness the power of AI to transform your text into professional infographics with one click. No design experience needed, 100% free.
               </p>
             </div>
           </div>
