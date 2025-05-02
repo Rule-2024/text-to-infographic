@@ -165,8 +165,8 @@ ${htmlTemplate}
 * **链接目标**：链接必须指向https://texttoinfographic.online网站
 * **内容区域调整**：内容区域（包括标题）必须从推广链接下方开始，与推广链接保持至少30px的垂直间距，确保不会重叠
 
-## 防止重叠的CSS样式
-```css
+## 防止重叠的CSS样式示例
+
 /* 推广链接样式 - 确保始终位于最上层且不会与标题重叠 */
 .promo-link {
   position: absolute;
@@ -201,7 +201,6 @@ ${htmlTemplate}
 .content-area h3:first-child {
   margin-top: 20px; /* 为顶部标题添加额外边距 */
 }
-```
 
 请基于以上模板和规范，创建一个完整的HTML信息图，确保内容完整、布局合理、视觉效果优秀，并且推广链接与标题不会重叠。`;
 }
