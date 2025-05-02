@@ -47,14 +47,109 @@ export async function htmlToDataUrl(
           // 给内容一些时间完全渲染
           await new Promise(resolve => setTimeout(resolve, 1000));
 
-          // 获取iframe中的body元素
-          const body = iframe.contentDocument.body;
-          if (!body) {
-            throw new Error('Iframe body not found');
+          // 获取iframe中的infographic-container元素（而不是整个body）
+          const container = iframe.contentDocument.querySelector('.infographic-container');
+          if (!container) {
+            // 如果找不到容器，回退到使用body
+            console.warn('Infographic container not found, falling back to body');
+            const body = iframe.contentDocument.body;
+            if (!body) {
+              throw new Error('Iframe body not found');
+            }
+
+            // 确保所有图片都已加载
+            const images = body.querySelectorAll('img');
+            await Promise.all(Array.from(images).map(img => {
+              if (img.complete) return Promise.resolve();
+              return new Promise<void>(resolve => {
+                img.onload = () => resolve();
+                img.onerror = () => resolve();
+              });
+            }));
+
+            // 获取实际内容尺寸
+            const contentWidth = body.scrollWidth;
+            const contentHeight = body.scrollHeight;
+
+            // 设置iframe尺寸以匹配内容
+            iframe.style.width = `${contentWidth}px`;
+            iframe.style.height = `${contentHeight}px`;
+
+            // 添加样式确保内容完全可见
+            const style = document.createElement('style');
+            style.textContent = `
+              body {
+                margin: 0;
+                padding: 0;
+                overflow: visible !important;
+                background: transparent !important;
+              }
+              ._html2canvas_pseudoelement_before,
+              ._html2canvas_pseudoelement_after {
+                display: none !important;
+              }
+            `;
+            iframe.contentDocument.head.appendChild(style);
+
+            // 再次等待以确保尺寸调整后的渲染完成
+            await new Promise(resolve => setTimeout(resolve, 500));
+
+            // 使用html2canvas捕获body内容
+            const canvas = await html2canvas(body, {
+              allowTaint: true,
+              useCORS: true,
+              scale: 2, // 更高的缩放比例以获得更好的质量
+              logging: false,
+              backgroundColor: '#ffffff',
+              width: contentWidth,
+              height: contentHeight,
+              windowWidth: contentWidth,
+              windowHeight: contentHeight,
+              foreignObjectRendering: false, // 关闭foreignObject渲染以避免某些渲染问题
+              onclone: (clonedDoc) => {
+                // 可以在这里对克隆的文档进行额外处理
+                const clonedBody = clonedDoc.body;
+                if (clonedBody) {
+                  // 确保所有元素都是可见的
+                  const allElements = clonedBody.querySelectorAll('*');
+                  allElements.forEach(el => {
+                    const style = window.getComputedStyle(el);
+                    if (style.display === 'none') {
+                      (el as HTMLElement).style.display = 'block';
+                    }
+                    if (style.visibility === 'hidden') {
+                      (el as HTMLElement).style.visibility = 'visible';
+                    }
+                  });
+
+                  // 移除可能导致问题的伪元素
+                  const styleEl = clonedDoc.createElement('style');
+                  styleEl.textContent = `
+                    ._html2canvas_pseudoelement_before,
+                    ._html2canvas_pseudoelement_after {
+                      display: none !important;
+                    }
+                  `;
+                  clonedDoc.head.appendChild(styleEl);
+                }
+              }
+            });
+
+            // 转换为数据URL
+            const dataUrl = canvas.toDataURL(
+              format === 'png' ? 'image/png' : 'image/jpeg',
+              format === 'jpg' ? quality : undefined
+            );
+
+            // 清理
+            document.body.removeChild(iframe);
+
+            resolve(dataUrl);
+            return;
           }
 
           // 确保所有图片都已加载
-          const images = body.querySelectorAll('img');
+          const images = container.querySelectorAll('img');
           await Promise.all(Array.from(images).map(img => {
             if (img.complete) return Promise.resolve();
             return new Promise<void>(resolve => {
@@ -63,35 +158,56 @@ export async function htmlToDataUrl(
             });
           }));
 
-          // 获取实际内容尺寸
-          const contentWidth = body.scrollWidth;
-          const contentHeight = body.scrollHeight;
+          // 获取容器尺寸
+          const containerWidth = (container as HTMLElement).offsetWidth;
+          const containerHeight = (container as HTMLElement).offsetHeight;
 
-          // 设置iframe尺寸以匹配内容
-          iframe.style.width = `${contentWidth}px`;
-          iframe.style.height = `${contentHeight}px`;
+          // 设置iframe尺寸以匹配容器
+          iframe.style.width = `${containerWidth}px`;
+          iframe.style.height = `${containerHeight}px`;
 
-          // 再次等待以确保尺寸调整后的渲染完成
+          // 添加样式确保内容完全可见
+          const style = document.createElement('style');
+          style.textContent = `
+            body {
+              margin: 0;
+              padding: 0;
+              overflow: visible !important;
+              background: transparent !important;
+            }
+            ._html2canvas_pseudoelement_before,
+            ._html2canvas_pseudoelement_after {
+              display: none !important;
+            }
+            .infographic-container {
+              overflow: visible !important;
+              position: relative !important;
+              display: block !important;
+            }
+          `;
+          iframe.contentDocument.head.appendChild(style);
+
+          // 再次等待以确保样式应用完成
           await new Promise(resolve => setTimeout(resolve, 500));
 
-          // 使用html2canvas捕获iframe内容
-          const canvas = await html2canvas(body, {
+          // 使用html2canvas捕获infographic-container内容
+          const canvas = await html2canvas(container as HTMLElement, {
             allowTaint: true,
             useCORS: true,
             scale: 2, // 更高的缩放比例以获得更好的质量
             logging: false,
-            backgroundColor: '#ffffff',
-            width: contentWidth,
-            height: contentHeight,
-            windowWidth: contentWidth,
-            windowHeight: contentHeight,
-            foreignObjectRendering: true, // 尝试使用foreignObject渲染以提高准确性
+            backgroundColor: null, // 使用透明背景，让容器自己的背景显示
+            width: containerWidth,
+            height: containerHeight,
+            windowWidth: containerWidth,
+            windowHeight: containerHeight,
+            foreignObjectRendering: false, // 关闭foreignObject渲染以避免某些渲染问题
             onclone: (clonedDoc) => {
               // 可以在这里对克隆的文档进行额外处理
-              const clonedBody = clonedDoc.body;
-              if (clonedBody) {
+              const clonedContainer = clonedDoc.querySelector('.infographic-container');
+              if (clonedContainer) {
                 // 确保所有元素都是可见的
-                const allElements = clonedBody.querySelectorAll('*');
+                const allElements = clonedContainer.querySelectorAll('*');
                 allElements.forEach(el => {
                   const style = window.getComputedStyle(el);
                   if (style.display === 'none') {
@@ -101,6 +217,16 @@ export async function htmlToDataUrl(
                     (el as HTMLElement).style.visibility = 'visible';
                   }
                 });
+
+                // 移除可能导致问题的伪元素
+                const styleEl = clonedDoc.createElement('style');
+                styleEl.textContent = `
+                  ._html2canvas_pseudoelement_before,
+                  ._html2canvas_pseudoelement_after {
+                    display: none !important;
+                  }
+                `;
+                clonedDoc.head.appendChild(styleEl);
               }
             }
           });
