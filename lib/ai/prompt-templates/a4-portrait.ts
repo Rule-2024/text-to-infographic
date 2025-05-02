@@ -5,7 +5,7 @@
 
 /**
  * 获取A4竖版信息图的提示词模板
- * @param content 用户输入的文本内容 
+ * @param content 用户输入的文本内容
  * @param mode 处理模式: 'full' = 提取70-80%精华内容保留结构, 'summary' = 提取20-30%核心精华
  * @returns 完整的提示词
  */
@@ -188,12 +188,12 @@ ${content}
       background-color: var(--background-color, #3B82F6);
     }
 
-    /* 推广链接样式 - 增强可见性 */
+    /* 推广链接样式 - 增强可见性并防止与标题重叠 */
     .promo-link {
       position: absolute;
       top: 20px;
       left: 20px;
-      z-index: 100;
+      z-index: 1000; /* 确保始终位于最上层 */
       padding: 10px 15px;
       font-size: 14px;
       color: rgba(255, 255, 255, 0.95);
@@ -204,6 +204,7 @@ ${content}
       background-color: rgba(0, 0, 0, 0.15);
       border-radius: 0 0 8px 0;
       max-width: fit-content;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* 添加轻微阴影增强可见性 */
     }
 
     .promo-link a {
@@ -213,15 +214,22 @@ ${content}
       border-bottom: 1px dotted rgba(255, 255, 255, 0.7);
     }
 
-    /* 内容区域 */
+    /* 内容区域 - 调整顶部边距确保与推广链接不重叠 */
     .content-area {
       position: absolute;
-      top: 57px; /* 15mm */
+      top: 80px; /* 增加顶部边距，确保与推广链接有足够间距 */
       right: 57px; /* 15mm */
       bottom: 57px; /* 15mm */
       left: 57px; /* 15mm */
       width: 680px; /* 180mm */
-      height: 1009px; /* 267mm */
+      height: 986px; /* 调整高度以适应增加的顶部边距 */
+    }
+
+    /* 确保标题与推广链接不重叠 */
+    .content-area h1:first-child,
+    .content-area h2:first-child,
+    .content-area h3:first-child {
+      margin-top: 20px; /* 为顶部标题添加额外边距 */
     }
 
     /* 渐变背景 */

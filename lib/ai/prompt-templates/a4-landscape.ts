@@ -23,7 +23,67 @@ export function getA4LandscapePrompt(content: string, mode: 'full' | 'summary'):
   <title>A4横版信息图</title>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;700&display=swap" rel="stylesheet">
   <style>
-    /* 样式代码... */
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Noto Sans SC', sans-serif;
+      background-color: #f5f5f5;
+    }
+
+    /* 信息图容器 - 固定A4横版尺寸 */
+    .infographic-container {
+      width: 1123px; /* 297mm */
+      height: 794px; /* 210mm */
+      position: relative;
+      overflow: hidden;
+      background-color: var(--background-color, #3B82F6);
+    }
+
+    /* 推广链接样式 - 确保始终位于最上层且不会与标题重叠 */
+    .promo-link {
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      z-index: 1000; /* 确保始终位于最上层 */
+      padding: 10px 15px;
+      font-size: 14px;
+      color: rgba(255, 255, 255, 0.95);
+      text-decoration: none;
+      font-weight: 500;
+      letter-spacing: 0.3px;
+      text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+      background-color: rgba(0, 0, 0, 0.15);
+      border-radius: 0 0 8px 0;
+      max-width: fit-content;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* 添加轻微阴影增强可见性 */
+    }
+
+    .promo-link a {
+      color: rgba(255, 255, 255, 1);
+      text-decoration: none;
+      font-weight: 600;
+      border-bottom: 1px dotted rgba(255, 255, 255, 0.7);
+    }
+
+    /* 内容区域 - 确保与推广链接保持足够距离 */
+    .content-area {
+      position: absolute;
+      top: 80px; /* 从推广链接下方开始，保持至少30px的垂直间距 */
+      right: 57px; /* 15mm安全边距 */
+      bottom: 57px; /* 15mm安全边距 */
+      left: 57px; /* 15mm安全边距 */
+      width: 1009px; /* 267mm */
+      height: 680px; /* 180mm */
+    }
+
+    /* 确保标题与推广链接不重叠 */
+    .content-area h1:first-child,
+    .content-area h2:first-child,
+    .content-area h3:first-child {
+      margin-top: 20px; /* 为顶部标题添加额外边距 */
+    }
+
+    /* 其他样式代码... */
   </style>
 </head>
 <body>
@@ -33,7 +93,7 @@ export function getA4LandscapePrompt(content: string, mode: 'full' | 'summary'):
     <!-- 推广链接 -->
     <div class="promo-link">
       <span class="promo-text">更多精美信息图请到：</span>
-      <a href="https://texttoinfographic.online" target="_blank">texttoinfographic</a>
+      <a href="https://texttoinfographic.online" target="_blank">texttoinfographic.online</a>
     </div>
     <div class="content-area">
       <!-- 信息图内容将在这里生成 -->
@@ -54,6 +114,7 @@ export function getA4LandscapePrompt(content: string, mode: 'full' | 'summary'):
 - **内容完整性**：确保所有重要内容完整呈现，不截断关键信息
 - **完全静态**：生成的信息图必须是完全静态的，禁止任何JavaScript交互、悬停效果、动画或其他动态效果
 - **输出格式**：最终输出必须是完整的HTML代码，包含所有必要的HTML结构、CSS样式和内容
+- **推广链接**：必须在左上角添加"更多精美信息图请到：texttoinfographic.online"的推广链接，使用与信息图相同的语言
 
 ## 设计任务
 创建一个符合标准A4横版尺寸(297mm×210mm)的高质量信息图，高效呈现以下内容并使用${processingMode}：
@@ -96,5 +157,51 @@ ${htmlTemplate}
    - 保持风格统一
    - 确保可读性优先
 
-请基于以上模板和规范，创建一个完整的HTML信息图，确保内容完整、布局合理、视觉效果优秀。`;
+## 推广链接实现
+* **位置要求**：必须在信息图左上角添加推广链接，与画布边缘保持20px的距离，确保与标题和其他内容有足够的间距，不会重叠
+* **样式要求**：使用半透明背景，确保文本清晰可见，与整体设计协调，设置较高的z-index（如1000）确保始终位于最上层
+* **内容要求**：显示"更多精美信息图请到：texttoinfographic.online"
+* **语言适配**：推广文本必须使用与信息图相同的语言，根据输入文本自动调整
+* **链接目标**：链接必须指向https://texttoinfographic.online网站
+* **内容区域调整**：内容区域（包括标题）必须从推广链接下方开始，与推广链接保持至少30px的垂直间距，确保不会重叠
+
+## 防止重叠的CSS样式
+```css
+/* 推广链接样式 - 确保始终位于最上层且不会与标题重叠 */
+.promo-link {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  z-index: 1000; /* 确保始终位于最上层 */
+  padding: 10px 15px;
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.95);
+  text-decoration: none;
+  font-weight: 500;
+  letter-spacing: 0.3px;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+  background-color: rgba(0, 0, 0, 0.15);
+  border-radius: 0 0 8px 0;
+  max-width: fit-content;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* 添加轻微阴影增强可见性 */
+}
+
+/* 内容区域 - 确保与推广链接保持足够距离 */
+.content-area {
+  position: absolute;
+  top: 80px; /* 从推广链接下方开始，保持至少30px的垂直间距 */
+  right: 57px; /* 15mm安全边距 */
+  bottom: 57px; /* 15mm安全边距 */
+  left: 57px; /* 15mm安全边距 */
+}
+
+/* 确保标题与推广链接不重叠 */
+.content-area h1:first-child,
+.content-area h2:first-child,
+.content-area h3:first-child {
+  margin-top: 20px; /* 为顶部标题添加额外边距 */
+}
+```
+
+请基于以上模板和规范，创建一个完整的HTML信息图，确保内容完整、布局合理、视觉效果优秀，并且推广链接与标题不会重叠。`;
 }
