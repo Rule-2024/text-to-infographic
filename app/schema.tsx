@@ -1,7 +1,8 @@
 import Script from 'next/script'
 
 export default function Schema() {
-  const schema = {
+  // WebApplication schema
+  const webAppSchema = {
     '@context': 'https://schema.org',
     '@type': 'WebApplication',
     name: 'Text to Infographic',
@@ -28,11 +29,28 @@ export default function Schema() {
     }
   }
 
+  // Organization schema with logo
+  const organizationSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'Organization',
+    name: 'Text to Infographic',
+    url: 'https://texttoinfographic.online',
+    logo: 'https://texttoinfographic.online/images/android-chrome-512x512.png',
+    description: 'AI-powered tool to transform text into professional infographics with one click. No design experience needed, 100% free.'
+  }
+
   return (
-    <Script
-      id="schema-org"
-      type="application/ld+json"
-      dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
-    />
+    <>
+      <Script
+        id="schema-webapp"
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(webAppSchema) }}
+      />
+      <Script
+        id="schema-organization"
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationSchema) }}
+      />
+    </>
   )
 }
