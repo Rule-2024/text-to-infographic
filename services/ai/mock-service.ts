@@ -20,7 +20,12 @@ export async function checkGenerationStatus(id: string): Promise<GenerationStatu
   // Randomly determine status
   let status: 'pending' | 'processing' | 'completed' | 'failed';
 
-  if (progress < 30) {
+  // 添加一个小概率随机失败的可能性（约5%的概率）
+  const shouldFail = Math.random() < 0.05;
+
+  if (shouldFail) {
+    status = 'failed';
+  } else if (progress < 30) {
     status = 'pending';
   } else if (progress < 90) {
     status = 'processing';
