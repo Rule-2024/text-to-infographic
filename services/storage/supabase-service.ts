@@ -1,11 +1,9 @@
-'use server';
-
 import { adminSupabase } from '@/lib/supabase';
 import { TextInputForm } from '@/lib/types/infographic';
 
 /**
  * 创建新的生成任务记录
- * 
+ *
  * @param id 生成任务ID
  * @param input 用户输入表单数据
  * @returns 创建是否成功
@@ -34,7 +32,7 @@ export async function createGenerationRecord(id: string, input: TextInputForm): 
 
 /**
  * 更新生成任务状态
- * 
+ *
  * @param id 生成任务ID
  * @param status 状态
  * @param progress 进度
@@ -68,7 +66,7 @@ export async function updateGenerationStatus(
 
 /**
  * 保存生成结果
- * 
+ *
  * @param id 生成任务ID
  * @param result HTML结果
  * @returns 保存是否成功
@@ -95,7 +93,7 @@ export async function saveGenerationResult(id: string, result: string): Promise<
 
 /**
  * 获取生成任务状态
- * 
+ *
  * @param id 生成任务ID
  * @returns 任务状态和结果
  */
