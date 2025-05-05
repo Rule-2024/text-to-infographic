@@ -1,4 +1,4 @@
-import { TextInputForm } from "@/lib/types/infographic";
+import { TextInputForm, GenerationStatus } from "@/lib/types/infographic";
 
 // Use mock service in MVP stage to avoid actual API calls
 export async function generateInfographic(input: TextInputForm): Promise<string> {
@@ -13,11 +13,7 @@ export async function generateInfographic(input: TextInputForm): Promise<string>
 }
 
 // Status check function
-export async function checkGenerationStatus(id: string): Promise<{
-  status: 'pending' | 'processing' | 'completed' | 'failed';
-  progress: number;
-  result?: string;
-}> {
+export async function checkGenerationStatus(id: string): Promise<GenerationStatus> {
   // Simulate processing progress
   const progress = Math.random() * 100;
 
@@ -32,11 +28,17 @@ export async function checkGenerationStatus(id: string): Promise<{
     status = 'completed';
   }
 
-  return {
+  // 构建返回值，确保包含所有必要的属性
+  const result: GenerationStatus = {
     status,
     progress: Math.min(100, Math.round(progress)),
     ...(status === 'completed' ? {
       result: 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iODAwIiBoZWlnaHQ9IjYwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iODAwIiBoZWlnaHQ9IjYwMCIgZmlsbD0iI2YwZjBmMCIvPjx0ZXh0IHg9IjQwMCIgeT0iMzAwIiBmb250LWZhbWlseT0iQXJpYWwiIGZvbnQtc2l6ZT0iMjQiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZpbGw9IiMzMzMiPk1vY2sgSW5mb2dyYXBoaWM6IENvbXBsZXRlZDwvdGV4dD48L3N2Zz4='
+    } : {}),
+    ...(status === 'failed' ? {
+      error: 'Mock error message for testing'
     } : {})
   };
+
+  return result;
 }

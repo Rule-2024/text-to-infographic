@@ -124,11 +124,12 @@ export function TextInputForm() {
         } else {
           router.push(`/processing?id=${data.id}`);
         }
-      } catch (fetchError) {
-        if (fetchError.name === 'AbortError') {
+      } catch (error) {
+        // 使用类型守卫检查错误类型
+        if (error instanceof Error && error.name === 'AbortError') {
           throw new Error('Request timed out. The server might be busy, please try again.');
         }
-        throw fetchError;
+        throw error;
       }
     } catch (err) {
       console.error('Form submission error:', err);

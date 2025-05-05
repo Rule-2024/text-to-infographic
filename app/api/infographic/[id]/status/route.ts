@@ -18,11 +18,15 @@ export async function GET(
     }
 
     // Check generation status
-    const status: GenerationStatus = await checkGenerationStatus(id);
+    const status = await checkGenerationStatus(id);
 
     // If status is failed, log more details for debugging
     if (status.status === 'failed') {
-      console.warn(`Generation task ${id} failed with error: ${status.error || 'Unknown error'}`);
+      // 使用简单的字符串拼接，避免直接访问可能不存在的属性
+      console.warn(`Generation task ${id} failed`);
+      if (typeof status === 'object' && status !== null && 'error' in status) {
+        console.warn(`Error details: ${(status as any).error || 'Unknown error'}`);
+      }
     }
 
     return NextResponse.json(status);
