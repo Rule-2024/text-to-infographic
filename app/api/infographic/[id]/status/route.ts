@@ -20,7 +20,7 @@ export async function GET(
     const status = await checkGenerationStatus(id);
 
     // If status is failed, log more details for debugging
-    if (status.status === 'failed') {
+    if (status.status === 'failed' && status.error) {
       console.warn(`Generation task ${id} failed with error: ${status.error}`);
     }
 
