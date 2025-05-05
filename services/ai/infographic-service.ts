@@ -1,24 +1,16 @@
 /**
  * Infographic Generation Service
- * Used to replace mock service, implementing real AI calls
+ * Used to replace mock service, implementing real AI calls with persistent storage
  */
 import { TextInputForm } from "@/lib/types/infographic";
 import { buildPrompt, processGeneratedHtml } from "@/lib/ai/prompt-builder";
 import { generateInfographicHtml, withRetry } from "@/lib/ai/api-client";
-
-interface GenerationResult {
-  html: string;
-  timestamp: number;
-}
-
-// In-memory cache for storing generation results
-// Note: In a production environment, a database or caching service should be used
-const generationCache = new Map<string, GenerationResult>();
-const generationStatus = new Map<string, {
-  status: 'pending' | 'processing' | 'completed' | 'failed';
-  progress: number;
-  error?: string;
-}>();
+import {
+  createGenerationRecord,
+  updateGenerationStatus,
+  saveGenerationResult,
+  getGenerationStatus
+} from "@/services/storage/supabase-service";
 
 /**
  * Generate infographic
@@ -27,67 +19,50 @@ const generationStatus = new Map<string, {
  * @returns Generation task ID
  */
 export async function generateInfographic(input: TextInputForm): Promise<string> {
-  // Generate unique ID (using uuid or nanoId)
+  // Generate unique ID
   const generationId = crypto.randomUUID();
 
-  // Set initial status
-  generationStatus.set(generationId, {
-    status: 'pending',
-    progress: 0
-  });
+  // Create initial record in database
+  await createGenerationRecord(generationId, input);
 
   // Execute generation process asynchronously
   (async () => {
     try {
-      generationStatus.set(generationId, {
-        status: 'processing',
-        progress: 10
-      });
+      // Update status to processing with 10% progress
+      await updateGenerationStatus(generationId, 'processing', 10);
 
       // Build prompt
       const prompt = buildPrompt(input);
 
-      // Update progress
-      generationStatus.set(generationId, {
-        status: 'processing',
-        progress: 30
-      });
+      // Update progress to 30%
+      await updateGenerationStatus(generationId, 'processing', 30);
 
-      // Call AI service to generate HTML
+      // Call AI service to generate HTML with increased retries and delay
       const html = await withRetry(
         () => generateInfographicHtml(prompt),
-        2, // Maximum 2 retries
-        2000 // Initial retry delay 2 seconds
+        4, // Increased from 2 to 4 retries
+        3000 // Increased from 2000ms to 3000ms initial retry delay
       );
 
-      // Update progress
-      generationStatus.set(generationId, {
-        status: 'processing',
-        progress: 80
-      });
+      // Update progress to 80%
+      await updateGenerationStatus(generationId, 'processing', 80);
 
       // Process generated HTML
       const processedHtml = processGeneratedHtml(html);
 
-      // Cache result
-      generationCache.set(generationId, {
-        html: processedHtml,
-        timestamp: Date.now()
-      });
-
-      // Update status to completed
-      generationStatus.set(generationId, {
-        status: 'completed',
-        progress: 100
-      });
+      // Save result to database
+      await saveGenerationResult(generationId, processedHtml);
 
     } catch (error) {
       console.error('Infographic generation failed:', error);
-      generationStatus.set(generationId, {
-        status: 'failed',
-        progress: 0,
-        error: error instanceof Error ? error.message : 'Unknown error'
-      });
+
+      // Update status to failed
+      await updateGenerationStatus(
+        generationId,
+        'failed',
+        0,
+        error instanceof Error ? error.message : 'Unknown error'
+      );
     }
   })();
 
@@ -107,40 +82,6 @@ export async function checkGenerationStatus(id: string): Promise<{
   result?: string;
   error?: string;
 }> {
-  // Get status
-  const status = generationStatus.get(id);
-
-  if (!status) {
-    return {
-      status: 'failed',
-      progress: 0,
-      error: 'Generation task not found'
-    };
-  }
-
-  // If completed, return result
-  if (status.status === 'completed') {
-    const cached = generationCache.get(id);
-
-    if (!cached) {
-      return {
-        status: 'failed',
-        progress: 0,
-        error: 'Result expired or lost'
-      };
-    }
-
-    return {
-      status: 'completed',
-      progress: 100,
-      result: cached.html
-    };
-  }
-
-  // Return in-progress status
-  return {
-    status: status.status,
-    progress: status.progress,
-    error: status.error
-  };
+  // Get status from database
+  return await getGenerationStatus(id);
 }

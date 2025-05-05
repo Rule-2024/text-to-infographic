@@ -1,15 +1,18 @@
 'use client';
 
-import { useState, FormEvent, ChangeEvent } from 'react';
+import { useState, FormEvent, ChangeEvent, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { MAX_TEXT_LENGTH, PROCESSING_MODES, SIZE_OPTIONS } from '@/lib/constants/infographic';
 import { getRemainingCharCount } from '@/lib/utils/text-utils';
 import type { TextInputForm as TextInputFormType } from '@/lib/types/infographic';
 
+// 本地存储键
+const FORM_STORAGE_KEY = 'infographic_form_data';
+
 export function TextInputForm() {
   const router = useRouter();
 
-  // Form state
+  // Form state with default values
   const [formData, setFormData] = useState<TextInputFormType>({
     content: '',
     mode: 'summary',
@@ -23,17 +26,44 @@ export function TextInputForm() {
   // Character count
   const remainingChars = getRemainingCharCount(formData.content, MAX_TEXT_LENGTH);
 
+  // 加载保存的表单数据
+  useEffect(() => {
+    try {
+      const savedData = localStorage.getItem(FORM_STORAGE_KEY);
+      if (savedData) {
+        const parsedData = JSON.parse(savedData) as TextInputFormType;
+        setFormData(parsedData);
+        console.log('Loaded saved form data');
+      }
+    } catch (err) {
+      console.error('Failed to load saved form data:', err);
+    }
+  }, []);
+
+  // 保存表单数据到本地存储
+  const saveFormData = (data: TextInputFormType) => {
+    try {
+      localStorage.setItem(FORM_STORAGE_KEY, JSON.stringify(data));
+    } catch (err) {
+      console.error('Failed to save form data:', err);
+    }
+  };
+
   // Handle text change
   const handleTextChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
     const text = e.target.value;
-    setFormData(prev => ({ ...prev, content: text }));
+    const newFormData = { ...formData, content: text };
+    setFormData(newFormData);
+    saveFormData(newFormData);
     setError(null);
   };
 
   // Handle select change
   const handleSelectChange = (e: ChangeEvent<HTMLSelectElement>) => {
     const { name, value } = e.target;
-    setFormData(prev => ({ ...prev, [name]: value }));
+    const newFormData = { ...formData, [name]: value };
+    setFormData(newFormData);
+    saveFormData(newFormData);
   };
 
   // Handle form submission
@@ -55,29 +85,53 @@ export function TextInputForm() {
       setIsSubmitting(true);
       setError(null);
 
-      // Call API
-      const response = await fetch('/api/infographic', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(formData),
-      });
+      // 保存表单数据以防提交失败
+      saveFormData(formData);
 
-      if (!response.ok) {
+      // Call API with increased timeout
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 15000); // 15秒超时
+
+      try {
+        const response = await fetch('/api/infographic', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(formData),
+          signal: controller.signal
+        });
+
+        clearTimeout(timeoutId);
+
+        if (!response.ok) {
+          const data = await response.json();
+          throw new Error(data.error || 'Submission failed');
+        }
+
         const data = await response.json();
-        throw new Error(data.error || 'Submission failed');
-      }
 
-      const data = await response.json();
+        // 提交成功后，清除保存的表单数据
+        try {
+          localStorage.removeItem(FORM_STORAGE_KEY);
+        } catch (e) {
+          console.error('Failed to clear saved form data:', e);
+        }
 
-      // Redirect to processing or preview page
-      if (data.status === 'completed') {
-        router.push(`/preview?id=${data.id}`);
-      } else {
-        router.push(`/processing?id=${data.id}`);
+        // Redirect to processing or preview page
+        if (data.status === 'completed') {
+          router.push(`/preview?id=${data.id}`);
+        } else {
+          router.push(`/processing?id=${data.id}`);
+        }
+      } catch (fetchError) {
+        if (fetchError.name === 'AbortError') {
+          throw new Error('Request timed out. The server might be busy, please try again.');
+        }
+        throw fetchError;
       }
     } catch (err) {
+      console.error('Form submission error:', err);
       setError(err instanceof Error ? err.message : 'Submission failed, please try again');
     } finally {
       setIsSubmitting(false);

@@ -1,7 +1,7 @@
 'use client';
 
 import { useSearchParams, useRouter } from 'next/navigation';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 
 export default function ProcessingPage() {
@@ -11,6 +11,9 @@ export default function ProcessingPage() {
 
   const [progress, setProgress] = useState(0);
   const [error, setError] = useState<string | null>(null);
+  const [retryCount, setRetryCount] = useState(0);
+  const hasAutoRetried = useRef(false);
+  const maxRetries = 2; // 最大自动重试次数
 
   useEffect(() => {
     if (!id) {
@@ -27,6 +30,13 @@ export default function ProcessingPage() {
         const response = await fetch(`/api/infographic/${id}/status`);
 
         if (!response.ok) {
+          // 如果服务器返回错误，尝试重试
+          if (retryCount < maxRetries) {
+            console.log(`Status check failed, retrying (${retryCount + 1}/${maxRetries})...`);
+            setRetryCount(prev => prev + 1);
+            timeoutId = setTimeout(checkStatus, 3000); // 延长重试间隔
+            return;
+          }
           throw new Error('Failed to fetch status');
         }
 
@@ -37,9 +47,30 @@ export default function ProcessingPage() {
           router.push(`/preview?id=${id}`);
           return;
         } else if (data.status === 'failed') {
-          // Generation failed, show error
+          // 如果是第一次失败且尚未自动重试，尝试自动重新创建
+          if (!hasAutoRetried.current) {
+            hasAutoRetried.current = true;
+            console.log('Generation failed, attempting automatic retry...');
+
+            // 显示正在重试的消息
+            setProgress(0);
+            setError(null);
+
+            // 等待短暂时间后重定向到创建页面
+            setTimeout(() => {
+              router.push('/create');
+            }, 2000);
+            return;
+          }
+
+          // 如果已经尝试过自动重试，显示错误
           setError(data.error || 'Generation failed, please try again');
           return;
+        }
+
+        // 重置重试计数器，因为成功获取了状态
+        if (retryCount > 0) {
+          setRetryCount(0);
         }
 
         // Update progress
@@ -48,7 +79,14 @@ export default function ProcessingPage() {
         // Continue polling
         timeoutId = setTimeout(checkStatus, pollInterval);
       } catch (err) {
-        setError('Failed to check status, please refresh the page and try again');
+        // 如果还有重试次数，尝试重试
+        if (retryCount < maxRetries) {
+          console.log(`Error occurred, retrying (${retryCount + 1}/${maxRetries})...`);
+          setRetryCount(prev => prev + 1);
+          timeoutId = setTimeout(checkStatus, 3000); // 延长重试间隔
+        } else {
+          setError('Failed to check status, please refresh the page and try again');
+        }
       }
     };
 
@@ -59,7 +97,7 @@ export default function ProcessingPage() {
     return () => {
       if (timeoutId) clearTimeout(timeoutId);
     };
-  }, [id, router]);
+  }, [id, router, retryCount]);
 
   // Cancel generation
   const handleCancel = async () => {
