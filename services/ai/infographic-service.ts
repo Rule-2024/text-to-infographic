@@ -2,7 +2,7 @@
  * Infographic Generation Service
  * Used to replace mock service, implementing real AI calls with persistent storage
  */
-import { TextInputForm } from "@/lib/types/infographic";
+import { TextInputForm, GenerationStatus } from "@/lib/types/infographic";
 import { buildPrompt, processGeneratedHtml } from "@/lib/ai/prompt-builder";
 import { generateInfographicHtml, withRetry } from "@/lib/ai/api-client";
 import {
@@ -76,12 +76,7 @@ export async function generateInfographic(input: TextInputForm): Promise<string>
  * @param id Generation task ID
  * @returns Task status and result
  */
-export async function checkGenerationStatus(id: string): Promise<{
-  status: 'pending' | 'processing' | 'completed' | 'failed';
-  progress: number;
-  result?: string;
-  error?: string;
-}> {
+export async function checkGenerationStatus(id: string): Promise<GenerationStatus> {
   // Get status from database
   return await getGenerationStatus(id);
 }

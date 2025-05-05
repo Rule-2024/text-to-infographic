@@ -1,5 +1,5 @@
 import { adminSupabase } from '@/lib/supabase';
-import { TextInputForm } from '@/lib/types/infographic';
+import { TextInputForm, GenerationStatus } from '@/lib/types/infographic';
 
 /**
  * 创建新的生成任务记录
@@ -97,12 +97,7 @@ export async function saveGenerationResult(id: string, result: string): Promise<
  * @param id 生成任务ID
  * @returns 任务状态和结果
  */
-export async function getGenerationStatus(id: string): Promise<{
-  status: 'pending' | 'processing' | 'completed' | 'failed';
-  progress: number;
-  result?: string;
-  error?: string;
-}> {
+export async function getGenerationStatus(id: string): Promise<GenerationStatus> {
   try {
     const { data, error } = await adminSupabase
       .from('generations')

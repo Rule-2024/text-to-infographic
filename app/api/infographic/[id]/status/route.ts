@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import { checkGenerationStatus } from '@/services/ai';
+import { GenerationStatus } from '@/lib/types/infographic';
 
 // GET /api/infographic/:id/status - Get the status of a generation task
 export async function GET(
@@ -17,11 +18,11 @@ export async function GET(
     }
 
     // Check generation status
-    const status = await checkGenerationStatus(id);
+    const status: GenerationStatus = await checkGenerationStatus(id);
 
     // If status is failed, log more details for debugging
-    if (status.status === 'failed' && status.error) {
-      console.warn(`Generation task ${id} failed with error: ${status.error}`);
+    if (status.status === 'failed') {
+      console.warn(`Generation task ${id} failed with error: ${status.error || 'Unknown error'}`);
     }
 
     return NextResponse.json(status);

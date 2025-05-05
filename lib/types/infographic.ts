@@ -18,6 +18,14 @@ export interface Generation {
   createdAt: Date;
 }
 
+// 生成任务状态类型
+export interface GenerationStatus {
+  status: 'pending' | 'processing' | 'completed' | 'failed';
+  progress: number;
+  result?: string;
+  error?: string;
+}
+
 // 尺寸配置类型
 export interface SizeConfig {
   name: string;
@@ -25,4 +33,4 @@ export interface SizeConfig {
   height: number;
   aspectRatio: number;
   description: string;
-} 
+}
