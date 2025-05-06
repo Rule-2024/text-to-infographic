@@ -110,8 +110,10 @@ export default function ProcessingPage() {
       <main className="flex min-h-screen flex-col items-center justify-center p-4 sm:p-8 md:p-24 bg-gradient-to-b from-background to-muted">
         {/* 背景装饰元素 */}
         <div className="absolute inset-0 overflow-hidden pointer-events-none">
-          <div className="absolute -top-40 -right-40 w-80 h-80 bg-primary/5 rounded-full blur-3xl"></div>
-          <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-secondary/5 rounded-full blur-3xl"></div>
+          <div className="absolute -top-40 -right-40 w-80 h-80 bg-primary/5 rounded-full blur-3xl animate-pulse"></div>
+          <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-secondary/5 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '1s' }}></div>
+          <div className="absolute top-1/4 right-1/4 w-40 h-40 bg-secondary/5 rounded-full blur-2xl animate-pulse" style={{ animationDelay: '1.5s' }}></div>
+          <div className="absolute bottom-1/4 left-1/4 w-40 h-40 bg-primary/5 rounded-full blur-2xl animate-pulse" style={{ animationDelay: '0.5s' }}></div>
         </div>
 
         <div className="glass-card p-8 card-shadow max-w-md text-center relative z-10">
@@ -119,16 +121,25 @@ export default function ProcessingPage() {
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
           </svg>
           <h2 className="mb-4 text-2xl font-bold text-destructive">Generation Failed</h2>
-          <p className="mb-6 text-muted-foreground">{error}</p>
-          <Link
-            href="/create"
-            className="btn-gradient inline-flex items-center gap-2"
-          >
-            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 17l-5-5m0 0l5-5m-5 5h12" />
-            </svg>
-            Back to Create
-          </Link>
+          <p className="mb-3 text-muted-foreground">{error}</p>
+          <p className="mb-6 text-sm text-muted-foreground">
+            Don't worry! This happens occasionally when our AI is processing complex content.
+            Let's try again with a few adjustments to get better results.
+          </p>
+          <div className="flex flex-col gap-4 sm:flex-row sm:justify-center">
+            <Link
+              href="/create"
+              className="btn-gradient inline-flex items-center justify-center gap-2"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 17l-5-5m0 0l5-5m-5 5h12" />
+              </svg>
+              Try Again
+            </Link>
+          </div>
+          <p className="mt-4 text-xs text-muted-foreground">
+            Tip: Try simplifying your text or breaking it into smaller sections for better results.
+          </p>
         </div>
       </main>
     );
@@ -138,8 +149,10 @@ export default function ProcessingPage() {
     <main className="flex min-h-screen flex-col items-center justify-center p-4 sm:p-8 md:p-24 bg-gradient-to-b from-background to-muted">
       {/* 背景装饰元素 */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute -top-40 -right-40 w-80 h-80 bg-primary/5 rounded-full blur-3xl"></div>
-        <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-secondary/5 rounded-full blur-3xl"></div>
+        <div className="absolute -top-40 -right-40 w-80 h-80 bg-primary/5 rounded-full blur-3xl animate-pulse"></div>
+        <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-secondary/5 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '1s' }}></div>
+        <div className="absolute top-1/4 right-1/4 w-40 h-40 bg-secondary/5 rounded-full blur-2xl animate-pulse" style={{ animationDelay: '1.5s' }}></div>
+        <div className="absolute bottom-1/4 left-1/4 w-40 h-40 bg-primary/5 rounded-full blur-2xl animate-pulse" style={{ animationDelay: '0.5s' }}></div>
       </div>
 
       <div className="glass-card p-8 card-shadow max-w-md text-center relative z-10">
@@ -151,9 +164,17 @@ export default function ProcessingPage() {
           </div>
           <h1 className="text-2xl font-bold gradient-heading">Creating Your Infographic</h1>
           <p className="text-sm text-muted-foreground mt-2">Our AI is working on your design</p>
+          <p className="text-xs text-muted-foreground mt-1">
+            <span className="inline-flex items-center">
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-3 w-3 mr-1 text-secondary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+              Estimated time: {progress < 30 ? '60-90 seconds' : progress < 60 ? '30-60 seconds' : '15-30 seconds'}
+            </span>
+          </p>
         </div>
 
-        <div className="mb-8">
+        <div className="mb-6">
           <div className="mb-2 flex justify-between text-sm font-medium">
             <span>Progress</span>
             <span className="text-primary">{progress}%</span>
@@ -166,7 +187,7 @@ export default function ProcessingPage() {
           </div>
         </div>
 
-        <div className="mb-8 text-left bg-background/50 rounded-lg p-4 border border-border/50">
+        <div className="mb-6 text-left bg-background/50 rounded-lg p-4 border border-border/50">
           <h3 className="text-sm font-medium mb-2 flex items-center gap-2">
             <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 text-secondary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
@@ -178,6 +199,27 @@ export default function ProcessingPage() {
             {progress >= 30 && progress < 60 && 'Designing the optimal layout for your information...'}
             {progress >= 60 && progress < 90 && 'Creating visual elements and applying design styles...'}
             {progress >= 90 && 'Finalizing your infographic and preparing preview...'}
+          </p>
+        </div>
+
+        <div className="mb-6 text-left bg-background/50 rounded-lg p-4 border border-border/50">
+          <h3 className="text-sm font-medium mb-2 flex items-center gap-2">
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+            Did You Know?
+          </h3>
+          <p className="text-xs text-muted-foreground">
+            {progress < 30 && 'Infographics are processed 60,000 times faster by the human brain than text alone. Your content is being transformed for maximum impact!'}
+            {progress >= 30 && progress < 60 && 'Color choices in infographics can increase willingness to read by up to 80%. We\'re selecting the perfect palette for your content.'}
+            {progress >= 60 && progress < 90 && 'People remember 80% of what they see, but only 20% of what they read. Your infographic will make your message more memorable!'}
+            {progress >= 90 && 'High-quality infographics are 30 times more likely to be read than plain text articles. Your content is almost ready to shine!'}
+          </p>
+        </div>
+
+        <div className="mb-6 text-center">
+          <p className="text-sm font-medium text-primary animate-pulse">
+            {progress < 50 ? 'Please wait while we craft your infographic...' : 'Almost there! Putting on the finishing touches...'}
           </p>
         </div>
 
