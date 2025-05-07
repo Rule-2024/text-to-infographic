@@ -14,6 +14,8 @@ export default function ProcessingPage() {
   const [retryCount, setRetryCount] = useState(0);
   const hasAutoRetried = useRef(false);
   const maxRetries = 2; // 最大自动重试次数
+  const startTimeRef = useRef<number>(Date.now()); // 记录开始时间
+  const maxProcessingTime = 180000; // 最大处理时间：3分钟
 
   useEffect(() => {
     if (!id) {
@@ -21,12 +23,22 @@ export default function ProcessingPage() {
       return;
     }
 
-    // Set polling interval
-    const pollInterval = 2000; // 2 seconds
+    // Set polling interval - 更频繁地检查状态以提供更及时的反馈
+    const pollInterval = 1500; // 1.5 seconds
     let timeoutId: NodeJS.Timeout;
 
     const checkStatus = async () => {
       try {
+        // 检查总处理时间是否超过最大限制
+        const currentTime = Date.now();
+        const elapsedTime = currentTime - startTimeRef.current;
+
+        if (elapsedTime > maxProcessingTime) {
+          console.log(`Processing timeout after ${elapsedTime}ms`);
+          setError('Processing is taking longer than expected. Please try again with a shorter text or different settings.');
+          return;
+        }
+
         const response = await fetch(`/api/infographic/${id}/status`);
 
         if (!response.ok) {
@@ -34,7 +46,7 @@ export default function ProcessingPage() {
           if (retryCount < maxRetries) {
             console.log(`Status check failed, retrying (${retryCount + 1}/${maxRetries})...`);
             setRetryCount(prev => prev + 1);
-            timeoutId = setTimeout(checkStatus, 3000); // 延长重试间隔
+            timeoutId = setTimeout(checkStatus, 2000); // 减少重试间隔
             return;
           }
           throw new Error('Failed to fetch status');
@@ -64,7 +76,7 @@ export default function ProcessingPage() {
           }
 
           // 如果已经尝试过自动重试，显示错误
-          setError(data.error || 'Generation failed, please try again');
+          setError(data.error || 'Generation failed, please try again with a shorter text or different settings.');
           return;
         }
 
@@ -76,16 +88,19 @@ export default function ProcessingPage() {
         // Update progress
         setProgress(data.progress || 0);
 
+        // 根据进度动态调整轮询间隔 - 进度越高，检查越频繁
+        const dynamicInterval = progress > 70 ? 1000 : pollInterval;
+
         // Continue polling
-        timeoutId = setTimeout(checkStatus, pollInterval);
+        timeoutId = setTimeout(checkStatus, dynamicInterval);
       } catch (err) {
         // 如果还有重试次数，尝试重试
         if (retryCount < maxRetries) {
           console.log(`Error occurred, retrying (${retryCount + 1}/${maxRetries})...`);
           setRetryCount(prev => prev + 1);
-          timeoutId = setTimeout(checkStatus, 3000); // 延长重试间隔
+          timeoutId = setTimeout(checkStatus, 2000); // 减少重试间隔
         } else {
-          setError('Failed to check status, please refresh the page and try again');
+          setError('Connection issue. Please check your internet connection and try again.');
         }
       }
     };

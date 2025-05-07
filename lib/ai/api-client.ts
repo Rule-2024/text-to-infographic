@@ -57,26 +57,89 @@ export async function generateInfographicHtml(prompt: string): Promise<string> {
 }
 
 /**
- * Wrapper function for retry logic
+ * Wrapper function for retry logic with improved error handling and timeout
  *
  * @param fn Async function to execute
  * @param retries Number of retries
  * @param delay Retry interval (milliseconds)
+ * @param timeout Optional timeout in milliseconds
  * @returns Function execution result
  */
 export async function withRetry<T>(
   fn: () => Promise<T>,
-  retries = 3,
-  delay = 1000
+  retries = 2, // 减少默认重试次数
+  delay = 1500, // 减少默认初始延迟
+  timeout?: number // 可选的超时参数
 ): Promise<T> {
+  // 添加超时逻辑的包装函数
+  const executeWithTimeout = async (): Promise<T> => {
+    if (!timeout) return fn();
+
+    // 创建一个超时Promise
+    const timeoutPromise = new Promise<never>((_, reject) => {
+      setTimeout(() => reject(new Error(`Operation timed out after ${timeout}ms`)), timeout);
+    });
+
+    // 竞争：函数执行 vs 超时
+    return Promise.race([fn(), timeoutPromise]);
+  };
+
   try {
-    return await fn();
+    return await executeWithTimeout();
   } catch (error) {
+    // 检查是否已达到最大重试次数
     if (retries <= 0) throw error;
+
+    // 判断错误是否可重试
+    if (!isRetryableError(error)) {
+      console.log('Non-retryable error detected, aborting retry:', error);
+      throw error;
+    }
+
+    // 计算下一次延迟，但设置上限为5000ms
+    const nextDelay = Math.min(delay * 1.5, 5000);
 
     console.log(`Operation failed, retrying in ${delay}ms, remaining retries: ${retries-1}`);
     await new Promise(resolve => setTimeout(resolve, delay));
 
-    return withRetry(fn, retries - 1, delay * 1.5); // Exponential backoff
+    return withRetry(fn, retries - 1, nextDelay, timeout);
   }
+}
+
+/**
+ * Determine if an error is retryable
+ *
+ * @param error The error to check
+ * @returns True if the error is retryable, false otherwise
+ */
+function isRetryableError(error: any): boolean {
+  const errorMessage = error?.message || '';
+
+  // 网络错误、超时、服务器繁忙等通常可以重试
+  if (
+    errorMessage.includes('network') ||
+    errorMessage.includes('timeout') ||
+    errorMessage.includes('429') ||  // Too Many Requests
+    errorMessage.includes('503') ||  // Service Unavailable
+    errorMessage.includes('504') ||  // Gateway Timeout
+    errorMessage.includes('connection') ||
+    errorMessage.includes('ECONNRESET') ||
+    errorMessage.includes('ETIMEDOUT')
+  ) {
+    return true;
+  }
+
+  // API密钥错误、格式错误等通常不应重试
+  if (
+    errorMessage.includes('API key') ||
+    errorMessage.includes('invalid format') ||
+    errorMessage.includes('authentication') ||
+    errorMessage.includes('401') ||  // Unauthorized
+    errorMessage.includes('403')     // Forbidden
+  ) {
+    return false;
+  }
+
+  // 默认可重试
+  return true;
 }
