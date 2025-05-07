@@ -142,7 +142,7 @@ export default function HomePage() {
             Discover the powerful features that make our AI text to infographic tool the best choice for creating stunning visual content
           </p>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             <a href="/features/text-analysis" className="glass-card p-6 card-shadow hover:shadow-lg transition-all duration-300 group">
               <div className="w-12 h-12 mb-4 rounded-full bg-primary/10 flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
                 <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -184,6 +184,54 @@ export default function HomePage() {
               <h3 className="text-xl font-semibold mb-2">Export Options</h3>
               <p className="text-muted-foreground mb-4">Download your infographics in multiple formats including PNG, JPG, and PDF</p>
               <span className="text-purple-600 font-medium flex items-center group-hover:translate-x-1 transition-transform duration-300">
+                Learn more
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 ml-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                </svg>
+              </span>
+            </a>
+
+            <a href="/features/size-options" className="glass-card p-6 card-shadow hover:shadow-lg transition-all duration-300 group">
+              <div className="w-12 h-12 mb-4 rounded-full bg-blue-100 flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4" />
+                </svg>
+              </div>
+              <h3 className="text-xl font-semibold mb-2">Size Options</h3>
+              <p className="text-muted-foreground mb-4">Create infographics in various sizes including 16:9, A4, and mobile formats</p>
+              <span className="text-blue-600 font-medium flex items-center group-hover:translate-x-1 transition-transform duration-300">
+                Learn more
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 ml-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                </svg>
+              </span>
+            </a>
+
+            <a href="/features/language-support" className="glass-card p-6 card-shadow hover:shadow-lg transition-all duration-300 group">
+              <div className="w-12 h-12 mb-4 rounded-full bg-green-100 flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5h12M9 3v2m1.048 9.5A18.022 18.022 0 016.412 9m6.088 9h7M11 21l5-10 5 10M12.751 5C11.783 10.77 8.07 15.61 3 18.129" />
+                </svg>
+              </div>
+              <h3 className="text-xl font-semibold mb-2">Language Support</h3>
+              <p className="text-muted-foreground mb-4">Create infographics in multiple languages with automatic language detection</p>
+              <span className="text-green-600 font-medium flex items-center group-hover:translate-x-1 transition-transform duration-300">
+                Learn more
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 ml-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                </svg>
+              </span>
+            </a>
+
+            <a href="/features/no-login" className="glass-card p-6 card-shadow hover:shadow-lg transition-all duration-300 group">
+              <div className="w-12 h-12 mb-4 rounded-full bg-amber-100 flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-amber-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                </svg>
+              </div>
+              <h3 className="text-xl font-semibold mb-2">No Login Required</h3>
+              <p className="text-muted-foreground mb-4">Use our tool without creating an account, just instant infographic creation</p>
+              <span className="text-amber-600 font-medium flex items-center group-hover:translate-x-1 transition-transform duration-300">
                 Learn more
                 <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 ml-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />

@@ -87,6 +87,15 @@ export function Header() {
                   <Link href="/features/export-options" className="block px-4 py-2 text-sm text-gray-700 hover:bg-accent hover:text-accent-foreground">
                     Export Options
                   </Link>
+                  <Link href="/features/size-options" className="block px-4 py-2 text-sm text-gray-700 hover:bg-accent hover:text-accent-foreground">
+                    Size Options
+                  </Link>
+                  <Link href="/features/language-support" className="block px-4 py-2 text-sm text-gray-700 hover:bg-accent hover:text-accent-foreground">
+                    Language Support
+                  </Link>
+                  <Link href="/features/no-login" className="block px-4 py-2 text-sm text-gray-700 hover:bg-accent hover:text-accent-foreground">
+                    No Login Required
+                  </Link>
                   <Link href="/features" className="block px-4 py-2 text-sm font-medium bg-gradient-to-r from-primary/10 to-secondary/10 text-primary">
                     View All Features
                   </Link>

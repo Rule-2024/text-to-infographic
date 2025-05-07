@@ -65,6 +65,24 @@ export default function FeaturesLayout({
                   position: 3,
                   name: 'Export Options',
                   url: 'https://texttoinfographic.online/features/export-options'
+                },
+                {
+                  '@type': 'ListItem',
+                  position: 4,
+                  name: 'Size Options',
+                  url: 'https://texttoinfographic.online/features/size-options'
+                },
+                {
+                  '@type': 'ListItem',
+                  position: 5,
+                  name: 'Language Support',
+                  url: 'https://texttoinfographic.online/features/language-support'
+                },
+                {
+                  '@type': 'ListItem',
+                  position: 6,
+                  name: 'No Login Required',
+                  url: 'https://texttoinfographic.online/features/no-login'
                 }
               ]
             }
