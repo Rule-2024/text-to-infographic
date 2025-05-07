@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import Script from 'next/script';
 
 export const metadata: Metadata = {
   title: 'AI Text to Infographic Features | Free Infographic Generator',
@@ -27,5 +28,50 @@ export default function FeaturesLayout({
 }: {
   children: React.ReactNode;
 }) {
-  return <>{children}</>;
+  return (
+    <>
+      <Script
+        id="structured-data-features"
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            '@context': 'https://schema.org',
+            '@type': 'WebPage',
+            name: 'AI Text to Infographic Features',
+            description: 'Explore the powerful features of our AI text to infographic tool. Convert text to stunning infographics with our free, no-login required infographic maker.',
+            url: 'https://texttoinfographic.online/features',
+            isPartOf: {
+              '@type': 'WebSite',
+              name: 'Text to Infographic',
+              url: 'https://texttoinfographic.online'
+            },
+            mainEntity: {
+              '@type': 'ItemList',
+              itemListElement: [
+                {
+                  '@type': 'ListItem',
+                  position: 1,
+                  name: 'Text Analysis',
+                  url: 'https://texttoinfographic.online/features/text-analysis'
+                },
+                {
+                  '@type': 'ListItem',
+                  position: 2,
+                  name: 'Design Styles',
+                  url: 'https://texttoinfographic.online/features/design-styles'
+                },
+                {
+                  '@type': 'ListItem',
+                  position: 3,
+                  name: 'Export Options',
+                  url: 'https://texttoinfographic.online/features/export-options'
+                }
+              ]
+            }
+          })
+        }}
+      />
+      {children}
+    </>
+  );
 }
