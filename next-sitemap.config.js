@@ -3,8 +3,9 @@ module.exports = {
   siteUrl: 'https://texttoinfographic.online',
   generateRobotsTxt: true,
   robotsTxtOptions: {
+    // 移除循环引用
     additionalSitemaps: [
-      'https://texttoinfographic.online/sitemap.xml',
+      // 'https://texttoinfographic.online/sitemap.xml',
     ],
     policies: [
       { userAgent: '*', allow: '/' },
@@ -44,4 +45,6 @@ module.exports = {
   changefreq: 'weekly',
   priority: 0.7,
   sitemapSize: 5000,
+  // 生成单个站点地图文件而不是索引
+  generateIndexSitemap: false,
 }
