@@ -122,7 +122,8 @@ export function TextInputForm() {
         if (data.status === 'completed') {
           router.push(`/preview?id=${data.id}`);
         } else {
-          router.push(`/processing?id=${data.id}`);
+          // 传递尺寸参数到处理页面，用于调整处理时间
+          router.push(`/processing?id=${data.id}&size=${formData.size}`);
         }
       } catch (error) {
         // 使用类型守卫检查错误类型

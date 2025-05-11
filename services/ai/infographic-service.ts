@@ -54,12 +54,24 @@ export async function generateInfographic(input: TextInputForm): Promise<string>
       }, 5000); // 每5秒更新一次进度
 
       try {
+        // 根据尺寸设置不同的超时时间
+        let timeout = 90000; // 默认90秒超时
+
+        // 为16:9、A4横版和A4竖版设置更长的超时时间
+        if (input.size === '16-9') {
+          timeout = 180000; // 16:9格式使用180秒超时
+          console.log(`Using extended timeout (${timeout}ms) for 16:9 format`);
+        } else if (input.size === 'a4-l' || input.size === 'a4-p') {
+          timeout = 150000; // A4格式使用150秒超时
+          console.log(`Using extended timeout (${timeout}ms) for A4 format`);
+        }
+
         // 使用优化的重试策略调用AI服务
         const html = await withRetry(
-          () => generateInfographicHtml(prompt),
+          () => generateInfographicHtml(prompt, input.size),
           2, // 减少重试次数以加快失败反馈
           1500, // 减少初始延迟以加快重试
-          90000 // 添加90秒总超时，确保不会无限等待
+          timeout // 根据尺寸设置的超时时间
         );
 
         // 清除进度更新器

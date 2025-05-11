@@ -15,7 +15,21 @@ export default function ProcessingPage() {
   const hasAutoRetried = useRef(false);
   const maxRetries = 2; // 最大自动重试次数
   const startTimeRef = useRef<number>(Date.now()); // 记录开始时间
-  const maxProcessingTime = 180000; // 最大处理时间：3分钟
+
+  // 获取尺寸参数，用于调整最大处理时间
+  const sizeParam = searchParams.get('size');
+
+  // 根据尺寸设置不同的最大处理时间
+  let maxProcessingTime = 180000; // 默认最大处理时间：3分钟
+
+  // 为16:9和A4格式提供更长的处理时间
+  if (sizeParam === '16-9') {
+    maxProcessingTime = 300000; // 16:9格式使用5分钟
+    console.log(`Using extended processing time (${maxProcessingTime}ms) for 16:9 format`);
+  } else if (sizeParam === 'a4-l' || sizeParam === 'a4-p') {
+    maxProcessingTime = 240000; // A4格式使用4分钟
+    console.log(`Using extended processing time (${maxProcessingTime}ms) for A4 format`);
+  }
 
   useEffect(() => {
     if (!id) {
@@ -34,8 +48,18 @@ export default function ProcessingPage() {
         const elapsedTime = currentTime - startTimeRef.current;
 
         if (elapsedTime > maxProcessingTime) {
-          console.log(`Processing timeout after ${elapsedTime}ms`);
-          setError('Processing is taking longer than expected. Please try again with a shorter text or different settings.');
+          console.log(`Processing timeout after ${elapsedTime}ms for size: ${sizeParam || 'unknown'}`);
+
+          // 根据尺寸提供更具体的错误信息
+          if (sizeParam === '16-9') {
+            setError('Processing the 16:9 landscape format is taking longer than expected. This format requires more processing power. Please try again with a shorter text or switch to the mobile format for faster results.');
+          } else if (sizeParam === 'a4-l') {
+            setError('Processing the A4 landscape format is taking longer than expected. This format requires more processing power. Please try again with a shorter text or switch to the mobile format for faster results.');
+          } else if (sizeParam === 'a4-p') {
+            setError('Processing the A4 portrait format is taking longer than expected. This format requires more processing power. Please try again with a shorter text or switch to the mobile format for faster results.');
+          } else {
+            setError('Processing is taking longer than expected. Please try again with a shorter text or different settings.');
+          }
           return;
         }
 
@@ -76,7 +100,20 @@ export default function ProcessingPage() {
           }
 
           // 如果已经尝试过自动重试，显示错误
-          setError(data.error || 'Generation failed, please try again with a shorter text or different settings.');
+          if (data.error) {
+            setError(data.error);
+          } else {
+            // 根据尺寸提供更具体的错误信息
+            if (sizeParam === '16-9') {
+              setError('Generation of 16:9 landscape format failed. This format is more complex and may require shorter text input. Please try again with less text or switch to the mobile format.');
+            } else if (sizeParam === 'a4-l') {
+              setError('Generation of A4 landscape format failed. This format is more complex and may require shorter text input. Please try again with less text or switch to the mobile format.');
+            } else if (sizeParam === 'a4-p') {
+              setError('Generation of A4 portrait format failed. This format is more complex and may require shorter text input. Please try again with less text or switch to the mobile format.');
+            } else {
+              setError('Generation failed, please try again with a shorter text or different settings.');
+            }
+          }
           return;
         }
 

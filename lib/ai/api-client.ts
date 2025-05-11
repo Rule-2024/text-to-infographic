@@ -7,9 +7,10 @@
  * Call AI service to generate infographic HTML
  *
  * @param prompt Complete prompt
+ * @param size Size identifier (optional): '16-9', 'a4-l', 'a4-p', '750'
  * @returns Generated HTML content
  */
-export async function generateInfographicHtml(prompt: string): Promise<string> {
+export async function generateInfographicHtml(prompt: string, size?: string): Promise<string> {
   try {
     // Get DeepSeek API key and base URL
     const apiKey = process.env.AI_API_KEY;
@@ -17,6 +18,18 @@ export async function generateInfographicHtml(prompt: string): Promise<string> {
     const model = process.env.AI_API_MODEL || 'deepseek-v3-0324';
 
     if (!apiKey) throw new Error('AI_API_KEY not configured');
+
+    // 根据尺寸设置不同的max_tokens参数
+    let maxTokens = 8192; // 默认值
+
+    // 为16:9和A4格式提供更多的token限制
+    if (size === '16-9') {
+      maxTokens = 12000; // 16:9格式使用更多token
+      console.log(`Using increased max_tokens (${maxTokens}) for 16:9 format`);
+    } else if (size === 'a4-l' || size === 'a4-p') {
+      maxTokens = 10000; // A4格式使用更多token
+      console.log(`Using increased max_tokens (${maxTokens}) for A4 format`);
+    }
 
     // 腾讯云DeepSeek API使用OpenAI兼容接口
     const response = await fetch(baseUrl, {
@@ -33,7 +46,7 @@ export async function generateInfographicHtml(prompt: string): Promise<string> {
         ],
         temperature: 0.7,
         stream: false,
-        max_tokens: 8192 // 设置较大的输出长度以确保完整的信息图HTML
+        max_tokens: maxTokens // 根据尺寸设置的token限制
       }),
     });
 
