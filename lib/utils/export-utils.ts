@@ -190,11 +190,46 @@ export async function htmlToDataUrl(
           // 再次等待以确保样式应用完成
           await new Promise(resolve => setTimeout(resolve, 500));
 
+          // 检测信息图类型
+          const detectType = () => {
+            try {
+              // 检查是否是16:9尺寸信息图
+              const width = (container as HTMLElement).style.width || (container as HTMLElement).offsetWidth;
+              const height = (container as HTMLElement).style.height || (container as HTMLElement).offsetHeight;
+
+              // 检查是否是16:9尺寸
+              if (width === '1920px' || width === 1920 || height === '1080px' || height === 1080) {
+                return '16-9';
+              }
+
+              // 检查是否是A4横版
+              if (width === '1123px' || width === 1123 || height === '794px' || height === 794) {
+                return 'a4-l';
+              }
+
+              // 检查是否是A4竖版
+              if (width === '794px' || width === 794 || height === '1123px' || height === 1123) {
+                return 'a4-p';
+              }
+
+              return 'mobile'; // 默认为移动版
+            } catch (err) {
+              console.error('Failed to detect infographic type:', err);
+              return 'unknown';
+            }
+          };
+
+          const infographicType = detectType();
+          console.log(`Capturing infographic type: ${infographicType}`);
+
+          // 对于16:9和A4格式，使用特殊配置
+          const scale = (infographicType === '16-9' || infographicType === 'a4-l' || infographicType === 'a4-p') ? 1 : 2;
+
           // 使用html2canvas捕获infographic-container内容
           const canvas = await html2canvas(container as HTMLElement, {
             allowTaint: true,
             useCORS: true,
-            scale: 2, // 更高的缩放比例以获得更好的质量
+            scale: scale, // 根据类型设置缩放比例
             logging: false,
             backgroundColor: null, // 使用透明背景，让容器自己的背景显示
             width: containerWidth,
@@ -250,11 +285,60 @@ export async function htmlToDataUrl(
         }
       };
 
+      // 检测信息图类型
+      const detectInfographicType = (html: string) => {
+        if (html.includes('width: 1920px') || html.includes('width:1920px') ||
+            html.includes('height: 1080px') || html.includes('height:1080px')) {
+          return '16-9';
+        }
+        if (html.includes('width: 1123px') || html.includes('width:1123px') ||
+            html.includes('height: 794px') || html.includes('height:794px')) {
+          return 'a4-l';
+        }
+        if (html.includes('width: 794px') || html.includes('width:794px') ||
+            html.includes('height: 1123px') || html.includes('height:1123px')) {
+          return 'a4-p';
+        }
+        return 'mobile';
+      };
+
+      const infographicType = detectInfographicType(htmlContent);
+      console.log(`Exporting infographic type: ${infographicType}`);
+
+      // 对于16:9和A4格式，添加额外的样式
+      let modifiedContent = htmlContent;
+      if (infographicType === '16-9' || infographicType === 'a4-l' || infographicType === 'a4-p') {
+        // 添加样式以确保内容正确渲染
+        const styleTag = `
+          <style>
+            body {
+              margin: 0;
+              padding: 0;
+              overflow: visible !important;
+              background: transparent !important;
+            }
+            .infographic-container {
+              transform-origin: top left;
+              position: relative !important;
+              display: block !important;
+              overflow: visible !important;
+            }
+          </style>
+        `;
+
+        // 在</head>前插入样式
+        if (htmlContent.includes('</head>')) {
+          modifiedContent = htmlContent.replace('</head>', `${styleTag}</head>`);
+        } else {
+          modifiedContent = `<html><head>${styleTag}</head><body>${htmlContent}</body></html>`;
+        }
+      }
+
       // 设置iframe内容
       const iframeDoc = iframe.contentWindow?.document;
       if (iframeDoc) {
         iframeDoc.open();
-        iframeDoc.write(htmlContent);
+        iframeDoc.write(modifiedContent);
         iframeDoc.close();
       } else {
         throw new Error('Cannot access iframe document');

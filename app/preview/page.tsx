@@ -150,60 +150,222 @@ export default function PreviewPage() {
                     // 设置初始高度
                     iframe.style.height = '80vh';
 
-                    // 创建一个ResizeObserver来监视iframe内容变化
-                    const resizeObserver = new ResizeObserver(() => {
-                      try {
-                        if (iframe.contentWindow && iframe.contentDocument) {
-                          // 获取内容实际高度
-                          const docHeight = Math.max(
-                            iframe.contentDocument.body.scrollHeight,
-                            iframe.contentDocument.documentElement.scrollHeight,
-                            iframe.contentDocument.body.offsetHeight,
-                            iframe.contentDocument.documentElement.offsetHeight
-                          );
+                    // 创建计数器，防止无限循环
+                    let resizeCount = 0;
+                    const MAX_RESIZE_COUNT = 5; // 最大调整次数
 
-                          // 设置iframe高度，确保完整显示内容
-                          if (docHeight > 0) {
-                            iframe.style.height = `${docHeight + 20}px`; // 添加一点额外空间
+                    // 检测信息图类型
+                    const detectInfographicType = () => {
+                      try {
+                        if (iframe.contentDocument) {
+                          // 检查是否是16:9尺寸信息图
+                          const container = iframe.contentDocument.querySelector('.infographic-container');
+                          if (container) {
+                            const width = (container as HTMLElement).style.width || (container as HTMLElement).offsetWidth;
+                            const height = (container as HTMLElement).style.height || (container as HTMLElement).offsetHeight;
+
+                            // 检查是否是16:9尺寸
+                            if (width === '1920px' || width === 1920 || height === '1080px' || height === 1080) {
+                              return '16-9';
+                            }
+
+                            // 检查是否是A4横版
+                            if (width === '1123px' || width === 1123 || height === '794px' || height === 794) {
+                              return 'a4-l';
+                            }
+
+                            // 检查是否是A4竖版
+                            if (width === '794px' || width === 794 || height === '1123px' || height === 1123) {
+                              return 'a4-p';
+                            }
                           }
                         }
+                        return 'mobile'; // 默认为移动版
                       } catch (err) {
-                        console.error('Failed to adjust iframe height:', err);
+                        console.error('Failed to detect infographic type:', err);
+                        return 'unknown';
                       }
-                    });
+                    };
+
+                    // 防抖函数
+                    const debounce = (func: Function, wait: number) => {
+                      let timeout: NodeJS.Timeout | null = null;
+                      return function(...args: any[]) {
+                        if (timeout) clearTimeout(timeout);
+                        timeout = setTimeout(() => {
+                          func.apply(this, args);
+                        }, wait);
+                      };
+                    };
+
+                    // 创建一个ResizeObserver来监视iframe内容变化
+                    const resizeObserver = new ResizeObserver(
+                      debounce(() => {
+                        try {
+                          // 如果已经达到最大调整次数，则停止调整
+                          if (resizeCount >= MAX_RESIZE_COUNT) {
+                            console.log(`Reached max resize count (${MAX_RESIZE_COUNT}), stopping adjustments`);
+                            resizeObserver.disconnect();
+                            return;
+                          }
+
+                          resizeCount++;
+                          console.log(`Resize count: ${resizeCount}`);
+
+                          if (iframe.contentWindow && iframe.contentDocument) {
+                            const infographicType = detectInfographicType();
+                            console.log(`Detected infographic type: ${infographicType}`);
+
+                            // 对于16:9和A4格式，使用特殊处理
+                            if (infographicType === '16-9' || infographicType === 'a4-l' || infographicType === 'a4-p') {
+                              // 获取容器元素
+                              const container = iframe.contentDocument.querySelector('.infographic-container') as HTMLElement;
+                              if (container) {
+                                // 获取容器的原始尺寸
+                                const originalWidth = parseFloat(container.style.width) || container.offsetWidth;
+                                const originalHeight = parseFloat(container.style.height) || container.offsetHeight;
+
+                                // 获取iframe父容器的宽度
+                                const parentWidth = iframe.parentElement?.offsetWidth || window.innerWidth * 0.8;
+
+                                // 计算缩放比例
+                                const scale = Math.min(1, parentWidth / originalWidth);
+
+                                // 设置iframe的高度为缩放后的高度
+                                const scaledHeight = originalHeight * scale;
+                                iframe.style.height = `${scaledHeight}px`;
+
+                                // 添加样式以确保内容正确缩放和居中
+                                const style = document.createElement('style');
+                                style.textContent = `
+                                  body {
+                                    margin: 0;
+                                    padding: 0;
+                                    display: flex;
+                                    justify-content: center;
+                                    align-items: flex-start;
+                                    min-height: 100vh;
+                                  }
+                                  .infographic-container {
+                                    transform: scale(${scale});
+                                    transform-origin: top center;
+                                    margin: 0 auto;
+                                  }
+                                `;
+
+                                // 检查是否已经添加了样式
+                                const existingStyle = iframe.contentDocument.querySelector('style[data-scale-style]');
+                                if (existingStyle) {
+                                  existingStyle.textContent = style.textContent;
+                                } else {
+                                  style.setAttribute('data-scale-style', 'true');
+                                  iframe.contentDocument.head.appendChild(style);
+                                }
+                              } else {
+                                console.warn('Infographic container not found');
+                              }
+                            } else {
+                              // 对于移动版，使用原来的高度调整逻辑
+                              const docHeight = Math.max(
+                                iframe.contentDocument.body.scrollHeight,
+                                iframe.contentDocument.documentElement.scrollHeight,
+                                iframe.contentDocument.body.offsetHeight,
+                                iframe.contentDocument.documentElement.offsetHeight
+                              );
+
+                              // 设置iframe高度，确保完整显示内容
+                              if (docHeight > 0) {
+                                iframe.style.height = `${docHeight + 20}px`; // 添加一点额外空间
+                              }
+                            }
+                          }
+                        } catch (err) {
+                          console.error('Failed to adjust iframe height:', err);
+                        }
+                      }, 200) // 200ms防抖延迟
+                    );
 
                     // 监视iframe加载完成事件
                     iframe.onload = () => {
                       try {
                         if (iframe.contentDocument && iframe.contentDocument.body) {
+                          // 重置计数器
+                          resizeCount = 0;
+
+                          // 检测信息图类型
+                          const infographicType = detectInfographicType();
+                          console.log(`Infographic loaded, type: ${infographicType}`);
+
                           // 开始观察iframe内容变化
                           resizeObserver.observe(iframe.contentDocument.body);
 
-                          // 立即调整高度
-                          const docHeight = Math.max(
-                            iframe.contentDocument.body.scrollHeight,
-                            iframe.contentDocument.documentElement.scrollHeight,
-                            iframe.contentDocument.body.offsetHeight,
-                            iframe.contentDocument.documentElement.offsetHeight
-                          );
+                          // 对于16:9和A4格式，使用特殊处理
+                          if (infographicType === '16-9' || infographicType === 'a4-l' || infographicType === 'a4-p') {
+                            // 获取容器元素
+                            const container = iframe.contentDocument.querySelector('.infographic-container') as HTMLElement;
+                            if (container) {
+                              // 获取容器的原始尺寸
+                              const originalWidth = parseFloat(container.style.width) || container.offsetWidth;
+                              const originalHeight = parseFloat(container.style.height) || container.offsetHeight;
 
-                          if (docHeight > 0) {
-                            iframe.style.height = `${docHeight + 20}px`;
+                              // 获取iframe父容器的宽度
+                              const parentWidth = iframe.parentElement?.offsetWidth || window.innerWidth * 0.8;
+
+                              // 计算缩放比例
+                              const scale = Math.min(1, parentWidth / originalWidth);
+
+                              // 设置iframe的高度为缩放后的高度
+                              const scaledHeight = originalHeight * scale;
+                              iframe.style.height = `${scaledHeight}px`;
+
+                              // 添加样式以确保内容正确缩放和居中
+                              const style = document.createElement('style');
+                              style.textContent = `
+                                body {
+                                  margin: 0;
+                                  padding: 0;
+                                  display: flex;
+                                  justify-content: center;
+                                  align-items: flex-start;
+                                  min-height: 100vh;
+                                }
+                                .infographic-container {
+                                  transform: scale(${scale});
+                                  transform-origin: top center;
+                                  margin: 0 auto;
+                                }
+                              `;
+
+                              style.setAttribute('data-scale-style', 'true');
+                              iframe.contentDocument.head.appendChild(style);
+                            }
+                          } else {
+                            // 对于移动版，使用原来的高度调整逻辑
+                            const docHeight = Math.max(
+                              iframe.contentDocument.body.scrollHeight,
+                              iframe.contentDocument.documentElement.scrollHeight,
+                              iframe.contentDocument.body.offsetHeight,
+                              iframe.contentDocument.documentElement.offsetHeight
+                            );
+
+                            if (docHeight > 0) {
+                              iframe.style.height = `${docHeight + 20}px`;
+                            }
+
+                            // 添加样式以确保内容完全可见（仅对移动版）
+                            const style = document.createElement('style');
+                            style.textContent = `
+                              body {
+                                margin: 0;
+                                padding: 0;
+                                overflow: visible !important;
+                              }
+                              * {
+                                max-width: 100% !important;
+                              }
+                            `;
+                            iframe.contentDocument.head.appendChild(style);
                           }
-
-                          // 添加样式以确保内容完全可见
-                          const style = document.createElement('style');
-                          style.textContent = `
-                            body {
-                              margin: 0;
-                              padding: 0;
-                              overflow: visible !important;
-                            }
-                            * {
-                              max-width: 100% !important;
-                            }
-                          `;
-                          iframe.contentDocument.head.appendChild(style);
                         }
                       } catch (err) {
                         console.error('Failed to setup iframe:', err);
@@ -223,7 +385,66 @@ export default function PreviewPage() {
                     // 创建全屏预览
                     const win = window.open('', '_blank');
                     if (win) {
-                      win.document.write(htmlContent);
+                      // 检测信息图类型
+                      const detectType = (html: string) => {
+                        if (html.includes('width: 1920px') || html.includes('width:1920px') ||
+                            html.includes('height: 1080px') || html.includes('height:1080px')) {
+                          return '16-9';
+                        }
+                        if (html.includes('width: 1123px') || html.includes('width:1123px') ||
+                            html.includes('height: 794px') || html.includes('height:794px')) {
+                          return 'a4-l';
+                        }
+                        if (html.includes('width: 794px') || html.includes('width:794px') ||
+                            html.includes('height: 1123px') || html.includes('height:1123px')) {
+                          return 'a4-p';
+                        }
+                        return 'mobile';
+                      };
+
+                      const type = detectType(htmlContent);
+
+                      // 对于16:9和A4格式，添加额外的样式
+                      if (type === '16-9' || type === 'a4-l' || type === 'a4-p') {
+                        // 添加居中和缩放样式
+                        const styleTag = `
+                          <style>
+                            body {
+                              margin: 0;
+                              padding: 0;
+                              display: flex;
+                              justify-content: center;
+                              align-items: flex-start;
+                              min-height: 100vh;
+                              background-color: #f5f5f5;
+                            }
+                            .infographic-container {
+                              margin: 20px auto;
+                              max-width: 100%;
+                              height: auto;
+                            }
+                            @media (max-width: 1920px) {
+                              .infographic-container {
+                                transform: scale(calc(100vw / 1920));
+                                transform-origin: top center;
+                              }
+                            }
+                          </style>
+                        `;
+
+                        // 在</head>前插入样式
+                        let modifiedContent = htmlContent;
+                        if (htmlContent.includes('</head>')) {
+                          modifiedContent = htmlContent.replace('</head>', `${styleTag}</head>`);
+                        } else {
+                          modifiedContent = `<html><head>${styleTag}</head><body>${htmlContent}</body></html>`;
+                        }
+
+                        win.document.write(modifiedContent);
+                      } else {
+                        win.document.write(htmlContent);
+                      }
+
                       win.document.close();
                     }
                   }}
