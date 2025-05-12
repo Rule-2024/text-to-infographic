@@ -197,8 +197,6 @@ export async function htmlToDataUrl(
               const width = (container as HTMLElement).style.width || (container as HTMLElement).offsetWidth;
               const height = (container as HTMLElement).style.height || (container as HTMLElement).offsetHeight;
 
-              console.log(`Container dimensions: width=${width}, height=${height}`);
-
               // 检查是否是16:9尺寸
               if (width === '1920px' || width === 1920 || height === '1080px' || height === 1080) {
                 return '16-9';
@@ -214,44 +212,24 @@ export async function htmlToDataUrl(
                 return 'a4-p';
               }
 
-              // 检查是否是移动版 - 使用更宽松的检测
-              if (
-                width === '750px' ||
-                width === 750 ||
-                (typeof width === 'number' && width > 700 && width < 800)
-              ) {
-                return 'mobile';
-              }
-
-              // 如果无法确定，检查HTML内容
-              const htmlContent = iframe.contentDocument?.documentElement.outerHTML || '';
-              if (htmlContent.includes('width: 750px') || htmlContent.includes('width:750px')) {
-                return 'mobile';
-              }
-
               return 'mobile'; // 默认为移动版
             } catch (err) {
               console.error('Failed to detect infographic type:', err);
-              return 'mobile'; // 出错时也默认为移动版
+              return 'unknown';
             }
           };
 
           const infographicType = detectType();
           console.log(`Capturing infographic type: ${infographicType}`);
 
-          // 根据信息图类型设置适当的缩放比例
-          let scale = 2; // 默认使用2倍缩放
-
-          // 对于16:9和A4格式，使用1倍缩放，因为它们已经足够大
-          if (infographicType === '16-9' || infographicType === 'a4-l' || infographicType === 'a4-p') {
-            scale = 1;
-          }
+          // 对于16:9和A4格式，使用特殊配置
+          const scale = (infographicType === '16-9' || infographicType === 'a4-l' || infographicType === 'a4-p') ? 1 : 2;
 
           // 使用html2canvas捕获infographic-container内容
           const canvas = await html2canvas(container as HTMLElement, {
             allowTaint: true,
             useCORS: true,
-            scale: scale, // 使用统一的缩放比例
+            scale: scale, // 根据类型设置缩放比例
             logging: false,
             backgroundColor: null, // 使用透明背景，让容器自己的背景显示
             width: containerWidth,
@@ -284,21 +262,6 @@ export async function htmlToDataUrl(
                   }
                 `;
                 clonedDoc.head.appendChild(styleEl);
-
-                // 为移动版添加特定处理
-                if (infographicType === 'mobile') {
-                  try {
-                    // 确保移动版信息图的宽度固定为750px
-                    (clonedContainer as HTMLElement).style.width = '750px';
-                    // 确保高度自适应
-                    (clonedContainer as HTMLElement).style.height = 'auto';
-                    // 确保所有内容都可见
-                    (clonedContainer as HTMLElement).style.overflow = 'visible';
-                    console.log('Applied mobile-specific styles to cloned container');
-                  } catch (err) {
-                    console.error('Failed to apply mobile-specific styles:', err);
-                  }
-                }
               }
             }
           });
@@ -336,57 +299,39 @@ export async function htmlToDataUrl(
             html.includes('height: 1123px') || html.includes('height:1123px')) {
           return 'a4-p';
         }
-        // 检测移动版信息图 - 简化检测逻辑
-        if (html.includes('width: 750px') || html.includes('width:750px')) {
-          return 'mobile';
-        }
         return 'mobile';
       };
 
       const infographicType = detectInfographicType(htmlContent);
       console.log(`Exporting infographic type: ${infographicType}`);
 
-      // 为所有格式添加适当的样式，包括移动版
+      // 对于16:9和A4格式，添加额外的样式
       let modifiedContent = htmlContent;
-
-      // 添加基本样式，适用于所有类型
-      let styleContent = `
-        body {
-          margin: 0;
-          padding: 0;
-          overflow: visible !important;
-          background: transparent !important;
-        }
-        .infographic-container {
-          transform-origin: top left;
-          position: relative !important;
-          display: block !important;
-          overflow: visible !important;
-        }
-      `;
-
-      // 为移动版添加特定样式
-      if (infographicType === 'mobile') {
-        styleContent += `
-          /* 移动版特定样式 */
-          .infographic-container {
-            width: 750px !important;
-            height: auto !important;
-          }
+      if (infographicType === '16-9' || infographicType === 'a4-l' || infographicType === 'a4-p') {
+        // 添加样式以确保内容正确渲染
+        const styleTag = `
+          <style>
+            body {
+              margin: 0;
+              padding: 0;
+              overflow: visible !important;
+              background: transparent !important;
+            }
+            .infographic-container {
+              transform-origin: top left;
+              position: relative !important;
+              display: block !important;
+              overflow: visible !important;
+            }
+          </style>
         `;
-      }
 
-      const styleTag = `
-        <style>
-          ${styleContent}
-        </style>
-      `;
-
-      // 在</head>前插入样式
-      if (htmlContent.includes('</head>')) {
-        modifiedContent = htmlContent.replace('</head>', `${styleTag}</head>`);
-      } else {
-        modifiedContent = `<html><head>${styleTag}</head><body>${htmlContent}</body></html>`;
+        // 在</head>前插入样式
+        if (htmlContent.includes('</head>')) {
+          modifiedContent = htmlContent.replace('</head>', `${styleTag}</head>`);
+        } else {
+          modifiedContent = `<html><head>${styleTag}</head><body>${htmlContent}</body></html>`;
+        }
       }
 
       // 设置iframe内容
