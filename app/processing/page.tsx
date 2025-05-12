@@ -15,20 +15,41 @@ export default function ProcessingPage() {
   const hasAutoRetried = useRef(false);
   const maxRetries = 2; // 最大自动重试次数
   const startTimeRef = useRef<number>(Date.now()); // 记录开始时间
+  const [isFirstVisit, setIsFirstVisit] = useState(true); // 跟踪是否是首次访问
 
   // 获取尺寸参数，用于调整最大处理时间
   const sizeParam = searchParams.get('size');
 
-  // 根据尺寸设置不同的最大处理时间
+  // 检测是否是首次访问网站
+  useEffect(() => {
+    const hasVisitedBefore = localStorage.getItem('has_visited_processing_before');
+    if (!hasVisitedBefore) {
+      // 标记为首次访问
+      localStorage.setItem('has_visited_processing_before', 'true');
+      console.log('First visit to processing page detected');
+    } else {
+      // 不是首次访问
+      setIsFirstVisit(false);
+      console.log('Returning visitor to processing page');
+    }
+  }, []);
+
+  // 根据尺寸和是否是首次访问设置不同的最大处理时间
   let maxProcessingTime = 180000; // 默认最大处理时间：3分钟
+
+  // 为首次访问增加额外的处理时间
+  const firstVisitBonus = isFirstVisit ? 120000 : 0; // 首次访问额外增加2分钟
 
   // 为16:9和A4格式提供更长的处理时间
   if (sizeParam === '16-9') {
-    maxProcessingTime = 300000; // 16:9格式使用5分钟
-    console.log(`Using extended processing time (${maxProcessingTime}ms) for 16:9 format`);
+    maxProcessingTime = 300000 + firstVisitBonus; // 16:9格式使用5分钟（首次访问7分钟）
+    console.log(`Using extended processing time (${maxProcessingTime}ms) for 16:9 format${isFirstVisit ? ' (first visit)' : ''}`);
   } else if (sizeParam === 'a4-l' || sizeParam === 'a4-p') {
-    maxProcessingTime = 240000; // A4格式使用4分钟
-    console.log(`Using extended processing time (${maxProcessingTime}ms) for A4 format`);
+    maxProcessingTime = 240000 + firstVisitBonus; // A4格式使用4分钟（首次访问6分钟）
+    console.log(`Using extended processing time (${maxProcessingTime}ms) for A4 format${isFirstVisit ? ' (first visit)' : ''}`);
+  } else {
+    maxProcessingTime = 180000 + firstVisitBonus; // 移动版使用3分钟（首次访问5分钟）
+    console.log(`Using processing time (${maxProcessingTime}ms) for mobile format${isFirstVisit ? ' (first visit)' : ''}`);
   }
 
   useEffect(() => {
@@ -37,52 +58,110 @@ export default function ProcessingPage() {
       return;
     }
 
-    // Set polling interval - 更频繁地检查状态以提供更及时的反馈
-    const pollInterval = 1500; // 1.5 seconds
+    // 跟踪轮询次数和间隔
+    const pollCountRef = useRef(0);
+    const [pollInterval, setPollInterval] = useState(1500); // 初始轮询间隔：1.5秒
     let timeoutId: NodeJS.Timeout;
 
     const checkStatus = async () => {
       try {
+        // 增加轮询计数
+        pollCountRef.current++;
+        const pollCount = pollCountRef.current;
+
+        // 记录轮询信息
+        console.log(`Poll #${pollCount}, interval: ${pollInterval}ms, elapsed: ${Date.now() - startTimeRef.current}ms`);
+
         // 检查总处理时间是否超过最大限制
         const currentTime = Date.now();
         const elapsedTime = currentTime - startTimeRef.current;
 
         if (elapsedTime > maxProcessingTime) {
-          console.log(`Processing timeout after ${elapsedTime}ms for size: ${sizeParam || 'unknown'}`);
+          console.log(`Processing timeout after ${elapsedTime}ms for size: ${sizeParam || 'unknown'}, first visit: ${isFirstVisit}`);
 
-          // 根据尺寸提供更具体的错误信息
+          // 根据尺寸和是否是首次访问提供更具体的错误信息
+          let timeoutMessage = '';
+
+          if (isFirstVisit) {
+            timeoutMessage = 'This is your first time using our service, which may take longer to initialize. ';
+          }
+
           if (sizeParam === '16-9') {
-            setError('Processing the 16:9 landscape format is taking longer than expected. This format requires more processing power. Please try again with a shorter text or switch to the mobile format for faster results.');
+            setError(`${timeoutMessage}Processing the 16:9 landscape format is taking longer than expected. This format requires more processing power. Please try again with a shorter text or switch to the mobile format for faster results.`);
           } else if (sizeParam === 'a4-l') {
-            setError('Processing the A4 landscape format is taking longer than expected. This format requires more processing power. Please try again with a shorter text or switch to the mobile format for faster results.');
+            setError(`${timeoutMessage}Processing the A4 landscape format is taking longer than expected. This format requires more processing power. Please try again with a shorter text or switch to the mobile format for faster results.`);
           } else if (sizeParam === 'a4-p') {
-            setError('Processing the A4 portrait format is taking longer than expected. This format requires more processing power. Please try again with a shorter text or switch to the mobile format for faster results.');
+            setError(`${timeoutMessage}Processing the A4 portrait format is taking longer than expected. This format requires more processing power. Please try again with a shorter text or switch to the mobile format for faster results.`);
           } else {
-            setError('Processing is taking longer than expected. Please try again with a shorter text or different settings.');
+            setError(`${timeoutMessage}Processing is taking longer than expected. Please try again with a shorter text or different settings.`);
           }
           return;
         }
 
-        const response = await fetch(`/api/infographic/${id}/status`);
+        // 添加重试逻辑
+        let statusFetchAttempts = 0;
+        const maxStatusFetchAttempts = 3;
+        let statusData = null;
 
-        if (!response.ok) {
-          // 如果服务器返回错误，尝试重试
-          if (retryCount < maxRetries) {
-            console.log(`Status check failed, retrying (${retryCount + 1}/${maxRetries})...`);
-            setRetryCount(prev => prev + 1);
-            timeoutId = setTimeout(checkStatus, 2000); // 减少重试间隔
-            return;
+        while (statusFetchAttempts < maxStatusFetchAttempts) {
+          try {
+            const response = await fetch(`/api/infographic/${id}/status`);
+            if (!response.ok) {
+              throw new Error(`Status API returned ${response.status}`);
+            }
+
+            statusData = await response.json();
+            break; // 成功获取状态，跳出循环
+          } catch (fetchError) {
+            statusFetchAttempts++;
+            console.warn(`Failed to fetch status, attempt ${statusFetchAttempts}/${maxStatusFetchAttempts}:`, fetchError);
+
+            if (statusFetchAttempts >= maxStatusFetchAttempts) {
+              throw fetchError; // 达到最大尝试次数，抛出错误
+            }
+
+            // 短暂延迟后重试
+            await new Promise(resolve => setTimeout(resolve, 1000));
           }
-          throw new Error('Failed to fetch status');
         }
 
-        const data = await response.json();
+        // 确保我们有状态数据
+        if (!statusData) {
+          throw new Error('Failed to fetch status after multiple attempts');
+        }
 
-        if (data.status === 'completed') {
-          // Generation complete, redirect to preview page
+        // 重置重试计数器，因为成功获取了状态
+        if (retryCount > 0) {
+          setRetryCount(0);
+        }
+
+        // 更新进度
+        setProgress(statusData.progress || 0);
+
+        // 根据进度和轮询次数动态调整轮询间隔
+        if (statusData.progress > 75) {
+          // 进度接近完成，更频繁地检查
+          setPollInterval(1000);
+        } else if (statusData.progress > 50) {
+          // 中等进度，适中的检查频率
+          setPollInterval(1500);
+        } else if (pollCount > 10) {
+          // 已经轮询多次，减少服务器负担
+          setPollInterval(3000);
+        }
+
+        if (statusData.status === 'completed') {
+          // 生成完成，跳转到预览页面
+          console.log(`Generation completed after ${elapsedTime}ms and ${pollCount} polls`);
+
+          // 标记为非首次访问（用于下次访问）
+          if (isFirstVisit) {
+            setIsFirstVisit(false);
+          }
+
           router.push(`/preview?id=${id}`);
           return;
-        } else if (data.status === 'failed') {
+        } else if (statusData.status === 'failed') {
           // 如果是第一次失败且尚未自动重试，尝试自动重新创建
           if (!hasAutoRetried.current) {
             hasAutoRetried.current = true;
@@ -100,36 +179,33 @@ export default function ProcessingPage() {
           }
 
           // 如果已经尝试过自动重试，显示错误
-          if (data.error) {
-            setError(data.error);
+          console.log(`Generation failed after ${elapsedTime}ms and ${pollCount} polls`);
+
+          if (statusData.error) {
+            setError(statusData.error);
           } else {
-            // 根据尺寸提供更具体的错误信息
+            // 根据尺寸和是否是首次访问提供更具体的错误信息
+            let failureMessage = '';
+
+            if (isFirstVisit) {
+              failureMessage = 'This is your first time using our service. ';
+            }
+
             if (sizeParam === '16-9') {
-              setError('Generation of 16:9 landscape format failed. This format is more complex and may require shorter text input. Please try again with less text or switch to the mobile format.');
+              setError(`${failureMessage}Generation of 16:9 landscape format failed. This format is more complex and may require shorter text input. Please try again with less text or switch to the mobile format.`);
             } else if (sizeParam === 'a4-l') {
-              setError('Generation of A4 landscape format failed. This format is more complex and may require shorter text input. Please try again with less text or switch to the mobile format.');
+              setError(`${failureMessage}Generation of A4 landscape format failed. This format is more complex and may require shorter text input. Please try again with less text or switch to the mobile format.`);
             } else if (sizeParam === 'a4-p') {
-              setError('Generation of A4 portrait format failed. This format is more complex and may require shorter text input. Please try again with less text or switch to the mobile format.');
+              setError(`${failureMessage}Generation of A4 portrait format failed. This format is more complex and may require shorter text input. Please try again with less text or switch to the mobile format.`);
             } else {
-              setError('Generation failed, please try again with a shorter text or different settings.');
+              setError(`${failureMessage}Generation failed, please try again with a shorter text or different settings.`);
             }
           }
           return;
         }
 
-        // 重置重试计数器，因为成功获取了状态
-        if (retryCount > 0) {
-          setRetryCount(0);
-        }
-
-        // Update progress
-        setProgress(data.progress || 0);
-
-        // 根据进度动态调整轮询间隔 - 进度越高，检查越频繁
-        const dynamicInterval = progress > 70 ? 1000 : pollInterval;
-
         // Continue polling
-        timeoutId = setTimeout(checkStatus, dynamicInterval);
+        timeoutId = setTimeout(checkStatus, pollInterval);
       } catch (err) {
         // 如果还有重试次数，尝试重试
         if (retryCount < maxRetries) {
@@ -137,7 +213,18 @@ export default function ProcessingPage() {
           setRetryCount(prev => prev + 1);
           timeoutId = setTimeout(checkStatus, 2000); // 减少重试间隔
         } else {
-          setError('Connection issue. Please check your internet connection and try again.');
+          // 提供更具体的错误信息
+          if (err instanceof Error) {
+            if (err.message.includes('network') || err.message.includes('connection')) {
+              setError('Network connection issue. Please check your internet connection and refresh the page.');
+            } else if (err.message.includes('timeout')) {
+              setError('Request timed out. The server might be busy, please refresh the page or try again later.');
+            } else {
+              setError(`Connection issue: ${err.message}. Please check your internet connection and try again.`);
+            }
+          } else {
+            setError('Connection issue. Please check your internet connection and try again.');
+          }
         }
       }
     };
@@ -149,7 +236,7 @@ export default function ProcessingPage() {
     return () => {
       if (timeoutId) clearTimeout(timeoutId);
     };
-  }, [id, router, retryCount]);
+  }, [id, router, retryCount, maxProcessingTime, sizeParam, isFirstVisit]);
 
   // Cancel generation
   const handleCancel = async () => {

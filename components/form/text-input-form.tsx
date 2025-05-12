@@ -66,6 +66,21 @@ export function TextInputForm() {
     saveFormData(newFormData);
   };
 
+  // 跟踪是否是首次提交
+  const [isFirstSubmission, setIsFirstSubmission] = useState(true);
+
+  // 检测是否是首次访问网站
+  useEffect(() => {
+    const hasVisitedBefore = localStorage.getItem('has_visited_before');
+    if (!hasVisitedBefore) {
+      // 标记为首次访问
+      localStorage.setItem('has_visited_before', 'true');
+    } else {
+      // 不是首次访问
+      setIsFirstSubmission(false);
+    }
+  }, []);
+
   // Handle form submission
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
@@ -88,53 +103,92 @@ export function TextInputForm() {
       // 保存表单数据以防提交失败
       saveFormData(formData);
 
-      // Call API with increased timeout
-      const controller = new AbortController();
-      const timeoutId = setTimeout(() => controller.abort(), 15000); // 15秒超时
+      // 根据是否是首次提交设置不同的超时时间
+      const timeoutDuration = isFirstSubmission ? 30000 : 20000; // 首次30秒，后续20秒
+      console.log(`Using ${timeoutDuration/1000}s timeout for ${isFirstSubmission ? 'first' : 'subsequent'} submission`);
 
-      try {
-        const response = await fetch('/api/infographic', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(formData),
-          signal: controller.signal
-        });
+      // 尝试提交，使用重试逻辑
+      let attempts = 0;
+      const maxAttempts = isFirstSubmission ? 2 : 1; // 首次提交允许一次重试
 
-        clearTimeout(timeoutId);
+      while (attempts <= maxAttempts) {
+        // 每次尝试都创建新的AbortController
+        let controller = new AbortController();
+        let timeoutId = setTimeout(() => controller.abort(), timeoutDuration);
 
-        if (!response.ok) {
-          const data = await response.json();
-          throw new Error(data.error || 'Submission failed');
-        }
-
-        const data = await response.json();
-
-        // 提交成功后，清除保存的表单数据
         try {
-          localStorage.removeItem(FORM_STORAGE_KEY);
-        } catch (e) {
-          console.error('Failed to clear saved form data:', e);
-        }
+          console.log(`Submission attempt ${attempts + 1}/${maxAttempts + 1}`);
 
-        // Redirect to processing or preview page
-        if (data.status === 'completed') {
-          router.push(`/preview?id=${data.id}`);
-        } else {
-          // 传递尺寸参数到处理页面，用于调整处理时间
-          router.push(`/processing?id=${data.id}&size=${formData.size}`);
+          const response = await fetch('/api/infographic', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(formData),
+            signal: controller.signal
+          });
+
+          clearTimeout(timeoutId);
+
+          if (!response.ok) {
+            const data = await response.json();
+            throw new Error(data.error || 'Submission failed');
+          }
+
+          const data = await response.json();
+
+          // 提交成功后，清除保存的表单数据
+          try {
+            localStorage.removeItem(FORM_STORAGE_KEY);
+          } catch (e) {
+            console.error('Failed to clear saved form data:', e);
+          }
+
+          // 标记为非首次提交（用于下次提交）
+          setIsFirstSubmission(false);
+
+          // Redirect to processing or preview page
+          if (data.status === 'completed') {
+            router.push(`/preview?id=${data.id}`);
+          } else {
+            // 传递尺寸参数到处理页面，用于调整处理时间
+            router.push(`/processing?id=${data.id}&size=${formData.size}`);
+          }
+
+          // 成功提交，跳出循环
+          return;
+        } catch (error) {
+          // 清理超时
+          clearTimeout(timeoutId);
+
+          // 如果是最后一次尝试，或者不是超时错误，则抛出
+          if (attempts >= maxAttempts || !(error instanceof Error && error.name === 'AbortError')) {
+            throw error;
+          }
+
+          // 超时错误且还有重试机会，尝试重试
+          console.log('Request timed out, retrying...');
+          attempts++;
+
+          // 短暂延迟后重试
+          await new Promise(resolve => setTimeout(resolve, 1000));
         }
-      } catch (error) {
-        // 使用类型守卫检查错误类型
-        if (error instanceof Error && error.name === 'AbortError') {
-          throw new Error('Request timed out. The server might be busy, please try again.');
-        }
-        throw error;
       }
     } catch (err) {
       console.error('Form submission error:', err);
-      setError(err instanceof Error ? err.message : 'Submission failed, please try again');
+
+      // 提供更具体的错误信息
+      if (err instanceof Error) {
+        if (err.name === 'AbortError') {
+          setError('Request timed out. The server might be busy, please try again in a few moments.');
+        } else if (err.message.includes('network') || err.message.includes('connection')) {
+          setError('Network connection issue. Please check your internet connection and try again.');
+        } else {
+          setError(err.message);
+        }
+      } else {
+        setError('Submission failed, please try again');
+      }
     } finally {
       setIsSubmitting(false);
     }

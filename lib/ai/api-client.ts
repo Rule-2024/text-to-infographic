@@ -3,6 +3,10 @@
  * Handle communication with AI services
  */
 
+// 跟踪API调用状态
+let apiCallCount = 0;
+let lastApiCallTime = 0;
+
 /**
  * Call AI service to generate infographic HTML
  *
@@ -12,6 +16,20 @@
  */
 export async function generateInfographicHtml(prompt: string, size?: string): Promise<string> {
   try {
+    // 记录API调用信息
+    apiCallCount++;
+    const currentTime = Date.now();
+    const timeSinceLastCall = currentTime - lastApiCallTime;
+    lastApiCallTime = currentTime;
+
+    console.log(`API call #${apiCallCount}, time since last call: ${timeSinceLastCall}ms, size: ${size || 'unknown'}`);
+
+    // 如果是首次调用或距离上次调用时间较长，添加短暂延迟以确保API服务准备就绪
+    if (apiCallCount === 1 || timeSinceLastCall > 300000) { // 首次调用或距离上次调用超过5分钟
+      console.log('First call or long time since last call, adding warm-up delay');
+      await new Promise(resolve => setTimeout(resolve, 1000)); // 添加1秒预热延迟
+    }
+
     // Get DeepSeek API key and base URL
     const apiKey = process.env.AI_API_KEY;
     const baseUrl = process.env.AI_API_URL || 'https://api.lkeap.cloud.tencent.com/v1/chat/completions';
@@ -31,41 +49,72 @@ export async function generateInfographicHtml(prompt: string, size?: string): Pr
       console.log(`Using increased max_tokens (${maxTokens}) for A4 format`);
     }
 
-    // 腾讯云DeepSeek API使用OpenAI兼容接口
-    const response = await fetch(baseUrl, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${apiKey}`
-      },
-      body: JSON.stringify({
-        model: model, // 使用环境变量中配置的模型，默认为deepseek-v3-0324
-        messages: [
-          { role: 'system', content: 'You are a professional infographic generator.' },
-          { role: 'user', content: prompt }
-        ],
-        temperature: 0.7,
-        stream: false,
-        max_tokens: maxTokens // 根据尺寸设置的token限制
-      }),
-    });
+    // 设置请求超时
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 60000); // 60秒请求超时
 
-    if (!response.ok) {
-      const errorData = await response.json().catch(() => ({}));
-      throw new Error(`API request failed: ${response.status} ${JSON.stringify(errorData)}`);
+    try {
+      // 腾讯云DeepSeek API使用OpenAI兼容接口
+      console.log(`Sending request to ${baseUrl} with model ${model}`);
+      const response = await fetch(baseUrl, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${apiKey}`
+        },
+        body: JSON.stringify({
+          model: model, // 使用环境变量中配置的模型，默认为deepseek-v3-0324
+          messages: [
+            { role: 'system', content: 'You are a professional infographic generator.' },
+            { role: 'user', content: prompt }
+          ],
+          temperature: 0.7,
+          stream: false,
+          max_tokens: maxTokens // 根据尺寸设置的token限制
+        }),
+        signal: controller.signal
+      });
+
+      // 清除超时
+      clearTimeout(timeoutId);
+
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({}));
+        throw new Error(`API request failed: ${response.status} ${JSON.stringify(errorData)}`);
+      }
+
+      const data = await response.json();
+
+      // Extract HTML content
+      const html = data.choices?.[0]?.message?.content;
+
+      if (!html) throw new Error('DeepSeek did not return HTML');
+
+      console.log(`API call #${apiCallCount} completed successfully`);
+      return html;
+    } catch (error) {
+      // 清除超时
+      clearTimeout(timeoutId);
+      throw error;
+    }
+  } catch (error) {
+    // 提供更具体的错误信息
+    let errorMessage = 'AI service call failed';
+
+    if (error instanceof Error) {
+      if (error.name === 'AbortError') {
+        errorMessage = 'API request timed out after 60 seconds';
+      } else if (error.message.includes('network') || error.message.includes('connection')) {
+        errorMessage = 'Network connection issue when calling AI service';
+      } else if (error.message.includes('API key') || error.message.includes('authentication')) {
+        errorMessage = 'AI service authentication failed, please check API key configuration';
+      } else {
+        errorMessage = error.message;
+      }
     }
 
-    const data = await response.json();
-
-    // Extract HTML content
-    const html = data.choices?.[0]?.message?.content;
-
-    if (!html) throw new Error('DeepSeek did not return HTML');
-
-    return html;
-  } catch (error) {
-    console.error('AI service call failed:', error);
-    throw new Error(`Infographic generation failed: ${error instanceof Error ? error.message : 'Unknown error'}`);
+    console.error(`AI service call #${apiCallCount} failed:`, errorMessage);
+    throw new Error(`Infographic generation failed: ${errorMessage}`);
   }
 }
 
@@ -84,6 +133,10 @@ export async function withRetry<T>(
   delay = 1500, // 减少默认初始延迟
   timeout?: number // 可选的超时参数
 ): Promise<T> {
+  // 记录重试信息
+  const startTime = Date.now();
+  const maxRetries = retries; // 保存初始重试次数，用于日志
+
   // 添加超时逻辑的包装函数
   const executeWithTimeout = async (): Promise<T> => {
     if (!timeout) return fn();
@@ -97,26 +150,49 @@ export async function withRetry<T>(
     return Promise.race([fn(), timeoutPromise]);
   };
 
-  try {
-    return await executeWithTimeout();
-  } catch (error) {
-    // 检查是否已达到最大重试次数
-    if (retries <= 0) throw error;
+  // 内部重试函数，使用尾递归优化
+  const attemptWithRetry = async (
+    remainingRetries: number,
+    currentDelay: number
+  ): Promise<T> => {
+    try {
+      // 记录当前尝试信息
+      const attemptNumber = maxRetries - remainingRetries + 1;
+      const elapsedTime = Date.now() - startTime;
+      console.log(`Attempt ${attemptNumber}/${maxRetries + 1}, elapsed time: ${elapsedTime}ms`);
 
-    // 判断错误是否可重试
-    if (!isRetryableError(error)) {
-      console.log('Non-retryable error detected, aborting retry:', error);
-      throw error;
+      // 执行函数
+      return await executeWithTimeout();
+    } catch (error) {
+      // 记录错误信息
+      const elapsedTime = Date.now() - startTime;
+      console.error(`Attempt failed after ${elapsedTime}ms:`, error);
+
+      // 检查是否已达到最大重试次数
+      if (remainingRetries <= 0) {
+        console.log(`All ${maxRetries + 1} attempts failed after ${elapsedTime}ms`);
+        throw error;
+      }
+
+      // 判断错误是否可重试
+      if (!isRetryableError(error)) {
+        console.log('Non-retryable error detected, aborting retry:', error);
+        throw error;
+      }
+
+      // 计算下一次延迟，但设置上限为5000ms
+      const nextDelay = Math.min(currentDelay * 1.5, 5000);
+
+      console.log(`Retrying in ${currentDelay}ms, remaining retries: ${remainingRetries}`);
+      await new Promise(resolve => setTimeout(resolve, currentDelay));
+
+      // 递归调用下一次尝试
+      return attemptWithRetry(remainingRetries - 1, nextDelay);
     }
+  };
 
-    // 计算下一次延迟，但设置上限为5000ms
-    const nextDelay = Math.min(delay * 1.5, 5000);
-
-    console.log(`Operation failed, retrying in ${delay}ms, remaining retries: ${retries-1}`);
-    await new Promise(resolve => setTimeout(resolve, delay));
-
-    return withRetry(fn, retries - 1, nextDelay, timeout);
-  }
+  // 开始第一次尝试
+  return attemptWithRetry(retries, delay);
 }
 
 /**
