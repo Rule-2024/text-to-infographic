@@ -151,10 +151,10 @@ export function TextInputForm() {
             <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
             </svg>
-            Text Content
+            文本内容
           </label>
           <span className={`text-xs px-2 py-1 rounded-full ${remainingChars <= 0 ? 'bg-destructive/10 text-destructive' : 'bg-primary/10 text-primary'}`}>
-            {formData.content.length}/{MAX_TEXT_LENGTH} characters
+            {formData.content.length}/{MAX_TEXT_LENGTH} 字符
           </span>
         </div>
 
@@ -166,8 +166,8 @@ export function TextInputForm() {
             value={formData.content}
             onChange={handleTextChange}
             disabled={isSubmitting}
-            className="w-full rounded-lg border border-input bg-background px-4 py-3 text-base sm:text-sm leading-relaxed sm:leading-normal ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/50 transition-all duration-200 shadow-sm focus-visible:shadow-md mobile-touch-target"
-            placeholder="Enter your text here to convert it into an infographic..."
+            className="w-full rounded-lg border border-input bg-background px-4 py-3 text-base leading-relaxed ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/50 transition-all duration-200 shadow-sm focus-visible:shadow-md mobile-touch-target"
+            placeholder="输入您的文本内容，将其转换为信息图..."
           />
           {isSubmitting && (
             <div className="absolute inset-0 bg-background/50 backdrop-blur-sm flex items-center justify-center rounded-lg">
@@ -192,7 +192,7 @@ export function TextInputForm() {
         )}
 
         <p className="text-xs text-muted-foreground">
-          Enter your text content to convert into an infographic. You can paste articles, reports, essays, or any text up to 10000 characters.
+          输入您想要转换为信息图的文本内容。您可以粘贴文章、报告、论文或任何不超过10000字符的文本。
         </p>
       </div>
 
@@ -202,7 +202,7 @@ export function TextInputForm() {
             <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-secondary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
             </svg>
-            Processing Mode
+            处理模式
           </label>
           <select
             id="mode"
@@ -219,7 +219,7 @@ export function TextInputForm() {
             ))}
           </select>
           <p className="text-xs text-muted-foreground">
-            Choose how your text should be processed. Full processing preserves the original structure, while summary extracts key points.
+            选择文本处理方式。全文处理保留原始结构，摘要模式提取关键要点。
           </p>
         </div>
 
@@ -228,7 +228,7 @@ export function TextInputForm() {
             <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-purple-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4" />
             </svg>
-            Size Selection
+            尺寸选择
           </label>
           <select
             id="size"
@@ -245,7 +245,7 @@ export function TextInputForm() {
             ))}
           </select>
           <p className="text-xs text-muted-foreground">
-            Select the size format for your infographic based on how you plan to use it (presentations, printing, or mobile).
+            根据您的使用场景选择信息图尺寸格式（演示文稿、打印或移动设备）。
           </p>
         </div>
       </div>
@@ -262,14 +262,14 @@ export function TextInputForm() {
                 <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
                 <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
               </svg>
-              Processing...
+              处理中...
             </>
           ) : (
             <>
               <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
               </svg>
-              Generate AI Infographic
+              生成AI信息图
             </>
           )}
         </button>

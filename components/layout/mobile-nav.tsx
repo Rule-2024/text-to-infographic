@@ -12,17 +12,22 @@ export function MobileNav() {
   const closeMenu = () => {
     setIsMenuOpen(false);
     setFeaturesOpen(false);
+    // 确保立即恢复滚动
+    document.body.style.overflow = '';
   };
 
   // 当菜单打开时禁止背景滚动
   useEffect(() => {
+    const originalStyle = window.getComputedStyle(document.body).overflow;
     if (isMenuOpen) {
       document.body.style.overflow = 'hidden';
     } else {
       document.body.style.overflow = '';
     }
+
+    // 组件卸载时确保恢复原始滚动状态
     return () => {
-      document.body.style.overflow = '';
+      document.body.style.overflow = originalStyle;
     };
   }, [isMenuOpen]);
 
@@ -53,9 +58,9 @@ export function MobileNav() {
             <Image src="/images/logo.svg" alt="Logo" fill className="object-contain" priority />
           </div>
         </Link>
-        
+
         {/* 汉堡菜单按钮 */}
-        <button 
+        <button
           onClick={() => setIsMenuOpen(!isMenuOpen)}
           className="mobile-touch-target flex items-center justify-center p-2 rounded-lg"
           aria-label={isMenuOpen ? "Close menu" : "Open menu"}
@@ -74,8 +79,8 @@ export function MobileNav() {
 
       {/* 移动端菜单 */}
       {isMenuOpen && (
-        <div className="fixed inset-0 z-50 bg-background pt-16">
-          <div className="container px-4 py-6 flex flex-col gap-6 h-full overflow-auto">
+        <div className="fixed inset-0 z-50 bg-background pt-16 mobile-scroll">
+          <div className="container px-4 py-6 flex flex-col gap-6 h-full overflow-y-auto">
             {/* 创建按钮 */}
             <Link
               href="/create"
@@ -100,11 +105,11 @@ export function MobileNav() {
                   </svg>
                   功能特点
                 </div>
-                <svg 
-                  xmlns="http://www.w3.org/2000/svg" 
-                  className={`h-5 w-5 transition-transform duration-300 ${featuresOpen ? 'rotate-180' : ''}`} 
-                  fill="none" 
-                  viewBox="0 0 24 24" 
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className={`h-5 w-5 transition-transform duration-300 ${featuresOpen ? 'rotate-180' : ''}`}
+                  fill="none"
+                  viewBox="0 0 24 24"
                   stroke="currentColor"
                 >
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
@@ -161,6 +166,17 @@ export function MobileNav() {
               </svg>
               登录
             </Link>
+
+            {/* 关闭菜单按钮 */}
+            <button
+              onClick={closeMenu}
+              className="mt-6 py-4 w-full flex items-center justify-center gap-2 border-t border-border/50 text-muted-foreground mobile-touch-target"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+              </svg>
+              关闭菜单
+            </button>
           </div>
         </div>
       )}

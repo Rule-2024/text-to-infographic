@@ -35,30 +35,31 @@ export function FloatingCta() {
       <Link
         href="/create"
         className={`
-          bg-gradient-to-r from-primary to-secondary 
-          text-white font-medium px-4 py-3 rounded-full 
-          shadow-lg hover:shadow-xl 
+          bg-gradient-to-r from-primary to-secondary
+          text-white font-medium px-4 py-3 rounded-full
+          shadow-lg hover:shadow-xl
           flex items-center gap-2
           transition-all duration-300
+          mobile-touch-target
           ${isAnimating ? 'animate-pulse scale-110' : ''}
         `}
       >
-        <svg 
-          xmlns="http://www.w3.org/2000/svg" 
-          className={`h-5 w-5 ${isAnimating ? 'animate-spin' : ''}`} 
-          fill="none" 
-          viewBox="0 0 24 24" 
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          className={`h-5 w-5 ${isAnimating ? 'animate-spin' : ''}`}
+          fill="none"
+          viewBox="0 0 24 24"
           stroke="currentColor"
         >
-          <path 
-            strokeLinecap="round" 
-            strokeLinejoin="round" 
-            strokeWidth={2} 
-            d="M12 6v6m0 0v6m0-6h6m-6 0H6" 
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth={2}
+            d="M12 6v6m0 0v6m0-6h6m-6 0H6"
           />
         </svg>
         <span className="relative">
-          Start Creating
+          开始创建
           {isAnimating && (
             <span className="absolute -top-1 -right-1 flex h-3 w-3">
               <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-white opacity-75"></span>
