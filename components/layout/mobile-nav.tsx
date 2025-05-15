@@ -48,14 +48,15 @@ export function MobileNav() {
     <>
       {/* 移动端导航栏 */}
       <div className="flex items-center justify-between w-full px-4">
-        <Link href="/" className="flex items-center gap-2" onClick={closeMenu}>
+        <Link href="/" className="flex items-center gap-3" onClick={closeMenu}>
           <div className="relative h-10 w-10">
             <Image src="/images/logo.svg" alt="Logo" fill className="object-contain" priority />
           </div>
+          <span className="text-base font-medium gradient-text">Text to infographic</span>
         </Link>
-        
+
         {/* 汉堡菜单按钮 */}
-        <button 
+        <button
           onClick={() => setIsMenuOpen(!isMenuOpen)}
           className="mobile-touch-target flex items-center justify-center p-2 rounded-lg"
           aria-label={isMenuOpen ? "Close menu" : "Open menu"}
@@ -100,11 +101,11 @@ export function MobileNav() {
                   </svg>
                   功能特点
                 </div>
-                <svg 
-                  xmlns="http://www.w3.org/2000/svg" 
-                  className={`h-5 w-5 transition-transform duration-300 ${featuresOpen ? 'rotate-180' : ''}`} 
-                  fill="none" 
-                  viewBox="0 0 24 24" 
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className={`h-5 w-5 transition-transform duration-300 ${featuresOpen ? 'rotate-180' : ''}`}
+                  fill="none"
+                  viewBox="0 0 24 24"
                   stroke="currentColor"
                 >
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
