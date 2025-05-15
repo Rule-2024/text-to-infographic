@@ -53,11 +53,10 @@ export function MobileNav() {
     <>
       {/* 移动端导航栏 */}
       <div className="flex items-center justify-between w-full px-4">
-        <Link href="/" className="flex items-center gap-2 pl-1" onClick={closeMenu}>
+        <Link href="/" className="flex items-center gap-2" onClick={closeMenu}>
           <div className="relative h-10 w-10">
             <Image src="/images/logo.svg" alt="Logo" fill className="object-contain" priority />
           </div>
-          <span className="font-medium text-sm bg-gradient-to-r from-primary to-secondary text-transparent bg-clip-text">Text to Infographic</span>
         </Link>
 
         {/* 汉堡菜单按钮 */}
