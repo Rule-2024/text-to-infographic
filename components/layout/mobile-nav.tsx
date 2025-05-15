@@ -14,16 +14,34 @@ export function MobileNav() {
     setFeaturesOpen(false);
   };
 
-  // 当菜单打开时禁止背景滚动
+  // 当菜单打开时禁止背景滚动并添加点击外部关闭菜单的功能
   useEffect(() => {
     if (isMenuOpen) {
       document.body.style.overflow = 'hidden';
+
+      // 添加点击外部关闭菜单的事件处理
+      const handleOutsideClick = (e: MouseEvent) => {
+        // 检查点击是否在菜单外部
+        const target = e.target as HTMLElement;
+        if (!target.closest('.mobile-menu-container') && !target.closest('.mobile-menu-button')) {
+          setIsMenuOpen(false);
+        }
+      };
+
+      // 添加事件监听器
+      document.addEventListener('click', handleOutsideClick);
+
+      // 清理函数
+      return () => {
+        document.body.style.overflow = '';
+        document.removeEventListener('click', handleOutsideClick);
+      };
     } else {
       document.body.style.overflow = '';
+      return () => {
+        document.body.style.overflow = '';
+      };
     }
-    return () => {
-      document.body.style.overflow = '';
-    };
   }, [isMenuOpen]);
 
   // FAQ点击处理函数
@@ -57,8 +75,11 @@ export function MobileNav() {
 
         {/* 汉堡菜单按钮 */}
         <button
-          onClick={() => setIsMenuOpen(!isMenuOpen)}
-          className="mobile-touch-target flex items-center justify-center p-2 rounded-lg"
+          onClick={(e) => {
+            e.stopPropagation(); // 阻止事件冒泡
+            setIsMenuOpen(!isMenuOpen);
+          }}
+          className="mobile-touch-target flex items-center justify-center p-2 rounded-lg z-[101] mobile-menu-button"
           aria-label={isMenuOpen ? "Close menu" : "Open menu"}
         >
           {isMenuOpen ? (
@@ -75,8 +96,8 @@ export function MobileNav() {
 
       {/* 移动端菜单 */}
       {isMenuOpen && (
-        <div className="fixed inset-0 z-50 bg-background pt-16">
-          <div className="container px-4 py-6 flex flex-col gap-6 h-full overflow-auto">
+        <div className="fixed inset-0 z-[100] bg-background mobile-menu-container" style={{ top: '64px' }}>
+          <div className="container px-4 py-4 flex flex-col gap-6 h-full overflow-auto mobile-menu-content">
             {/* 创建按钮 */}
             <Link
               href="/create"
@@ -92,8 +113,11 @@ export function MobileNav() {
             {/* 功能菜单 */}
             <div className="border-b pb-4">
               <button
-                onClick={() => setFeaturesOpen(!featuresOpen)}
-                className="flex items-center justify-between w-full py-3 text-lg"
+                onClick={(e) => {
+                  e.stopPropagation(); // 阻止事件冒泡
+                  setFeaturesOpen(!featuresOpen);
+                }}
+                className="flex items-center justify-between w-full py-3 text-lg mobile-touch-target"
               >
                 <div className="flex items-center gap-2">
                   <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -114,25 +138,25 @@ export function MobileNav() {
 
               {featuresOpen && (
                 <div className="pl-7 flex flex-col gap-4 mt-2 mb-2">
-                  <Link href="/features/text-analysis" className="py-2 text-muted-foreground" onClick={closeMenu}>
+                  <Link href="/features/text-analysis" className="py-2 text-muted-foreground mobile-touch-target" onClick={(e) => { e.stopPropagation(); closeMenu(); }}>
                     文本分析
                   </Link>
-                  <Link href="/features/design-styles" className="py-2 text-muted-foreground" onClick={closeMenu}>
+                  <Link href="/features/design-styles" className="py-2 text-muted-foreground mobile-touch-target" onClick={(e) => { e.stopPropagation(); closeMenu(); }}>
                     设计风格
                   </Link>
-                  <Link href="/features/export-options" className="py-2 text-muted-foreground" onClick={closeMenu}>
+                  <Link href="/features/export-options" className="py-2 text-muted-foreground mobile-touch-target" onClick={(e) => { e.stopPropagation(); closeMenu(); }}>
                     导出选项
                   </Link>
-                  <Link href="/features/size-options" className="py-2 text-muted-foreground" onClick={closeMenu}>
+                  <Link href="/features/size-options" className="py-2 text-muted-foreground mobile-touch-target" onClick={(e) => { e.stopPropagation(); closeMenu(); }}>
                     尺寸选项
                   </Link>
-                  <Link href="/features/language-support" className="py-2 text-muted-foreground" onClick={closeMenu}>
+                  <Link href="/features/language-support" className="py-2 text-muted-foreground mobile-touch-target" onClick={(e) => { e.stopPropagation(); closeMenu(); }}>
                     语言支持
                   </Link>
-                  <Link href="/features/no-login" className="py-2 text-muted-foreground" onClick={closeMenu}>
+                  <Link href="/features/no-login" className="py-2 text-muted-foreground mobile-touch-target" onClick={(e) => { e.stopPropagation(); closeMenu(); }}>
                     无需登录
                   </Link>
-                  <Link href="/features" className="py-2 font-medium text-primary" onClick={closeMenu}>
+                  <Link href="/features" className="py-2 font-medium text-primary mobile-touch-target" onClick={(e) => { e.stopPropagation(); closeMenu(); }}>
                     查看所有功能
                   </Link>
                 </div>
@@ -142,8 +166,11 @@ export function MobileNav() {
             {/* FAQ链接 */}
             <a
               href="/#faq-section"
-              onClick={handleFaqClick}
-              className="flex items-center gap-2 py-3 border-b text-lg"
+              onClick={(e) => {
+                e.stopPropagation();
+                handleFaqClick(e);
+              }}
+              className="flex items-center gap-2 py-3 border-b text-lg mobile-touch-target"
             >
               <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
@@ -154,8 +181,11 @@ export function MobileNav() {
             {/* 登录链接 */}
             <Link
               href="/auth/sign-in"
-              className="flex items-center gap-2 py-3 text-lg"
-              onClick={closeMenu}
+              className="flex items-center gap-2 py-3 text-lg mobile-touch-target"
+              onClick={(e) => {
+                e.stopPropagation();
+                closeMenu();
+              }}
             >
               <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1" />
