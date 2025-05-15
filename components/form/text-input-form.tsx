@@ -143,7 +143,7 @@ export function TextInputForm() {
   return (
     <form className="space-y-8" onSubmit={handleSubmit}>
       <div className="space-y-3">
-        <div className="flex items-center justify-between">
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
           <label
             htmlFor="content"
             className="block text-base font-medium flex items-center gap-2"
@@ -166,7 +166,7 @@ export function TextInputForm() {
             value={formData.content}
             onChange={handleTextChange}
             disabled={isSubmitting}
-            className="w-full rounded-lg border border-input bg-background px-4 py-3 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/50 transition-all duration-200 shadow-sm focus-visible:shadow-md"
+            className="w-full rounded-lg border border-input bg-background px-4 py-3 text-base sm:text-sm leading-relaxed sm:leading-normal ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/50 transition-all duration-200 shadow-sm focus-visible:shadow-md mobile-touch-target"
             placeholder="Enter your text here to convert it into an infographic..."
           />
           {isSubmitting && (
@@ -210,7 +210,7 @@ export function TextInputForm() {
             value={formData.mode}
             onChange={handleSelectChange}
             disabled={isSubmitting}
-            className="w-full rounded-lg border border-input bg-background px-4 py-3 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/50 transition-all duration-200 shadow-sm focus-visible:shadow-md"
+            className="w-full rounded-lg border border-input bg-background px-4 py-3 text-base sm:text-sm leading-relaxed sm:leading-normal ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/50 transition-all duration-200 shadow-sm focus-visible:shadow-md mobile-touch-target"
           >
             {PROCESSING_MODES.map(mode => (
               <option key={mode.value} value={mode.value}>
@@ -236,7 +236,7 @@ export function TextInputForm() {
             value={formData.size}
             onChange={handleSelectChange}
             disabled={isSubmitting}
-            className="w-full rounded-lg border border-input bg-background px-4 py-3 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/50 transition-all duration-200 shadow-sm focus-visible:shadow-md"
+            className="w-full rounded-lg border border-input bg-background px-4 py-3 text-base sm:text-sm leading-relaxed sm:leading-normal ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/50 transition-all duration-200 shadow-sm focus-visible:shadow-md mobile-touch-target"
           >
             {Object.entries(SIZE_OPTIONS).map(([key, size]) => (
               <option key={key} value={key}>
@@ -254,7 +254,7 @@ export function TextInputForm() {
         <button
           type="submit"
           disabled={isSubmitting}
-          className="bg-gradient-to-r from-primary to-secondary text-white px-8 py-4 rounded-lg shadow-md hover:shadow-lg transition-all duration-300 transform hover:scale-105 flex items-center gap-2 font-medium disabled:opacity-50 disabled:hover:scale-100 disabled:cursor-not-allowed"
+          className="bg-gradient-to-r from-primary to-secondary text-white px-6 sm:px-8 py-4 rounded-lg shadow-md hover:shadow-lg transition-all duration-300 transform hover:scale-105 flex items-center gap-2 font-medium disabled:opacity-50 disabled:hover:scale-100 disabled:cursor-not-allowed text-base mobile-touch-target w-full sm:w-auto max-w-xs sm:max-w-none"
         >
           {isSubmitting ? (
             <>

@@ -114,29 +114,29 @@ export default function PreviewPage() {
       </div>
 
       <div className="relative z-10 w-full max-w-6xl">
-        <div className="mb-8 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+        <div className="mb-6 md:mb-8 flex flex-col md:flex-row md:items-center md:justify-between gap-3 md:gap-4">
           <div>
-            <h1 className="text-3xl font-bold gradient-heading">Your Infographic</h1>
-            <p className="text-muted-foreground">Preview and export your AI-generated infographic</p>
+            <h1 className="text-2xl md:text-3xl font-bold gradient-heading">Your Infographic</h1>
+            <p className="text-sm md:text-base text-muted-foreground">Preview and export your AI-generated infographic</p>
           </div>
-          <div className="flex gap-4">
+          <div className="flex gap-3 md:gap-4 mt-2 md:mt-0">
             <button
-              className="btn-gradient flex items-center gap-2"
+              className="btn-gradient flex items-center gap-1.5 md:gap-2 py-2 px-3 md:px-4 text-sm md:text-base"
               onClick={() => setShowExportDialog(true)}
             >
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 md:h-5 md:w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
               </svg>
               Export
             </button>
             <Link
               href="/create"
-              className="gradient-border px-4 py-2 text-sm font-medium transition-all duration-300 hover:shadow-md flex items-center gap-1.5"
+              className="gradient-border px-3 md:px-4 py-2 text-sm md:text-base font-medium transition-all duration-300 hover:shadow-md flex items-center gap-1.5"
             >
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 md:h-5 md:w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
               </svg>
-              Create New
+              <span className="hidden xs:inline">Create</span> New
             </Link>
           </div>
         </div>
@@ -178,6 +178,11 @@ export default function PreviewPage() {
                             if (width === '794px' || width === 794 || height === '1123px' || height === 1123) {
                               return 'a4-p';
                             }
+
+                            // 检查是否是移动版 (650px或750px宽)
+                            if (width === '650px' || width === 650 || width === '750px' || width === 750) {
+                              return 'mobile';
+                            }
                           }
                         }
                         return 'mobile'; // 默认为移动版
@@ -216,55 +221,92 @@ export default function PreviewPage() {
                             const infographicType = detectInfographicType();
                             console.log(`Detected infographic type: ${infographicType}`);
 
-                            // 对于16:9和A4格式，使用特殊处理
+                            // 获取设备宽度和检查是否为移动设备
+                            const deviceWidth = window.innerWidth;
+                            const isMobile = deviceWidth < 768; // 移动设备断点
+
+                            // 获取容器元素
+                            const container = iframe.contentDocument.querySelector('.infographic-container') as HTMLElement;
+                            if (!container) {
+                              console.warn('Infographic container not found');
+                              return;
+                            }
+
+                            // 获取容器的原始尺寸
+                            const originalWidth = parseFloat(container.style.width) || container.offsetWidth;
+                            const originalHeight = parseFloat(container.style.height) || container.offsetHeight;
+
+                            // 获取iframe父容器的宽度
+                            const parentWidth = iframe.parentElement?.offsetWidth || window.innerWidth * 0.9;
+
+                            // 计算缩放比例 - 为移动设备留出边距
+                            const scale = Math.min(1, (parentWidth - (isMobile ? 16 : 32)) / originalWidth);
+
+                            // 设置iframe的高度为缩放后的高度
+                            const scaledHeight = originalHeight * scale;
+                            iframe.style.height = `${scaledHeight + (isMobile ? 40 : 20)}px`; // 移动端添加更多额外空间
+
+                            // 添加样式以确保内容正确缩放和居中
+                            const style = document.createElement('style');
+
                             if (infographicType === '16-9' || infographicType === 'a4-l' || infographicType === 'a4-p') {
-                              // 获取容器元素
-                              const container = iframe.contentDocument.querySelector('.infographic-container') as HTMLElement;
-                              if (container) {
-                                // 获取容器的原始尺寸
-                                const originalWidth = parseFloat(container.style.width) || container.offsetWidth;
-                                const originalHeight = parseFloat(container.style.height) || container.offsetHeight;
-
-                                // 获取iframe父容器的宽度
-                                const parentWidth = iframe.parentElement?.offsetWidth || window.innerWidth * 0.8;
-
-                                // 计算缩放比例
-                                const scale = Math.min(1, parentWidth / originalWidth);
-
-                                // 设置iframe的高度为缩放后的高度
-                                const scaledHeight = originalHeight * scale;
-                                iframe.style.height = `${scaledHeight}px`;
-
-                                // 添加样式以确保内容正确缩放和居中
-                                const style = document.createElement('style');
-                                style.textContent = `
-                                  body {
-                                    margin: 0;
-                                    padding: 0;
-                                    display: flex;
-                                    justify-content: center;
-                                    align-items: flex-start;
-                                    min-height: 100vh;
-                                  }
-                                  .infographic-container {
-                                    transform: scale(${scale});
-                                    transform-origin: top center;
-                                    margin: 0 auto;
-                                  }
-                                `;
-
-                                // 检查是否已经添加了样式
-                                const existingStyle = iframe.contentDocument.querySelector('style[data-scale-style]');
-                                if (existingStyle) {
-                                  existingStyle.textContent = style.textContent;
-                                } else {
-                                  style.setAttribute('data-scale-style', 'true');
-                                  iframe.contentDocument.head.appendChild(style);
+                              // 对于16:9和A4格式，使用特殊处理
+                              style.textContent = `
+                                body {
+                                  margin: 0;
+                                  padding: 0;
+                                  display: flex;
+                                  justify-content: center;
+                                  align-items: flex-start;
+                                  min-height: 100vh;
+                                  overflow-x: hidden;
                                 }
-                              } else {
-                                console.warn('Infographic container not found');
-                              }
+                                .infographic-container {
+                                  transform: scale(${scale});
+                                  transform-origin: top center;
+                                  margin: 0 auto;
+                                }
+                                ${isMobile ? `
+                                /* 移动设备优化 */
+                                .infographic-container * {
+                                  font-size: 120% !important;
+                                  line-height: 1.5 !important;
+                                }
+                                /* 确保推广链接可见 */
+                                .promo-link, .promo-link * {
+                                  font-size: 14px !important;
+                                  padding: 5px !important;
+                                  background: rgba(255,255,255,0.8) !important;
+                                  z-index: 1000 !important;
+                                }
+                                ` : ''}
+                              `;
                             } else {
+                              // 对于移动版，使用优化的样式
+                              style.textContent = `
+                                body {
+                                  margin: 0;
+                                  padding: 0;
+                                  overflow-x: hidden;
+                                }
+                                .infographic-container {
+                                  width: 100% !important;
+                                  max-width: ${parentWidth}px !important;
+                                  margin: 0 auto;
+                                }
+                                * {
+                                  max-width: 100% !important;
+                                  box-sizing: border-box !important;
+                                }
+                                /* 确保推广链接可见 */
+                                .promo-link, .promo-link * {
+                                  font-size: 14px !important;
+                                  padding: 5px !important;
+                                  background: rgba(255,255,255,0.8) !important;
+                                  z-index: 1000 !important;
+                                }
+                              `;
+
                               // 对于移动版，使用原来的高度调整逻辑
                               const docHeight = Math.max(
                                 iframe.contentDocument.body.scrollHeight,
@@ -275,8 +317,17 @@ export default function PreviewPage() {
 
                               // 设置iframe高度，确保完整显示内容
                               if (docHeight > 0) {
-                                iframe.style.height = `${docHeight + 20}px`; // 添加一点额外空间
+                                iframe.style.height = `${docHeight + 40}px`; // 添加更多额外空间
                               }
+                            }
+
+                            // 检查是否已经添加了样式
+                            const existingStyle = iframe.contentDocument.querySelector('style[data-scale-style]');
+                            if (existingStyle) {
+                              existingStyle.textContent = style.textContent;
+                            } else {
+                              style.setAttribute('data-scale-style', 'true');
+                              iframe.contentDocument.head.appendChild(style);
                             }
                           }
                         } catch (err) {
@@ -299,73 +350,145 @@ export default function PreviewPage() {
                           // 开始观察iframe内容变化
                           resizeObserver.observe(iframe.contentDocument.body);
 
+                          // 获取设备宽度和检查是否为移动设备
+                          const deviceWidth = window.innerWidth;
+                          const isMobile = deviceWidth < 768; // 移动设备断点
+
+                          // 调用专门的函数来优化移动端显示
+                          adjustIframeForMobile(iframe, infographicType, isMobile);
+
+                          // 添加窗口大小变化监听，以便在旋转设备或调整窗口大小时重新调整
+                          const handleResize = debounce(() => {
+                            adjustIframeForMobile(iframe, infographicType, window.innerWidth < 768);
+                          }, 250);
+
+                          window.addEventListener('resize', handleResize);
+
+                          // 在组件卸载时移除事件监听器
+                          return () => {
+                            window.removeEventListener('resize', handleResize);
+                          };
+                        }
+                      } catch (err) {
+                        console.error('Failed to setup iframe:', err);
+                      }
+                    };
+
+                    // 专门的函数来优化移动端显示
+                    const adjustIframeForMobile = (iframe: HTMLIFrameElement, infographicType: string, isMobile: boolean) => {
+                      try {
+                        if (!iframe.contentDocument) return;
+
+                        // 获取容器元素
+                        const container = iframe.contentDocument.querySelector('.infographic-container') as HTMLElement;
+                        if (!container) {
+                          console.warn('Infographic container not found');
+                          return;
+                        }
+
+                        // 获取容器的原始尺寸
+                        const originalWidth = parseFloat(container.style.width) || container.offsetWidth;
+                        const originalHeight = parseFloat(container.style.height) || container.offsetHeight;
+
+                        // 获取iframe父容器的宽度
+                        const parentWidth = iframe.parentElement?.offsetWidth || window.innerWidth * 0.9;
+
+                        // 计算缩放比例 - 为移动设备留出边距
+                        const scale = Math.min(1, (parentWidth - (isMobile ? 16 : 32)) / originalWidth);
+
+                        // 设置iframe的高度为缩放后的高度
+                        const scaledHeight = originalHeight * scale;
+                        iframe.style.height = `${scaledHeight + (isMobile ? 40 : 20)}px`; // 移动端添加更多额外空间
+
+                        // 添加样式以确保内容正确缩放和居中
+                        const style = document.createElement('style');
+
+                        if (infographicType === '16-9' || infographicType === 'a4-l' || infographicType === 'a4-p') {
                           // 对于16:9和A4格式，使用特殊处理
-                          if (infographicType === '16-9' || infographicType === 'a4-l' || infographicType === 'a4-p') {
-                            // 获取容器元素
-                            const container = iframe.contentDocument.querySelector('.infographic-container') as HTMLElement;
-                            if (container) {
-                              // 获取容器的原始尺寸
-                              const originalWidth = parseFloat(container.style.width) || container.offsetWidth;
-                              const originalHeight = parseFloat(container.style.height) || container.offsetHeight;
-
-                              // 获取iframe父容器的宽度
-                              const parentWidth = iframe.parentElement?.offsetWidth || window.innerWidth * 0.8;
-
-                              // 计算缩放比例
-                              const scale = Math.min(1, parentWidth / originalWidth);
-
-                              // 设置iframe的高度为缩放后的高度
-                              const scaledHeight = originalHeight * scale;
-                              iframe.style.height = `${scaledHeight}px`;
-
-                              // 添加样式以确保内容正确缩放和居中
-                              const style = document.createElement('style');
-                              style.textContent = `
-                                body {
-                                  margin: 0;
-                                  padding: 0;
-                                  display: flex;
-                                  justify-content: center;
-                                  align-items: flex-start;
-                                  min-height: 100vh;
-                                }
-                                .infographic-container {
-                                  transform: scale(${scale});
-                                  transform-origin: top center;
-                                  margin: 0 auto;
-                                }
-                              `;
-
-                              style.setAttribute('data-scale-style', 'true');
-                              iframe.contentDocument.head.appendChild(style);
+                          style.textContent = `
+                            body {
+                              margin: 0;
+                              padding: 0;
+                              display: flex;
+                              justify-content: center;
+                              align-items: flex-start;
+                              min-height: 100vh;
+                              overflow-x: hidden;
                             }
-                          } else {
-                            // 对于移动版，使用原来的高度调整逻辑
-                            const docHeight = Math.max(
-                              iframe.contentDocument.body.scrollHeight,
-                              iframe.contentDocument.documentElement.scrollHeight,
-                              iframe.contentDocument.body.offsetHeight,
-                              iframe.contentDocument.documentElement.offsetHeight
-                            );
-
-                            if (docHeight > 0) {
-                              iframe.style.height = `${docHeight + 20}px`;
+                            .infographic-container {
+                              transform: scale(${scale});
+                              transform-origin: top center;
+                              margin: 0 auto;
                             }
+                            ${isMobile ? `
+                            /* 移动设备优化 */
+                            .infographic-container * {
+                              font-size: 120% !important;
+                              line-height: 1.5 !important;
+                            }
+                            /* 确保推广链接可见 */
+                            .promo-link, .promo-link * {
+                              font-size: 14px !important;
+                              padding: 5px !important;
+                              background: rgba(255,255,255,0.8) !important;
+                              z-index: 1000 !important;
+                              position: relative !important;
+                            }
+                            ` : ''}
+                          `;
+                        } else {
+                          // 对于移动版，使用优化的样式
+                          style.textContent = `
+                            body {
+                              margin: 0;
+                              padding: 0;
+                              overflow-x: hidden;
+                            }
+                            .infographic-container {
+                              width: 100% !important;
+                              max-width: ${parentWidth}px !important;
+                              margin: 0 auto;
+                            }
+                            * {
+                              max-width: 100% !important;
+                              box-sizing: border-box !important;
+                            }
+                            /* 确保推广链接可见 */
+                            .promo-link, .promo-link * {
+                              font-size: 14px !important;
+                              padding: 5px !important;
+                              background: rgba(255,255,255,0.8) !important;
+                              z-index: 1000 !important;
+                              position: relative !important;
+                            }
+                          `;
 
-                            // 添加样式以确保内容完全可见（仅对移动版）
-                            const style = document.createElement('style');
-                            style.textContent = `
-                              body {
-                                margin: 0;
-                                padding: 0;
-                                overflow: visible !important;
-                              }
-                              * {
-                                max-width: 100% !important;
-                              }
-                            `;
-                            iframe.contentDocument.head.appendChild(style);
+                          // 对于移动版，使用原来的高度调整逻辑
+                          const docHeight = Math.max(
+                            iframe.contentDocument.body.scrollHeight,
+                            iframe.contentDocument.documentElement.scrollHeight,
+                            iframe.contentDocument.body.offsetHeight,
+                            iframe.contentDocument.documentElement.offsetHeight
+                          );
+
+                          // 设置iframe高度，确保完整显示内容
+                          if (docHeight > 0) {
+                            iframe.style.height = `${docHeight + 40}px`; // 添加更多额外空间
                           }
+                        }
+
+                        // 检查是否已经添加了样式
+                        const existingStyle = iframe.contentDocument.querySelector('style[data-scale-style]');
+                        if (existingStyle) {
+                          existingStyle.textContent = style.textContent;
+                        } else {
+                          style.setAttribute('data-scale-style', 'true');
+                          iframe.contentDocument.head.appendChild(style);
+                        }
+                      } catch (err) {
+                        console.error('Failed to adjust iframe for mobile:', err);
+                      }
+                    };
                         }
                       } catch (err) {
                         console.error('Failed to setup iframe:', err);
@@ -379,7 +502,20 @@ export default function PreviewPage() {
                 sandbox="allow-same-origin"
                 title="Infographic Preview"
               />
-              <div className="absolute bottom-4 right-4 flex gap-2">
+              <div className="absolute bottom-4 right-4 flex flex-wrap gap-2 md:gap-3">
+                {/* 导出按钮 - 在移动端使用更大的按钮 */}
+                <button
+                  onClick={() => setShowExportDialog(true)}
+                  className="bg-primary text-white p-3 md:p-2 rounded-full md:rounded-lg shadow-md hover:shadow-lg transition-all duration-300 flex items-center justify-center md:justify-start gap-1.5 w-12 h-12 md:w-auto md:h-auto"
+                  aria-label="Export"
+                >
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 md:h-5 md:w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+                  </svg>
+                  <span className="hidden md:inline">Export</span>
+                </button>
+
+                {/* 新窗口打开按钮 - 在移动端使用更大的按钮 */}
                 <button
                   onClick={() => {
                     // 创建全屏预览
@@ -403,58 +539,96 @@ export default function PreviewPage() {
                       };
 
                       const type = detectType(htmlContent);
+                      const isMobile = window.innerWidth < 768;
 
-                      // 对于16:9和A4格式，添加额外的样式
-                      if (type === '16-9' || type === 'a4-l' || type === 'a4-p') {
-                        // 添加居中和缩放样式
-                        const styleTag = `
-                          <style>
-                            body {
-                              margin: 0;
-                              padding: 0;
-                              display: flex;
-                              justify-content: center;
-                              align-items: flex-start;
-                              min-height: 100vh;
-                              background-color: #f5f5f5;
-                            }
+                      // 添加优化的样式
+                      const styleTag = `
+                        <style>
+                          body {
+                            margin: 0;
+                            padding: 0;
+                            display: flex;
+                            justify-content: center;
+                            align-items: flex-start;
+                            min-height: 100vh;
+                            background-color: #f5f5f5;
+                            overflow-x: hidden;
+                          }
+
+                          ${type === '16-9' || type === 'a4-l' || type === 'a4-p' ? `
+                          .infographic-container {
+                            margin: 20px auto;
+                            max-width: 100%;
+                            height: auto;
+                          }
+                          @media (max-width: 1920px) {
                             .infographic-container {
-                              margin: 20px auto;
-                              max-width: 100%;
-                              height: auto;
+                              transform: scale(calc(100vw / ${type === '16-9' ? 1920 : type === 'a4-l' ? 1123 : 794}));
+                              transform-origin: top center;
                             }
-                            @media (max-width: 1920px) {
-                              .infographic-container {
-                                transform: scale(calc(100vw / 1920));
-                                transform-origin: top center;
-                              }
-                            }
-                          </style>
-                        `;
+                          }
+                          ${isMobile ? `
+                          /* 移动设备优化 */
+                          .infographic-container * {
+                            font-size: 120% !important;
+                            line-height: 1.5 !important;
+                          }
+                          ` : ''}
+                          ` : `
+                          .infographic-container {
+                            width: 100% !important;
+                            max-width: 100% !important;
+                            margin: 0 auto;
+                          }
+                          * {
+                            max-width: 100% !important;
+                            box-sizing: border-box !important;
+                          }
+                          `}
 
-                        // 在</head>前插入样式
-                        let modifiedContent = htmlContent;
-                        if (htmlContent.includes('</head>')) {
-                          modifiedContent = htmlContent.replace('</head>', `${styleTag}</head>`);
-                        } else {
-                          modifiedContent = `<html><head>${styleTag}</head><body>${htmlContent}</body></html>`;
-                        }
+                          /* 确保推广链接可见 */
+                          .promo-link, .promo-link * {
+                            font-size: 14px !important;
+                            padding: 5px !important;
+                            background: rgba(255,255,255,0.8) !important;
+                            z-index: 1000 !important;
+                            position: relative !important;
+                          }
+                        </style>
+                      `;
 
-                        win.document.write(modifiedContent);
+                      // 在</head>前插入样式
+                      let modifiedContent = htmlContent;
+                      if (htmlContent.includes('</head>')) {
+                        modifiedContent = htmlContent.replace('</head>', `${styleTag}</head>`);
                       } else {
-                        win.document.write(htmlContent);
+                        modifiedContent = `<html><head>${styleTag}</head><body>${htmlContent}</body></html>`;
                       }
 
+                      win.document.write(modifiedContent);
                       win.document.close();
                     }
                   }}
-                  className="p-2 bg-white/80 rounded-full shadow-md hover:bg-white transition-colors"
-                  title="Open in new window"
+                  className="bg-white/90 p-3 md:p-2 rounded-full md:rounded-lg shadow-md hover:bg-white transition-all duration-300 flex items-center justify-center md:justify-start gap-1.5 w-12 h-12 md:w-auto md:h-auto"
+                  aria-label="Open in new window"
                 >
-                  <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 md:h-5 md:w-5 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
                   </svg>
+                  <span className="hidden md:inline">Open</span>
                 </button>
+
+                {/* 返回创建页面按钮 - 在移动端使用更大的按钮 */}
+                <Link
+                  href="/create"
+                  className="bg-white/90 p-3 md:p-2 rounded-full md:rounded-lg shadow-md hover:bg-white transition-all duration-300 flex items-center justify-center md:justify-start gap-1.5 w-12 h-12 md:w-auto md:h-auto"
+                  aria-label="Create new"
+                >
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 md:h-5 md:w-5 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+                  </svg>
+                  <span className="hidden md:inline">New</span>
+                </Link>
               </div>
             </div>
           ) : (

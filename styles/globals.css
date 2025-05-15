@@ -139,4 +139,48 @@
   .dark .gradient-border::before {
     background: #111827;
   }
+
+  /* 移动端优化工具类 */
+  .mobile-touch-target {
+    @apply min-h-[44px] min-w-[44px];
+  }
+
+  .mobile-spacing {
+    @apply p-4 md:p-8;
+  }
+
+  .mobile-text {
+    @apply text-base md:text-sm leading-relaxed md:leading-normal;
+  }
+
+  .mobile-heading {
+    @apply text-2xl md:text-3xl leading-tight;
+  }
+
+  /* 移动端滚动优化 */
+  .mobile-scroll {
+    @apply overflow-auto overscroll-contain;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  /* 移动端触摸反馈 */
+  .mobile-tap-highlight {
+    -webkit-tap-highlight-color: rgba(0,0,0,0);
+  }
+}
+
+/* 移动端媒体查询优化 */
+@media (max-width: 640px) {
+  html, body {
+    font-size: 16px; /* 确保基础字体大小足够大 */
+  }
+
+  .glass-card {
+    @apply rounded-lg; /* 在移动端使用较小的圆角 */
+  }
+
+  /* 优化移动端表单元素 */
+  input, select, textarea, button {
+    @apply text-base py-3; /* 更大的触摸目标 */
+  }
 }
