@@ -68,11 +68,11 @@ export function Header() {
           // 桌面端导航
           <>
             <div className="flex items-center gap-2">
-              <Link href="/" className="flex items-center gap-3 group">
+              <Link href="/" className="flex items-center gap-3 group pl-2">
                 <div className="relative h-10 w-10 transition-transform duration-300 group-hover:scale-110">
                   <Image src="/images/logo.svg" alt="Logo" fill className="object-contain" priority />
                 </div>
-                <span className="sr-only">Home</span>
+                <span className="font-medium text-lg bg-gradient-to-r from-primary to-secondary text-transparent bg-clip-text">Text to Infographic</span>
               </Link>
             </div>
 
