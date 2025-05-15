@@ -489,11 +489,6 @@ export default function PreviewPage() {
                         console.error('Failed to adjust iframe for mobile:', err);
                       }
                     };
-                        }
-                      } catch (err) {
-                        console.error('Failed to setup iframe:', err);
-                      }
-                    };
                   }
                 }}
                 srcDoc={htmlContent}
