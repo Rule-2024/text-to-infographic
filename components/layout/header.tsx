@@ -63,7 +63,9 @@ export function Header() {
       <div className="container flex h-16 items-center justify-between">
         {isMobile ? (
           // 移动端导航
-          <MobileNav />
+          <div className="w-full">
+            <MobileNav />
+          </div>
         ) : (
           // 桌面端导航
           <>

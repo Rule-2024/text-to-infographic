@@ -14,27 +14,25 @@ export function MobileNav() {
     setFeaturesOpen(false);
   };
 
-  // 当菜单打开时禁止背景滚动并添加点击外部关闭菜单的功能
+  // 当菜单打开时禁止背景滚动
   useEffect(() => {
     if (isMenuOpen) {
       document.body.style.overflow = 'hidden';
 
-      // 添加点击外部关闭菜单的事件处理
-      const handleOutsideClick = (e: MouseEvent) => {
-        // 检查点击是否在菜单外部
-        const target = e.target as HTMLElement;
-        if (!target.closest('.mobile-menu-container') && !target.closest('.mobile-menu-button')) {
+      // 添加ESC键关闭菜单
+      const handleEscKey = (e: KeyboardEvent) => {
+        if (e.key === 'Escape') {
           setIsMenuOpen(false);
         }
       };
 
       // 添加事件监听器
-      document.addEventListener('click', handleOutsideClick);
+      document.addEventListener('keydown', handleEscKey);
 
       // 清理函数
       return () => {
         document.body.style.overflow = '';
-        document.removeEventListener('click', handleOutsideClick);
+        document.removeEventListener('keydown', handleEscKey);
       };
     } else {
       document.body.style.overflow = '';
@@ -42,6 +40,21 @@ export function MobileNav() {
         document.body.style.overflow = '';
       };
     }
+  }, [isMenuOpen]);
+
+  // 处理窗口大小变化，在大屏幕上自动关闭菜单
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth >= 768 && isMenuOpen) {
+        setIsMenuOpen(false);
+      }
+    };
+
+    window.addEventListener('resize', handleResize);
+
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
   }, [isMenuOpen]);
 
   // FAQ点击处理函数
@@ -76,6 +89,7 @@ export function MobileNav() {
         {/* 汉堡菜单按钮 */}
         <button
           onClick={(e) => {
+            e.preventDefault();
             e.stopPropagation(); // 阻止事件冒泡
             setIsMenuOpen(!isMenuOpen);
           }}
@@ -96,13 +110,16 @@ export function MobileNav() {
 
       {/* 移动端菜单 */}
       {isMenuOpen && (
-        <div className="fixed inset-0 z-[100] bg-background mobile-menu-container" style={{ top: '64px' }}>
-          <div className="container px-4 py-4 flex flex-col gap-6 h-full overflow-auto mobile-menu-content">
+        <div className="fixed left-0 right-0 bottom-0 z-[100] bg-background mobile-menu-container" style={{ top: '64px', height: 'calc(100vh - 64px)' }}>
+          <div className="px-4 py-4 flex flex-col gap-6 h-full overflow-auto mobile-menu-content">
             {/* 创建按钮 */}
             <Link
               href="/create"
-              className="bg-gradient-to-r from-primary to-secondary text-white px-4 py-3 rounded-lg shadow-md flex items-center justify-center gap-2 font-medium text-lg"
-              onClick={closeMenu}
+              className="bg-gradient-to-r from-primary to-secondary text-white px-4 py-3 rounded-lg shadow-md flex items-center justify-center gap-2 font-medium text-lg w-full"
+              onClick={(e) => {
+                e.stopPropagation();
+                closeMenu();
+              }}
             >
               <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
