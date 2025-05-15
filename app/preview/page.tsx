@@ -1,27 +1,18 @@
 'use client';
 
-import { useSearchParams, useRouter } from 'next/navigation';
-import { useState, useEffect, useRef } from 'react';
+import { useSearchParams } from 'next/navigation';
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import Image from 'next/image';
 import { ExportDialog } from '@/components/export/export-dialog';
-import { addSwipeGesture, SwipeDirection, addDoubleTapGesture } from '@/lib/mobile-gestures';
-import { GestureHint } from '@/components/gesture-hint';
 
 export default function PreviewPage() {
   const searchParams = useSearchParams();
-  const router = useRouter();
   const id = searchParams.get('id');
-
-  const previewContainerRef = useRef<HTMLDivElement>(null);
-  const imageRef = useRef<HTMLImageElement>(null);
 
   const [htmlContent, setHtmlContent] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
   const [showExportDialog, setShowExportDialog] = useState(false);
-  const [scale, setScale] = useState(1);
-  const [isZoomed, setIsZoomed] = useState(false);
 
   // Get generation result
   useEffect(() => {
@@ -75,8 +66,8 @@ export default function PreviewPage() {
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
             </svg>
           </div>
-          <h2 className="mb-4 text-2xl font-bold gradient-heading">加载预览</h2>
-          <p className="mb-6 text-sm text-muted-foreground">正在准备您的信息图以供显示...</p>
+          <h2 className="mb-4 text-2xl font-bold gradient-heading">Loading Preview</h2>
+          <p className="mb-6 text-sm text-muted-foreground">Preparing your infographic for display...</p>
           <div className="h-2 w-64 mx-auto rounded-full bg-muted overflow-hidden">
             <div className="h-full animate-pulse rounded-full bg-gradient-to-r from-primary to-secondary"></div>
           </div>
@@ -98,16 +89,16 @@ export default function PreviewPage() {
           <svg xmlns="http://www.w3.org/2000/svg" className="h-12 w-12 mx-auto mb-4 text-destructive" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
           </svg>
-          <h2 className="mb-4 text-2xl font-bold text-destructive">预览错误</h2>
+          <h2 className="mb-4 text-2xl font-bold text-destructive">Preview Error</h2>
           <p className="mb-6 text-muted-foreground">{error}</p>
           <Link
             href="/create"
-            className="btn-gradient inline-flex items-center gap-2 mobile-touch-target"
+            className="btn-gradient inline-flex items-center gap-2"
           >
             <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 17l-5-5m0 0l5-5m-5 5h12" />
             </svg>
-            返回创建页面
+            Back to Create
           </Link>
         </div>
       </main>
@@ -125,8 +116,8 @@ export default function PreviewPage() {
       <div className="relative z-10 w-full max-w-6xl">
         <div className="mb-6 md:mb-8 flex flex-col md:flex-row md:items-center md:justify-between gap-3 md:gap-4">
           <div>
-            <h1 className="text-2xl md:text-3xl font-bold gradient-heading">您的信息图</h1>
-            <p className="text-sm md:text-base text-muted-foreground">预览并导出您的AI生成的信息图</p>
+            <h1 className="text-2xl md:text-3xl font-bold gradient-heading">Your Infographic</h1>
+            <p className="text-sm md:text-base text-muted-foreground">Preview and export your AI-generated infographic</p>
           </div>
           <div className="flex gap-3 md:gap-4 mt-2 md:mt-0">
             <button
@@ -136,7 +127,7 @@ export default function PreviewPage() {
               <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 md:h-5 md:w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
               </svg>
-              导出
+              Export
             </button>
             <Link
               href="/create"
@@ -145,14 +136,14 @@ export default function PreviewPage() {
               <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 md:h-5 md:w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
               </svg>
-              <span className="hidden xs:inline">创建</span>新的
+              <span className="hidden xs:inline">Create</span> New
             </Link>
           </div>
         </div>
 
         <div className="glass-card card-shadow overflow-auto mb-8">
           {htmlContent ? (
-            <div className="relative" ref={previewContainerRef} style={{ transform: `scale(${scale})`, transformOrigin: 'top center', transition: 'transform 0.3s ease' }}>
+            <div className="relative">
               <iframe
                 ref={(iframe) => {
                   if (iframe) {
@@ -510,19 +501,17 @@ export default function PreviewPage() {
                 {/* 导出按钮 - 在移动端使用更大的按钮 */}
                 <button
                   onClick={() => setShowExportDialog(true)}
-                  className="bg-primary text-white p-3 md:p-2 rounded-full md:rounded-lg shadow-md hover:shadow-lg transition-all duration-300 flex items-center justify-center md:justify-start gap-1.5 w-12 h-12 md:w-auto md:h-auto mobile-touch-target mobile-touch-feedback"
+                  className="bg-primary text-white p-3 md:p-2 rounded-full md:rounded-lg shadow-md hover:shadow-lg transition-all duration-300 flex items-center justify-center md:justify-start gap-1.5 w-12 h-12 md:w-auto md:h-auto"
                   aria-label="Export"
                 >
                   <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 md:h-5 md:w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
                   </svg>
-                  <span className="hidden md:inline">导出</span>
+                  <span className="hidden md:inline">Export</span>
                 </button>
 
                 {/* 新窗口打开按钮 - 在移动端使用更大的按钮 */}
                 <button
-                  className="bg-secondary text-white p-3 md:p-2 rounded-full md:rounded-lg shadow-md hover:shadow-lg transition-all duration-300 flex items-center justify-center md:justify-start gap-1.5 w-12 h-12 md:w-auto md:h-auto mobile-touch-target mobile-touch-feedback"
-                  aria-label="Open in new window"
                   onClick={() => {
                     // 创建全屏预览
                     const win = window.open('', '_blank');
@@ -621,7 +610,7 @@ export default function PreviewPage() {
                   <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 md:h-5 md:w-5 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
                   </svg>
-                  <span className="hidden md:inline">打开</span>
+                  <span className="hidden md:inline">Open</span>
                 </button>
 
                 {/* 返回创建页面按钮 - 在移动端使用更大的按钮 */}
@@ -633,20 +622,20 @@ export default function PreviewPage() {
                   <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 md:h-5 md:w-5 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
                   </svg>
-                  <span className="hidden md:inline">新建</span>
+                  <span className="hidden md:inline">New</span>
                 </Link>
               </div>
             </div>
           ) : (
             <div className="flex h-[80vh] w-full items-center justify-center">
-              <p className="text-xl text-muted-foreground">没有可预览的内容</p>
+              <p className="text-xl text-muted-foreground">No content to preview</p>
             </div>
           )}
         </div>
 
         <div className="text-center">
           <p className="text-sm text-muted-foreground mb-4">
-            想要分享这个信息图？<span className="text-primary font-medium hover:underline cursor-pointer">登录</span>以解锁分享功能（即将推出）
+            Want to share this infographic? <span className="text-primary font-medium hover:underline cursor-pointer">Sign in</span> to unlock sharing features (coming soon)
           </p>
         </div>
       </div>
@@ -658,9 +647,6 @@ export default function PreviewPage() {
           onClose={() => setShowExportDialog(false)}
         />
       )}
-
-      {/* 移动端手势提示 */}
-      <GestureHint message="双击放大，上下滑动缩放，左右滑动导航" />
     </main>
   );
 }

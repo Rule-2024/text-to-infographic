@@ -66,8 +66,8 @@ export function ExportDialog({ htmlContent, onClose }: ExportDialogProps) {
       setProgress(0);
 
       // 显示详细错误信息
-      const errorMessage = err instanceof Error ? err.message : '发生未知错误';
-      setError(`导出失败: ${errorMessage}. 请重试。`);
+      const errorMessage = err instanceof Error ? err.message : 'Unknown error occurred';
+      setError(`Export failed: ${errorMessage}. Please try again.`);
       console.error('Export error:', err);
     } finally {
       setIsExporting(false);
@@ -82,7 +82,7 @@ export function ExportDialog({ htmlContent, onClose }: ExportDialogProps) {
         <div className="absolute -z-10 bottom-0 left-0 w-32 h-32 bg-secondary/5 rounded-full blur-2xl"></div>
 
         <div className="flex justify-between items-center mb-6">
-          <h2 className="text-2xl font-bold gradient-heading">导出信息图</h2>
+          <h2 className="text-2xl font-bold gradient-heading">Export Infographic</h2>
           <button
             onClick={onClose}
             className="text-muted-foreground hover:text-foreground transition-colors duration-200"
@@ -100,7 +100,7 @@ export function ExportDialog({ htmlContent, onClose }: ExportDialogProps) {
               <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 3v2m6-2v2M9 19v2m6-2v2M5 9H3m2 6H3m18-6h-2m2 6h-2M7 19h10a2 2 0 002-2V7a2 2 0 00-2-2H7a2 2 0 00-2 2v10a2 2 0 002 2zM9 9h6v6H9V9z" />
               </svg>
-              导出格式
+              Export Format
             </label>
             <select
               id="format"
@@ -122,7 +122,7 @@ export function ExportDialog({ htmlContent, onClose }: ExportDialogProps) {
               <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 text-secondary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
               </svg>
-              文件名
+              Filename
             </label>
             <div className="flex items-center">
               <input
@@ -132,7 +132,7 @@ export function ExportDialog({ htmlContent, onClose }: ExportDialogProps) {
                 onChange={(e) => setFilename(e.target.value)}
                 disabled={isExporting}
                 className="flex-1 rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/50 transition-shadow duration-200"
-                placeholder="输入文件名"
+                placeholder="Enter filename"
               />
               <span className="ml-2 text-sm font-medium text-muted-foreground bg-muted px-2 py-1 rounded">
                 .{format}
@@ -147,7 +147,7 @@ export function ExportDialog({ htmlContent, onClose }: ExportDialogProps) {
                   <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 text-primary animate-pulse" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
                   </svg>
-                  导出中...
+                  Exporting...
                 </span>
                 <span className="text-primary font-medium">{progress}%</span>
               </div>
@@ -173,31 +173,31 @@ export function ExportDialog({ htmlContent, onClose }: ExportDialogProps) {
             <button
               onClick={onClose}
               disabled={isExporting}
-              className="gradient-border px-4 py-2 text-sm font-medium transition-all duration-300 hover:shadow-md flex items-center gap-1.5 disabled:opacity-50 mobile-touch-target mobile-touch-feedback"
+              className="gradient-border px-4 py-2 text-sm font-medium transition-all duration-300 hover:shadow-md flex items-center gap-1.5 disabled:opacity-50"
             >
               <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
               </svg>
-              取消
+              Cancel
             </button>
             <button
               onClick={handleExport}
               disabled={isExporting || !filename.trim()}
-              className="btn-gradient text-sm flex items-center gap-1.5 disabled:opacity-50 mobile-touch-target mobile-touch-feedback"
+              className="btn-gradient text-sm flex items-center gap-1.5 disabled:opacity-50"
             >
               {isExporting ? (
                 <>
                   <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 animate-spin" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
                   </svg>
-                  导出中...
+                  Exporting...
                 </>
               ) : (
                 <>
                   <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
                   </svg>
-                  导出
+                  Export
                 </>
               )}
             </button>

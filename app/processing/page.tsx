@@ -172,11 +172,11 @@ export default function ProcessingPage() {
           <svg xmlns="http://www.w3.org/2000/svg" className="h-12 w-12 mx-auto mb-4 text-destructive" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
           </svg>
-          <h2 className="mb-4 text-2xl font-bold text-destructive">生成失败</h2>
+          <h2 className="mb-4 text-2xl font-bold text-destructive">Generation Failed</h2>
           <p className="mb-3 text-muted-foreground">{error}</p>
           <p className="mb-6 text-sm text-muted-foreground">
-            别担心！这种情况偶尔会发生，尤其是在处理复杂内容时。
-            让我们做些调整后再试一次，以获得更好的结果。
+            Don't worry! This happens occasionally when our AI is processing complex content.
+            Let's try again with a few adjustments to get better results.
           </p>
           <div className="flex flex-col gap-4 sm:flex-row sm:justify-center">
             <Link
@@ -186,11 +186,11 @@ export default function ProcessingPage() {
               <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 17l-5-5m0 0l5-5m-5 5h12" />
               </svg>
-              重新尝试
+              Try Again
             </Link>
           </div>
           <p className="mt-4 text-xs text-muted-foreground">
-            提示：尝试简化您的文本或将其分成更小的部分以获得更好的结果。
+            Tip: Try simplifying your text or breaking it into smaller sections for better results.
           </p>
         </div>
       </main>
@@ -214,21 +214,21 @@ export default function ProcessingPage() {
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
             </svg>
           </div>
-          <h1 className="text-2xl font-bold gradient-heading">正在创建您的信息图</h1>
-          <p className="text-sm text-muted-foreground mt-2">我们的AI正在设计您的信息图</p>
+          <h1 className="text-2xl font-bold gradient-heading">Creating Your Infographic</h1>
+          <p className="text-sm text-muted-foreground mt-2">Our AI is working on your design</p>
           <p className="text-xs text-muted-foreground mt-1">
             <span className="inline-flex items-center">
               <svg xmlns="http://www.w3.org/2000/svg" className="h-3 w-3 mr-1 text-secondary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
               </svg>
-              预计时间: {progress < 30 ? '60-90秒' : progress < 60 ? '30-60秒' : '15-30秒'}
+              Estimated time: {progress < 30 ? '60-90 seconds' : progress < 60 ? '30-60 seconds' : '15-30 seconds'}
             </span>
           </p>
         </div>
 
         <div className="mb-6">
           <div className="mb-2 flex justify-between text-sm font-medium">
-            <span>进度</span>
+            <span>Progress</span>
             <span className="text-primary">{progress}%</span>
           </div>
           <div className="h-3 w-full rounded-full bg-muted overflow-hidden">
@@ -244,13 +244,13 @@ export default function ProcessingPage() {
             <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 text-secondary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
             </svg>
-            当前状态:
+            Current Status:
           </h3>
           <p className="text-sm text-muted-foreground">
-            {progress < 30 && '正在分析您的文本内容并识别关键点...'}
-            {progress >= 30 && progress < 60 && '正在为您的信息设计最佳布局...'}
-            {progress >= 60 && progress < 90 && '正在创建视觉元素并应用设计风格...'}
-            {progress >= 90 && '正在完成您的信息图并准备预览...'}
+            {progress < 30 && 'Analyzing your text content and identifying key points...'}
+            {progress >= 30 && progress < 60 && 'Designing the optimal layout for your information...'}
+            {progress >= 60 && progress < 90 && 'Creating visual elements and applying design styles...'}
+            {progress >= 90 && 'Finalizing your infographic and preparing preview...'}
           </p>
         </div>
 
@@ -259,30 +259,30 @@ export default function ProcessingPage() {
             <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
             </svg>
-            您知道吗？
+            Did You Know?
           </h3>
           <p className="text-xs text-muted-foreground">
-            {progress < 30 && '人脑处理信息图的速度比纯文本快60,000倍。我们正在将您的内容转化为最具影响力的形式！'}
-            {progress >= 30 && progress < 60 && '信息图中的色彩选择可以将阅读意愿提高80%。我们正在为您的内容选择完美的配色方案。'}
-            {progress >= 60 && progress < 90 && '人们能记住80%的所见内容，但只能记住20%的所读内容。您的信息图将使您的信息更加难忘！'}
-            {progress >= 90 && '高质量的信息图比纯文本文章更容易被阅读，可能性高达30倍。您的内容即将闪亮登场！'}
+            {progress < 30 && 'Infographics are processed 60,000 times faster by the human brain than text alone. Your content is being transformed for maximum impact!'}
+            {progress >= 30 && progress < 60 && 'Color choices in infographics can increase willingness to read by up to 80%. We\'re selecting the perfect palette for your content.'}
+            {progress >= 60 && progress < 90 && 'People remember 80% of what they see, but only 20% of what they read. Your infographic will make your message more memorable!'}
+            {progress >= 90 && 'High-quality infographics are 30 times more likely to be read than plain text articles. Your content is almost ready to shine!'}
           </p>
         </div>
 
         <div className="mb-6 text-center">
           <p className="text-sm font-medium text-primary animate-pulse">
-            {progress < 50 ? '请稍候，我们正在制作您的信息图...' : '即将完成！正在添加最后的润色...'}
+            {progress < 50 ? 'Please wait while we craft your infographic...' : 'Almost there! Putting on the finishing touches...'}
           </p>
         </div>
 
         <button
           onClick={handleCancel}
-          className="gradient-border px-4 py-2 text-sm font-medium transition-all duration-300 hover:shadow-md flex items-center gap-1.5 mx-auto mobile-touch-target"
+          className="gradient-border px-4 py-2 text-sm font-medium transition-all duration-300 hover:shadow-md flex items-center gap-1.5 mx-auto"
         >
           <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
           </svg>
-          取消处理
+          Cancel Process
         </button>
       </div>
     </main>

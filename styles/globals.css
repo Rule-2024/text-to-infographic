@@ -167,36 +167,6 @@
   .mobile-tap-highlight {
     -webkit-tap-highlight-color: rgba(0,0,0,0);
   }
-
-  /* 移动端间距优化 */
-  .mobile-gap {
-    @apply gap-3 md:gap-4;
-  }
-
-  /* 移动端按钮优化 */
-  .mobile-button {
-    @apply py-3 px-4 md:py-2 md:px-3 text-base md:text-sm rounded-lg;
-  }
-
-  /* 移动端卡片内容优化 */
-  .mobile-card-content {
-    @apply space-y-4 md:space-y-6;
-  }
-
-  /* 移动端列表项优化 */
-  .mobile-list-item {
-    @apply py-3 md:py-2;
-  }
-
-  /* 移动端触摸目标 */
-  .mobile-touch-target {
-    @apply min-h-[44px] min-w-[44px]; /* 确保触摸目标至少44x44像素 */
-  }
-
-  /* 移动端触摸反馈 */
-  .mobile-touch-feedback {
-    @apply active:opacity-70 active:scale-95 transition-all duration-150;
-  }
 }
 
 /* 移动端媒体查询优化 */
@@ -212,33 +182,5 @@
   /* 优化移动端表单元素 */
   input, select, textarea, button {
     @apply text-base py-3; /* 更大的触摸目标 */
-  }
-
-  /* 优化移动端间距 */
-  .p-8 {
-    @apply p-6;
-  }
-
-  .p-6 {
-    @apply p-4;
-  }
-
-  /* 优化移动端文本大小 */
-  h1 {
-    @apply text-2xl;
-  }
-
-  h2 {
-    @apply text-xl;
-  }
-
-  /* 优化移动端按钮 */
-  .btn-gradient {
-    @apply px-4 py-3;
-  }
-
-  /* 优化移动端导航 */
-  .nav-link {
-    @apply py-3;
   }
 }
