@@ -181,8 +181,8 @@ export default function PreviewPage() {
                               return 'a4-p';
                             }
 
-                            // 检查是否是移动版 (750px宽)
-                            if (width === '750px' || width === 750) {
+                            // 检查是否是移动版 (650px或750px宽)
+                            if (width === '650px' || width === 650 || width === '750px' || width === 750) {
                               return 'mobile';
                             }
                           }
@@ -404,26 +404,6 @@ export default function PreviewPage() {
 
                         if (infographicType === '16-9' || infographicType === 'a4-l' || infographicType === 'a4-p') {
                           // 对于16:9和A4格式，使用特殊处理
-
-                          // 根据不同的信息图类型设置不同的缩放策略
-                          let adjustedScale = scale;
-                          let adjustedMargin = '0 auto';
-
-                          // 为不同类型的信息图设置特定的缩放和边距
-                          if (infographicType === '16-9') {
-                            // 16:9格式需要更多的水平空间
-                            adjustedScale = Math.min(scale, (parentWidth - (isMobile ? 20 : 40)) / originalWidth);
-                            adjustedMargin = '10px auto';
-                          } else if (infographicType === 'a4-l') {
-                            // A4横版
-                            adjustedScale = Math.min(scale, (parentWidth - (isMobile ? 16 : 32)) / originalWidth);
-                            adjustedMargin = '10px auto';
-                          } else if (infographicType === 'a4-p') {
-                            // A4竖版可能需要更多的垂直空间
-                            adjustedScale = Math.min(scale, (parentWidth - (isMobile ? 12 : 24)) / originalWidth);
-                            adjustedMargin = '5px auto';
-                          }
-
                           style.textContent = `
                             body {
                               margin: 0;
@@ -436,16 +416,11 @@ export default function PreviewPage() {
                               background-color: transparent !important;
                             }
                             .infographic-container {
-                              transform: scale(${adjustedScale});
+                              transform: scale(${scale});
                               transform-origin: top center;
-                              margin: ${adjustedMargin};
+                              margin: 0 auto;
                               width: ${originalWidth}px !important;
                               height: ${originalHeight}px !important;
-                              box-sizing: border-box !important;
-                            }
-                            img, svg {
-                              max-width: 100% !important;
-                              height: auto !important;
                             }
                             ${isMobile ? `
                             /* 移动设备优化 */
@@ -459,65 +434,13 @@ export default function PreviewPage() {
                               background: rgba(255,255,255,0.8) !important;
                               z-index: 1000 !important;
                               position: relative !important;
-                              border-radius: 4px !important;
-                              box-shadow: 0 1px 3px rgba(0,0,0,0.1) !important;
-                              margin: 5px !important;
                             }
-
-                            /* 针对不同尺寸信息图的推广链接优化 */
-                            ${infographicType === '16-9' ? `
-                            /* 16:9格式推广链接优化 */
-                            .promo-link {
-                              top: 5px !important;
-                              left: 5px !important;
-                            }
-                            ` : infographicType === 'a4-l' ? `
-                            /* A4横版推广链接优化 */
-                            .promo-link {
-                              top: 5px !important;
-                              left: 5px !important;
-                            }
-                            ` : infographicType === 'a4-p' ? `
-                            /* A4竖版推广链接优化 */
-                            .promo-link {
-                              top: 5px !important;
-                              left: 5px !important;
-                            }
-                            ` : `
-                            /* 移动版推广链接优化 */
-                            .promo-link {
-                              top: 0 !important;
-                              left: 0 !important;
-                            }
-                            `}
                             ` : ''}
                           `;
 
                           // 设置iframe的高度为缩放后的高度，加上额外空间
-                          // 为不同类型的信息图添加不同的额外空间
-                          const scaledHeight = originalHeight * adjustedScale;
-                          const extraSpace = isMobile ?
-                            (infographicType === 'a4-p' ? 80 : 60) : // 移动端竖版需要更多空间
-                            (infographicType === '16-9' ? 50 : 40);  // 桌面端16:9需要更多空间
-
-                          iframe.style.height = `${scaledHeight + extraSpace}px`;
-
-                          // 添加特定尺寸的类名，以便应用特定的CSS样式
-                          if (iframe.parentElement) {
-                            // 移除所有预览类型类名
-                            iframe.parentElement.classList.remove('preview-16-9', 'preview-a4-l', 'preview-a4-p', 'preview-mobile');
-
-                            // 添加当前预览类型的类名
-                            if (infographicType === '16-9') {
-                              iframe.parentElement.classList.add('preview-16-9');
-                            } else if (infographicType === 'a4-l') {
-                              iframe.parentElement.classList.add('preview-a4-l');
-                            } else if (infographicType === 'a4-p') {
-                              iframe.parentElement.classList.add('preview-a4-p');
-                            } else {
-                              iframe.parentElement.classList.add('preview-mobile');
-                            }
-                          }
+                          const scaledHeight = originalHeight * scale;
+                          iframe.style.height = `${scaledHeight + (isMobile ? 60 : 40)}px`; // 移动端添加更多额外空间
                         } else {
                           // 对于移动版，使用优化的样式
                           style.textContent = `
@@ -548,11 +471,6 @@ export default function PreviewPage() {
                               background: rgba(255,255,255,0.8) !important;
                               z-index: 1000 !important;
                               position: relative !important;
-                              border-radius: 4px !important;
-                              box-shadow: 0 1px 3px rgba(0,0,0,0.1) !important;
-                              margin: 5px !important;
-                              top: 0 !important;
-                              left: 0 !important;
                             }
                           `;
 
@@ -638,9 +556,6 @@ export default function PreviewPage() {
                             html.includes('height: 1123px') || html.includes('height:1123px')) {
                           return 'a4-p';
                         }
-                        if (html.includes('width: 750px') || html.includes('width:750px')) {
-                          return 'mobile';
-                        }
                         return 'mobile';
                       };
 
@@ -666,42 +581,13 @@ export default function PreviewPage() {
                             margin: ${isMobile ? '10px' : '20px'} auto;
                             max-width: 100%;
                             height: auto;
-                            box-sizing: border-box !important;
                           }
-
-                          /* 特定尺寸的优化 */
-                          ${type === '16-9' ? `
-                          /* 16:9格式优化 */
                           @media (max-width: 1920px) {
                             .infographic-container {
-                              transform: scale(calc(${isMobile ? '0.92 * ' : '0.98 * '}100vw / 1920));
+                              transform: scale(calc(${isMobile ? '0.95 * ' : ''}100vw / ${type === '16-9' ? 1920 : type === 'a4-l' ? 1123 : 794}));
                               transform-origin: top center;
                             }
                           }
-                          ` : type === 'a4-l' ? `
-                          /* A4横版优化 */
-                          @media (max-width: 1123px) {
-                            .infographic-container {
-                              transform: scale(calc(${isMobile ? '0.94 * ' : '0.98 * '}100vw / 1123));
-                              transform-origin: top center;
-                            }
-                          }
-                          ` : `
-                          /* A4竖版优化 */
-                          @media (max-width: 794px) {
-                            .infographic-container {
-                              transform: scale(calc(${isMobile ? '0.96 * ' : '0.98 * '}100vw / 794));
-                              transform-origin: top center;
-                            }
-                          }
-                          `}
-
-                          /* 确保内容不会溢出 */
-                          img, svg {
-                            max-width: 100% !important;
-                            height: auto !important;
-                          }
-
                           ${isMobile ? `
                           /* 移动设备优化 */
                           .infographic-container * {
@@ -732,37 +618,7 @@ export default function PreviewPage() {
                             background: rgba(255,255,255,0.8) !important;
                             z-index: 1000 !important;
                             position: relative !important;
-                            border-radius: 4px !important;
-                            box-shadow: 0 1px 3px rgba(0,0,0,0.1) !important;
-                            margin: 5px !important;
                           }
-
-                          /* 针对不同尺寸信息图的推广链接优化 */
-                          ${type === '16-9' ? `
-                          /* 16:9格式推广链接优化 */
-                          .promo-link {
-                            top: 5px !important;
-                            left: 5px !important;
-                          }
-                          ` : type === 'a4-l' ? `
-                          /* A4横版推广链接优化 */
-                          .promo-link {
-                            top: 5px !important;
-                            left: 5px !important;
-                          }
-                          ` : type === 'a4-p' ? `
-                          /* A4竖版推广链接优化 */
-                          .promo-link {
-                            top: 5px !important;
-                            left: 5px !important;
-                          }
-                          ` : `
-                          /* 移动版推广链接优化 */
-                          .promo-link {
-                            top: 0 !important;
-                            left: 0 !important;
-                          }
-                          `}
 
                           /* 移动端额外优化 */
                           ${isMobile ? `
