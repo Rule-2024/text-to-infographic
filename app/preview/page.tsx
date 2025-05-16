@@ -181,8 +181,8 @@ export default function PreviewPage() {
                               return 'a4-p';
                             }
 
-                            // 检查是否是移动版 (650px或750px宽)
-                            if (width === '650px' || width === 650 || width === '750px' || width === 750) {
+                            // 检查是否是移动版 (750px宽)
+                            if (width === '750px' || width === 750) {
                               return 'mobile';
                             }
                           }
@@ -555,6 +555,9 @@ export default function PreviewPage() {
                         if (html.includes('width: 794px') || html.includes('width:794px') ||
                             html.includes('height: 1123px') || html.includes('height:1123px')) {
                           return 'a4-p';
+                        }
+                        if (html.includes('width: 750px') || html.includes('width:750px')) {
+                          return 'mobile';
                         }
                         return 'mobile';
                       };
