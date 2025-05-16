@@ -173,7 +173,7 @@
     -webkit-tap-highlight-color: rgba(0,0,0,0);
   }
 
-  /* 移动端预览优化 */
+  /* 预览优化 - 适用于所有尺寸 */
   .mobile-preview-container {
     @apply w-full overflow-hidden;
   }
@@ -181,6 +181,21 @@
   .mobile-preview-iframe {
     @apply w-full border-none block mx-auto;
     background-color: transparent;
+  }
+
+  /* 16:9格式预览优化 */
+  .preview-16-9 {
+    @apply aspect-video;
+  }
+
+  /* A4横版预览优化 */
+  .preview-a4-l {
+    @apply aspect-[1.414/1];
+  }
+
+  /* A4竖版预览优化 */
+  .preview-a4-p {
+    @apply aspect-[1/1.414];
   }
 }
 
