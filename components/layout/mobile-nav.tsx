@@ -77,7 +77,7 @@ export function MobileNav() {
 
   return (
     <>
-      {/* 移动端导航栏 */}
+      {/* Mobile Navigation Bar */}
       <div className="flex items-center justify-between w-full px-4">
         <Link href="/" className="flex items-center gap-3" onClick={closeMenu}>
           <div className="relative h-10 w-10">
@@ -86,11 +86,11 @@ export function MobileNav() {
           <span className="text-base font-medium gradient-text">Text to infographic</span>
         </Link>
 
-        {/* 汉堡菜单按钮 */}
+        {/* Hamburger Menu Button */}
         <button
           onClick={(e) => {
             e.preventDefault();
-            e.stopPropagation(); // 阻止事件冒泡
+            e.stopPropagation(); // Prevent event bubbling
             setIsMenuOpen(!isMenuOpen);
           }}
           className="mobile-touch-target flex items-center justify-center p-2 rounded-lg z-[101] mobile-menu-button"
@@ -108,11 +108,11 @@ export function MobileNav() {
         </button>
       </div>
 
-      {/* 移动端菜单 */}
+      {/* Mobile Menu */}
       {isMenuOpen && (
         <div className="fixed left-0 right-0 bottom-0 z-[100] bg-background mobile-menu-container" style={{ top: '64px', height: 'calc(100vh - 64px)' }}>
           <div className="px-4 py-4 flex flex-col gap-6 h-full overflow-auto mobile-menu-content">
-            {/* 创建按钮 */}
+            {/* Create Button */}
             <Link
               href="/create"
               className="bg-gradient-to-r from-primary to-secondary text-white px-4 py-3 rounded-lg shadow-md flex items-center justify-center gap-2 font-medium text-lg w-full"
@@ -124,14 +124,14 @@ export function MobileNav() {
               <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
               </svg>
-              创建信息图
+              Create Now
             </Link>
 
-            {/* 功能菜单 */}
+            {/* Features Menu */}
             <div className="border-b pb-4">
               <button
                 onClick={(e) => {
-                  e.stopPropagation(); // 阻止事件冒泡
+                  e.stopPropagation(); // Prevent event bubbling
                   setFeaturesOpen(!featuresOpen);
                 }}
                 className="flex items-center justify-between w-full py-3 text-lg mobile-touch-target"
@@ -140,7 +140,7 @@ export function MobileNav() {
                   <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
                   </svg>
-                  功能特点
+                  Features
                 </div>
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -156,31 +156,31 @@ export function MobileNav() {
               {featuresOpen && (
                 <div className="pl-7 flex flex-col gap-4 mt-2 mb-2">
                   <Link href="/features/text-analysis" className="py-2 text-muted-foreground mobile-touch-target" onClick={(e) => { e.stopPropagation(); closeMenu(); }}>
-                    文本分析
+                    Text Analysis
                   </Link>
                   <Link href="/features/design-styles" className="py-2 text-muted-foreground mobile-touch-target" onClick={(e) => { e.stopPropagation(); closeMenu(); }}>
-                    设计风格
+                    Design Styles
                   </Link>
                   <Link href="/features/export-options" className="py-2 text-muted-foreground mobile-touch-target" onClick={(e) => { e.stopPropagation(); closeMenu(); }}>
-                    导出选项
+                    Export Options
                   </Link>
                   <Link href="/features/size-options" className="py-2 text-muted-foreground mobile-touch-target" onClick={(e) => { e.stopPropagation(); closeMenu(); }}>
-                    尺寸选项
+                    Size Options
                   </Link>
                   <Link href="/features/language-support" className="py-2 text-muted-foreground mobile-touch-target" onClick={(e) => { e.stopPropagation(); closeMenu(); }}>
-                    语言支持
+                    Language Support
                   </Link>
                   <Link href="/features/no-login" className="py-2 text-muted-foreground mobile-touch-target" onClick={(e) => { e.stopPropagation(); closeMenu(); }}>
-                    无需登录
+                    No Login Required
                   </Link>
                   <Link href="/features" className="py-2 font-medium text-primary mobile-touch-target" onClick={(e) => { e.stopPropagation(); closeMenu(); }}>
-                    查看所有功能
+                    View All Features
                   </Link>
                 </div>
               )}
             </div>
 
-            {/* FAQ链接 */}
+            {/* FAQ Link */}
             <a
               href="/#faq-section"
               onClick={(e) => {
@@ -192,10 +192,10 @@ export function MobileNav() {
               <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
               </svg>
-              常见问题
+              FAQ
             </a>
 
-            {/* 登录链接 */}
+            {/* Sign In Link */}
             <Link
               href="/auth/sign-in"
               className="flex items-center gap-2 py-3 text-lg mobile-touch-target"
@@ -207,7 +207,7 @@ export function MobileNav() {
               <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1" />
               </svg>
-              登录
+              Sign In
             </Link>
           </div>
         </div>
