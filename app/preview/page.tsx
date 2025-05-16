@@ -106,7 +106,7 @@ export default function PreviewPage() {
   }
 
   return (
-    <main className="flex min-h-screen flex-col items-center p-4 sm:p-8 md:p-16 pb-24 bg-gradient-to-b from-background to-muted">
+    <main className="flex min-h-screen flex-col items-center p-3 sm:p-6 md:p-16 pb-24 bg-gradient-to-b from-background to-muted">
       {/* 背景装饰元素 */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <div className="absolute -top-40 -right-40 w-80 h-80 bg-primary/5 rounded-full blur-3xl"></div>
@@ -141,14 +141,16 @@ export default function PreviewPage() {
           </div>
         </div>
 
-        <div className="glass-card card-shadow overflow-auto mb-8">
+        <div className="glass-card card-shadow overflow-hidden mb-8 mobile-preview-container">
           {htmlContent ? (
             <div className="relative">
               <iframe
+                className="mobile-preview-iframe w-full"
                 ref={(iframe) => {
                   if (iframe) {
-                    // 设置初始高度
-                    iframe.style.height = '80vh';
+                    // 设置初始高度 - 移动端使用更小的初始高度以避免过长的空白
+                    const isMobile = window.innerWidth < 768;
+                    iframe.style.height = isMobile ? '50vh' : '80vh';
 
                     // 创建计数器，防止无限循环
                     let resizeCount = 0;
@@ -394,11 +396,8 @@ export default function PreviewPage() {
                         const parentWidth = iframe.parentElement?.offsetWidth || window.innerWidth * 0.9;
 
                         // 计算缩放比例 - 为移动设备留出边距
-                        const scale = Math.min(1, (parentWidth - (isMobile ? 16 : 32)) / originalWidth);
-
-                        // 设置iframe的高度为缩放后的高度
-                        const scaledHeight = originalHeight * scale;
-                        iframe.style.height = `${scaledHeight + (isMobile ? 40 : 20)}px`; // 移动端添加更多额外空间
+                        // 增加移动设备的边距，确保内容不会太靠近屏幕边缘
+                        const scale = Math.min(1, (parentWidth - (isMobile ? 24 : 32)) / originalWidth);
 
                         // 添加样式以确保内容正确缩放和居中
                         const style = document.createElement('style');
@@ -414,17 +413,19 @@ export default function PreviewPage() {
                               align-items: flex-start;
                               min-height: 100vh;
                               overflow-x: hidden;
+                              background-color: transparent !important;
                             }
                             .infographic-container {
                               transform: scale(${scale});
                               transform-origin: top center;
                               margin: 0 auto;
+                              width: ${originalWidth}px !important;
+                              height: ${originalHeight}px !important;
                             }
                             ${isMobile ? `
                             /* 移动设备优化 */
                             .infographic-container * {
-                              font-size: 120% !important;
-                              line-height: 1.5 !important;
+                              line-height: 1.4 !important;
                             }
                             /* 确保推广链接可见 */
                             .promo-link, .promo-link * {
@@ -436,6 +437,10 @@ export default function PreviewPage() {
                             }
                             ` : ''}
                           `;
+
+                          // 设置iframe的高度为缩放后的高度，加上额外空间
+                          const scaledHeight = originalHeight * scale;
+                          iframe.style.height = `${scaledHeight + (isMobile ? 60 : 40)}px`; // 移动端添加更多额外空间
                         } else {
                           // 对于移动版，使用优化的样式
                           style.textContent = `
@@ -443,15 +448,21 @@ export default function PreviewPage() {
                               margin: 0;
                               padding: 0;
                               overflow-x: hidden;
+                              background-color: transparent !important;
                             }
                             .infographic-container {
                               width: 100% !important;
                               max-width: ${parentWidth}px !important;
                               margin: 0 auto;
+                              padding: 0 !important;
                             }
                             * {
                               max-width: 100% !important;
                               box-sizing: border-box !important;
+                            }
+                            img, svg {
+                              height: auto !important;
+                              max-width: 100% !important;
                             }
                             /* 确保推广链接可见 */
                             .promo-link, .promo-link * {
@@ -463,18 +474,29 @@ export default function PreviewPage() {
                             }
                           `;
 
-                          // 对于移动版，使用原来的高度调整逻辑
-                          const docHeight = Math.max(
-                            iframe.contentDocument.body.scrollHeight,
-                            iframe.contentDocument.documentElement.scrollHeight,
-                            iframe.contentDocument.body.offsetHeight,
-                            iframe.contentDocument.documentElement.offsetHeight
-                          );
+                          // 对于移动版，使用改进的高度调整逻辑
+                          // 等待一小段时间以确保内容完全渲染
+                          setTimeout(() => {
+                            try {
+                              if (!iframe.contentDocument) return;
 
-                          // 设置iframe高度，确保完整显示内容
-                          if (docHeight > 0) {
-                            iframe.style.height = `${docHeight + 40}px`; // 添加更多额外空间
-                          }
+                              const docHeight = Math.max(
+                                iframe.contentDocument.body.scrollHeight,
+                                iframe.contentDocument.documentElement.scrollHeight,
+                                iframe.contentDocument.body.offsetHeight,
+                                iframe.contentDocument.documentElement.offsetHeight,
+                                container.scrollHeight,
+                                container.offsetHeight
+                              );
+
+                              // 设置iframe高度，确保完整显示内容，添加更多额外空间
+                              if (docHeight > 0) {
+                                iframe.style.height = `${docHeight + (isMobile ? 80 : 40)}px`;
+                              }
+                            } catch (err) {
+                              console.error('Failed to adjust iframe height in timeout:', err);
+                            }
+                          }, 300);
                         }
 
                         // 检查是否已经添加了样式
@@ -492,8 +514,12 @@ export default function PreviewPage() {
                   }
                 }}
                 srcDoc={htmlContent}
-                className="w-full"
-                style={{ border: 'none' }}
+                style={{
+                  border: 'none',
+                  display: 'block',
+                  margin: '0 auto',
+                  backgroundColor: 'transparent'
+                }}
                 sandbox="allow-same-origin"
                 title="Infographic Preview"
               />
@@ -552,21 +578,20 @@ export default function PreviewPage() {
 
                           ${type === '16-9' || type === 'a4-l' || type === 'a4-p' ? `
                           .infographic-container {
-                            margin: 20px auto;
+                            margin: ${isMobile ? '10px' : '20px'} auto;
                             max-width: 100%;
                             height: auto;
                           }
                           @media (max-width: 1920px) {
                             .infographic-container {
-                              transform: scale(calc(100vw / ${type === '16-9' ? 1920 : type === 'a4-l' ? 1123 : 794}));
+                              transform: scale(calc(${isMobile ? '0.95 * ' : ''}100vw / ${type === '16-9' ? 1920 : type === 'a4-l' ? 1123 : 794}));
                               transform-origin: top center;
                             }
                           }
                           ${isMobile ? `
                           /* 移动设备优化 */
                           .infographic-container * {
-                            font-size: 120% !important;
-                            line-height: 1.5 !important;
+                            line-height: 1.4 !important;
                           }
                           ` : ''}
                           ` : `
@@ -574,10 +599,15 @@ export default function PreviewPage() {
                             width: 100% !important;
                             max-width: 100% !important;
                             margin: 0 auto;
+                            padding: 0 !important;
                           }
                           * {
                             max-width: 100% !important;
                             box-sizing: border-box !important;
+                          }
+                          img, svg {
+                            height: auto !important;
+                            max-width: 100% !important;
                           }
                           `}
 
@@ -589,6 +619,27 @@ export default function PreviewPage() {
                             z-index: 1000 !important;
                             position: relative !important;
                           }
+
+                          /* 移动端额外优化 */
+                          ${isMobile ? `
+                          @media (max-width: 768px) {
+                            body {
+                              padding: 0 8px;
+                            }
+
+                            .infographic-container {
+                              margin-top: 10px !important;
+                              margin-bottom: 10px !important;
+                            }
+
+                            /* 确保所有内容可见 */
+                            .infographic-container > * {
+                              max-width: 100% !important;
+                              overflow-wrap: break-word !important;
+                              word-wrap: break-word !important;
+                            }
+                          }
+                          ` : ''}
                         </style>
                       `;
 

@@ -172,6 +172,16 @@
   .mobile-tap-highlight {
     -webkit-tap-highlight-color: rgba(0,0,0,0);
   }
+
+  /* 移动端预览优化 */
+  .mobile-preview-container {
+    @apply w-full overflow-hidden;
+  }
+
+  .mobile-preview-iframe {
+    @apply w-full border-none block mx-auto;
+    background-color: transparent;
+  }
 }
 
 /* 移动端媒体查询优化 */
@@ -187,5 +197,14 @@
   /* 优化移动端表单元素 */
   input, select, textarea, button {
     @apply text-base py-3; /* 更大的触摸目标 */
+  }
+
+  /* 优化移动端预览 */
+  .mobile-preview-container {
+    @apply p-0 sm:p-2;
+  }
+
+  .mobile-preview-iframe {
+    @apply rounded-none sm:rounded-lg;
   }
 }
