@@ -141,7 +141,7 @@ export function TextInputForm() {
   };
 
   return (
-    <form className="space-y-8" onSubmit={handleSubmit}>
+    <form className="space-y-6 md:space-y-8" onSubmit={handleSubmit}>
       <div className="space-y-3">
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
           <label
@@ -162,11 +162,11 @@ export function TextInputForm() {
           <textarea
             id="content"
             name="content"
-            rows={10}
+            rows={8}
             value={formData.content}
             onChange={handleTextChange}
             disabled={isSubmitting}
-            className="w-full rounded-lg border border-input bg-background px-4 py-3 text-base sm:text-sm leading-relaxed sm:leading-normal ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/50 transition-all duration-200 shadow-sm focus-visible:shadow-md mobile-touch-target"
+            className="w-full rounded-lg border border-input bg-background px-3 sm:px-4 py-3 text-base leading-relaxed ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/50 transition-all duration-200 shadow-sm focus-visible:shadow-md mobile-touch-target"
             placeholder="Enter your text here to convert it into an infographic..."
           />
           {isSubmitting && (
@@ -196,8 +196,8 @@ export function TextInputForm() {
         </p>
       </div>
 
-      <div className="grid gap-6 md:grid-cols-2">
-        <div className="space-y-3">
+      <div className="grid gap-5 md:gap-6 md:grid-cols-2">
+        <div className="space-y-2 md:space-y-3">
           <label htmlFor="mode" className="block text-base font-medium flex items-center gap-2">
             <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-secondary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
@@ -210,7 +210,7 @@ export function TextInputForm() {
             value={formData.mode}
             onChange={handleSelectChange}
             disabled={isSubmitting}
-            className="w-full rounded-lg border border-input bg-background px-4 py-3 text-base sm:text-sm leading-relaxed sm:leading-normal ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/50 transition-all duration-200 shadow-sm focus-visible:shadow-md mobile-touch-target"
+            className="w-full rounded-lg border border-input bg-background px-3 sm:px-4 py-3 text-base leading-relaxed ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/50 transition-all duration-200 shadow-sm focus-visible:shadow-md mobile-touch-target"
           >
             {PROCESSING_MODES.map(mode => (
               <option key={mode.value} value={mode.value}>
@@ -223,7 +223,7 @@ export function TextInputForm() {
           </p>
         </div>
 
-        <div className="space-y-3">
+        <div className="space-y-2 md:space-y-3">
           <label htmlFor="size" className="block text-base font-medium flex items-center gap-2">
             <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-purple-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4" />
@@ -236,7 +236,7 @@ export function TextInputForm() {
             value={formData.size}
             onChange={handleSelectChange}
             disabled={isSubmitting}
-            className="w-full rounded-lg border border-input bg-background px-4 py-3 text-base sm:text-sm leading-relaxed sm:leading-normal ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/50 transition-all duration-200 shadow-sm focus-visible:shadow-md mobile-touch-target"
+            className="w-full rounded-lg border border-input bg-background px-3 sm:px-4 py-3 text-base leading-relaxed ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/50 transition-all duration-200 shadow-sm focus-visible:shadow-md mobile-touch-target"
           >
             {Object.entries(SIZE_OPTIONS).map(([key, size]) => (
               <option key={key} value={key}>
@@ -250,11 +250,11 @@ export function TextInputForm() {
         </div>
       </div>
 
-      <div className="flex justify-center pt-4">
+      <div className="flex justify-center pt-2 md:pt-4">
         <button
           type="submit"
           disabled={isSubmitting}
-          className="bg-gradient-to-r from-primary to-secondary text-white px-6 sm:px-8 py-4 rounded-lg shadow-md hover:shadow-lg transition-all duration-300 transform hover:scale-105 flex items-center gap-2 font-medium disabled:opacity-50 disabled:hover:scale-100 disabled:cursor-not-allowed text-base mobile-touch-target w-full sm:w-auto max-w-xs sm:max-w-none"
+          className="bg-gradient-to-r from-primary to-secondary text-white px-6 sm:px-8 py-3 md:py-4 rounded-lg shadow-md hover:shadow-lg transition-all duration-300 transform hover:scale-105 flex items-center gap-2 font-medium disabled:opacity-50 disabled:hover:scale-100 disabled:cursor-not-allowed text-base mobile-touch-target w-full sm:w-auto max-w-xs sm:max-w-none"
         >
           {isSubmitting ? (
             <>
@@ -273,6 +273,11 @@ export function TextInputForm() {
             </>
           )}
         </button>
+      </div>
+
+      {/* 移动端提示 */}
+      <div className="text-center text-xs text-muted-foreground md:hidden">
+        <p>Tap the button above to create your infographic</p>
       </div>
     </form>
   );
