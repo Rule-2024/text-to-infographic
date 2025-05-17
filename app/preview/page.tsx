@@ -399,10 +399,22 @@ export default function PreviewPage() {
                         // 增加移动设备的边距，确保内容不会太靠近屏幕边缘
                         const scale = Math.min(1, (parentWidth - (isMobile ? 24 : 32)) / originalWidth);
 
+                        // 检测是否是横版信息图
+                        const isLandscape = infographicType === '16-9' || infographicType === 'a4-l';
+
                         // 添加样式以确保内容正确缩放和居中
                         const style = document.createElement('style');
 
                         if (infographicType === '16-9' || infographicType === 'a4-l' || infographicType === 'a4-p') {
+                          // 计算最佳缩放比例 - 横版信息图需要更多缩放
+                          let optimalScale = scale;
+                          if (isMobile) {
+                            // 移动设备上，横版信息图需要更多缩放
+                            if (isLandscape) {
+                              optimalScale = Math.min(0.9, (parentWidth - 20) / originalWidth);
+                            }
+                          }
+
                           // 对于16:9和A4格式，使用特殊处理
                           style.textContent = `
                             body {
@@ -412,15 +424,17 @@ export default function PreviewPage() {
                               justify-content: center;
                               align-items: flex-start;
                               min-height: 100vh;
-                              overflow-x: hidden;
+                              overflow-x: auto;
                               background-color: transparent !important;
                             }
                             .infographic-container {
-                              transform: scale(${scale});
+                              transform: scale(${optimalScale});
                               transform-origin: top center;
                               margin: 0 auto;
                               width: ${originalWidth}px !important;
                               height: ${originalHeight}px !important;
+                              overflow: visible !important;
+                              box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
                             }
                             ${isMobile ? `
                             /* 移动设备优化 */
@@ -435,12 +449,54 @@ export default function PreviewPage() {
                               z-index: 1000 !important;
                               position: relative !important;
                             }
+
+                            /* 横版信息图提示 */
+                            ${isLandscape ? `
+                            .landscape-hint {
+                              position: fixed;
+                              bottom: 70px;
+                              left: 50%;
+                              transform: translateX(-50%);
+                              background: rgba(0,0,0,0.7);
+                              color: white;
+                              padding: 8px 16px;
+                              border-radius: 20px;
+                              font-size: 12px;
+                              z-index: 1000;
+                              display: flex;
+                              align-items: center;
+                              gap: 8px;
+                              box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+                            }
+                            ` : ''}
                             ` : ''}
                           `;
 
                           // 设置iframe的高度为缩放后的高度，加上额外空间
-                          const scaledHeight = originalHeight * scale;
-                          iframe.style.height = `${scaledHeight + (isMobile ? 60 : 40)}px`; // 移动端添加更多额外空间
+                          const scaledHeight = originalHeight * optimalScale;
+
+                          // 为不同类型的信息图添加不同的额外空间
+                          let extraSpace = 40;
+                          if (isLandscape) {
+                            // 横版信息图需要更多空间
+                            extraSpace = isMobile ? 80 : 60;
+
+                            // 添加横版提示元素
+                            if (isMobile) {
+                              // 检查是否已存在提示
+                              if (!iframe.contentDocument.querySelector('.landscape-hint')) {
+                                const hintDiv = document.createElement('div');
+                                hintDiv.className = 'landscape-hint';
+                                hintDiv.innerHTML = '提示：横向旋转设备可获得更好体验 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12H3M3 12L8 7M3 12L8 17"></path></svg>';
+                                iframe.contentDocument.body.appendChild(hintDiv);
+                              }
+                            }
+                          } else if (infographicType === 'a4-p') {
+                            // A4竖版需要更多空间
+                            extraSpace = isMobile ? 100 : 80;
+                          }
+
+                          iframe.style.height = `${scaledHeight + extraSpace}px`; // 添加额外空间
                         } else {
                           // 对于移动版，使用优化的样式
                           style.textContent = `
@@ -524,6 +580,113 @@ export default function PreviewPage() {
                 title="Infographic Preview"
               />
               <div className="absolute bottom-4 right-4 flex flex-wrap gap-2 md:gap-3">
+                {/* 全屏/放大按钮 - 在移动端使用更大的按钮 */}
+                <button
+                  onClick={() => {
+                    // 获取iframe元素
+                    const iframe = document.querySelector('.mobile-preview-iframe') as HTMLIFrameElement;
+                    if (!iframe) return;
+
+                    // 检测信息图类型
+                    const infographicType = iframe.contentDocument?.querySelector('.infographic-container') ?
+                      (iframe.contentDocument?.querySelector('.infographic-container') as HTMLElement).style.width === '1920px' ? '16-9' :
+                      (iframe.contentDocument?.querySelector('.infographic-container') as HTMLElement).style.width === '1123px' ? 'a4-l' :
+                      (iframe.contentDocument?.querySelector('.infographic-container') as HTMLElement).style.width === '794px' ? 'a4-p' : 'mobile'
+                      : 'unknown';
+
+                    // 检测是否是横版信息图
+                    const isLandscape = infographicType === '16-9' || infographicType === 'a4-l';
+
+                    // 检测设备方向
+                    const isDeviceLandscape = window.innerWidth > window.innerHeight;
+
+                    // 如果是横版信息图且设备处于竖屏状态，提示用户旋转设备
+                    if (isLandscape && !isDeviceLandscape && window.innerWidth < 768) {
+                      alert('为了更好地查看横版信息图，请将设备旋转至横屏模式');
+                    }
+
+                    // 打开全屏预览
+                    const win = window.open('', '_blank');
+                    if (win && htmlContent) {
+                      // 添加优化的全屏样式
+                      const styleTag = `
+                        <style>
+                          body {
+                            margin: 0;
+                            padding: 0;
+                            display: flex;
+                            justify-content: center;
+                            align-items: flex-start;
+                            min-height: 100vh;
+                            background-color: #f5f5f5;
+                            overflow: auto;
+                          }
+
+                          .infographic-container {
+                            margin: 20px auto;
+                            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+                            max-width: 100%;
+                            max-height: 100%;
+                            overflow: visible !important;
+                          }
+
+                          /* 横版信息图的特殊处理 */
+                          ${isLandscape ? `
+                          @media (orientation: landscape) {
+                            body {
+                              align-items: center;
+                              padding: 0;
+                            }
+                            .infographic-container {
+                              max-width: 98vw;
+                              max-height: 98vh;
+                              transform: scale(0.98);
+                              transform-origin: center;
+                              margin: 0 auto;
+                            }
+                          }
+                          ` : ''}
+
+                          /* 竖版信息图的特殊处理 */
+                          ${!isLandscape ? `
+                          .infographic-container {
+                            max-width: 98vw;
+                            transform-origin: top center;
+                          }
+                          ` : ''}
+
+                          /* 确保推广链接可见 */
+                          .promo-link, .promo-link * {
+                            font-size: 14px !important;
+                            padding: 5px !important;
+                            background: rgba(255,255,255,0.8) !important;
+                            z-index: 1000 !important;
+                            position: relative !important;
+                          }
+                        </style>
+                      `;
+
+                      // 在</head>前插入样式
+                      let modifiedContent = htmlContent;
+                      if (htmlContent.includes('</head>')) {
+                        modifiedContent = htmlContent.replace('</head>', `${styleTag}</head>`);
+                      } else {
+                        modifiedContent = `<html><head>${styleTag}</head><body>${htmlContent}</body></html>`;
+                      }
+
+                      win.document.write(modifiedContent);
+                      win.document.close();
+                    }
+                  }}
+                  className="bg-secondary text-white p-3 md:p-2 rounded-full md:rounded-lg shadow-md hover:shadow-lg transition-all duration-300 flex items-center justify-center md:justify-start gap-1.5 w-12 h-12 md:w-auto md:h-auto"
+                  aria-label="Fullscreen"
+                >
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 md:h-5 md:w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5v-4m0 4h-4m4 0l-5-5" />
+                  </svg>
+                  <span className="hidden md:inline">全屏查看</span>
+                </button>
+
                 {/* 导出按钮 - 在移动端使用更大的按钮 */}
                 <button
                   onClick={() => setShowExportDialog(true)}
@@ -533,7 +696,7 @@ export default function PreviewPage() {
                   <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 md:h-5 md:w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
                   </svg>
-                  <span className="hidden md:inline">Export</span>
+                  <span className="hidden md:inline">导出</span>
                 </button>
 
                 {/* 新窗口打开按钮 - 在移动端使用更大的按钮 */}
@@ -581,16 +744,38 @@ export default function PreviewPage() {
 
                           ${type === '16-9' || type === 'a4-l' || type === 'a4-p' ? `
                           .infographic-container {
-                            margin: ${isMobile ? '10px' : '20px'} auto;
-                            max-width: 100%;
-                            height: auto;
+                            margin: ${isMobile ? '20px' : '30px'} auto;
+                            width: ${type === '16-9' ? '1920px' : type === 'a4-l' ? '1123px' : '794px'} !important;
+                            height: ${type === '16-9' ? '1080px' : type === 'a4-l' ? '794px' : '1123px'} !important;
+                            overflow: visible !important;
+                            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
                           }
-                          @media (max-width: 1920px) {
+
+                          /* 横版信息图的特殊处理 */
+                          ${(type === '16-9' || type === 'a4-l') ? `
+                          @media (orientation: portrait) {
                             .infographic-container {
-                              transform: scale(calc(${isMobile ? '0.95 * ' : ''}100vw / ${type === '16-9' ? 1920 : type === 'a4-l' ? 1123 : 794}));
+                              transform: scale(${Math.min(0.95, 95 / 100)});
                               transform-origin: top center;
                             }
                           }
+                          @media (orientation: landscape) {
+                            body {
+                              align-items: center;
+                            }
+                            .infographic-container {
+                              transform: scale(min(0.95, 95vw / ${type === '16-9' ? 1920 : 1123}));
+                              transform-origin: center;
+                            }
+                          }
+                          ` : `
+                          /* 竖版信息图的特殊处理 */
+                          .infographic-container {
+                            transform: scale(min(0.95, 95vw / 794));
+                            transform-origin: top center;
+                          }
+                          `}
+
                           ${isMobile ? `
                           /* 移动设备优化 */
                           .infographic-container * {
@@ -627,20 +812,38 @@ export default function PreviewPage() {
                           ${isMobile ? `
                           @media (max-width: 768px) {
                             body {
-                              padding: 0 8px;
+                              padding: 0;
                             }
 
                             .infographic-container {
-                              margin-top: 10px !important;
-                              margin-bottom: 10px !important;
+                              margin: 20px auto !important;
                             }
 
                             /* 确保所有内容可见 */
                             .infographic-container > * {
-                              max-width: 100% !important;
                               overflow-wrap: break-word !important;
                               word-wrap: break-word !important;
                             }
+
+                            /* 横版信息图提示 */
+                            ${type === '16-9' || type === 'a4-l' ? `
+                            .landscape-hint {
+                              position: fixed;
+                              bottom: 70px;
+                              left: 50%;
+                              transform: translateX(-50%);
+                              background: rgba(0,0,0,0.7);
+                              color: white;
+                              padding: 8px 16px;
+                              border-radius: 20px;
+                              font-size: 12px;
+                              z-index: 1000;
+                              display: flex;
+                              align-items: center;
+                              gap: 8px;
+                              box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+                            }
+                            ` : ''}
                           }
                           ` : ''}
                         </style>
