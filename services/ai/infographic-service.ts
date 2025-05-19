@@ -27,82 +27,136 @@ export async function generateInfographic(input: TextInputForm): Promise<string>
 
   // Execute generation process asynchronously
   (async () => {
+    // 设置一个进度更新器，在等待AI响应期间提供进度更新
+    let progressValue = 5;
+    let progressInterval: NodeJS.Timeout | null = null;
+
+    // 初始化重试计数
+    let retryCount = 0;
+    const maxRetries = 2; // 最大重试次数
+
+    // 创建进度更新函数
+    const startProgressUpdates = () => {
+      // 清除之前的进度更新器（如果存在）
+      if (progressInterval) {
+        clearInterval(progressInterval);
+      }
+
+      // 创建新的进度更新器
+      progressInterval = setInterval(async () => {
+        if (progressValue < 75) {
+          progressValue += 3;
+          await updateGenerationStatus(generationId, 'processing', progressValue);
+        }
+      }, 3000); // 每3秒更新一次进度
+    };
+
+    // 停止进度更新
+    const stopProgressUpdates = () => {
+      if (progressInterval) {
+        clearInterval(progressInterval);
+        progressInterval = null;
+      }
+    };
+
     try {
-      // 更细粒度的进度更新
       // 初始状态 - 任务开始
-      await updateGenerationStatus(generationId, 'processing', 5);
+      await updateGenerationStatus(generationId, 'processing', progressValue);
+      startProgressUpdates();
 
       // 构建提示词
       console.log(`Building prompt for generation ${generationId}`);
       const prompt = buildPrompt(input);
-      await updateGenerationStatus(generationId, 'processing', 15);
+      progressValue = 15;
+      await updateGenerationStatus(generationId, 'processing', progressValue);
 
       // 准备调用AI服务
       console.log(`Preparing to call AI service for generation ${generationId}`);
-      await updateGenerationStatus(generationId, 'processing', 25);
+      progressValue = 25;
+      await updateGenerationStatus(generationId, 'processing', progressValue);
 
       // 调用AI服务生成HTML - 这是最耗时的步骤
       console.log(`Calling AI service for generation ${generationId}`);
+      progressValue = 30;
+      await updateGenerationStatus(generationId, 'processing', progressValue);
 
-      // 设置一个进度更新器，在等待AI响应期间提供进度更新
-      let progressValue = 30;
-      const progressInterval = setInterval(async () => {
-        if (progressValue < 75) {
-          progressValue += 5;
-          await updateGenerationStatus(generationId, 'processing', progressValue);
-        }
-      }, 5000); // 每5秒更新一次进度
+      // 根据尺寸设置不同的超时时间
+      let timeout = 90000; // 默认90秒超时
 
-      try {
-        // 根据尺寸设置不同的超时时间
-        let timeout = 90000; // 默认90秒超时
-
-        // 为16:9、A4横版和A4竖版设置更长的超时时间
-        if (input.size === '16-9') {
-          timeout = 180000; // 16:9格式使用180秒超时
-          console.log(`Using extended timeout (${timeout}ms) for 16:9 format`);
-        } else if (input.size === 'a4-l' || input.size === 'a4-p') {
-          timeout = 150000; // A4格式使用150秒超时
-          console.log(`Using extended timeout (${timeout}ms) for A4 format`);
-        }
-
-        // 使用优化的重试策略调用AI服务
-        const html = await withRetry(
-          () => generateInfographicHtml(prompt, input.size),
-          2, // 减少重试次数以加快失败反馈
-          1500, // 减少初始延迟以加快重试
-          timeout // 根据尺寸设置的超时时间
-        );
-
-        // 清除进度更新器
-        clearInterval(progressInterval);
-
-        // AI响应成功，更新进度
-        await updateGenerationStatus(generationId, 'processing', 80);
-
-        // 处理生成的HTML
-        console.log(`Processing HTML for generation ${generationId}`);
-        const processedHtml = processGeneratedHtml(html);
-        await updateGenerationStatus(generationId, 'processing', 90);
-
-        // 保存结果到数据库
-        console.log(`Saving result for generation ${generationId}`);
-        await saveGenerationResult(generationId, processedHtml);
-      } catch (error) {
-        // 确保清除进度更新器
-        clearInterval(progressInterval);
-        throw error;
+      // 为16:9、A4横版和A4竖版设置更长的超时时间
+      if (input.size === '16-9') {
+        timeout = 180000; // 16:9格式使用180秒超时
+        console.log(`Using extended timeout (${timeout}ms) for 16:9 format`);
+      } else if (input.size === 'a4-l' || input.size === 'a4-p') {
+        timeout = 150000; // A4格式使用150秒超时
+        console.log(`Using extended timeout (${timeout}ms) for A4 format`);
       }
 
+      // 定义生成函数，包含内部重试逻辑
+      const generateWithRetries = async (): Promise<string> => {
+        try {
+          // 使用优化的重试策略调用AI服务
+          return await withRetry(
+            () => generateInfographicHtml(prompt, input.size),
+            2, // 内部重试次数
+            1500, // 初始延迟
+            timeout // 根据尺寸设置的超时时间
+          );
+        } catch (error) {
+          // 如果内部重试失败，检查是否还有外部重试次数
+          if (retryCount < maxRetries) {
+            retryCount++;
+            console.log(`Generation attempt ${retryCount} failed, retrying...`);
+
+            // 短暂延迟后重试
+            await new Promise(resolve => setTimeout(resolve, 2000));
+            return generateWithRetries(); // 递归重试
+          }
+
+          // 如果已达到最大重试次数，抛出错误
+          throw error;
+        }
+      };
+
+      // 执行生成（包含重试逻辑）
+      const html = await generateWithRetries();
+
+      // 停止进度更新
+      stopProgressUpdates();
+
+      // AI响应成功，更新进度
+      progressValue = 80;
+      await updateGenerationStatus(generationId, 'processing', progressValue);
+
+      // 处理生成的HTML
+      console.log(`Processing HTML for generation ${generationId}`);
+      const processedHtml = processGeneratedHtml(html);
+      progressValue = 90;
+      await updateGenerationStatus(generationId, 'processing', progressValue);
+
+      // 保存结果到数据库
+      console.log(`Saving result for generation ${generationId}`);
+      await saveGenerationResult(generationId, processedHtml);
+
     } catch (error) {
+      // 停止进度更新
+      stopProgressUpdates();
+
       console.error('Infographic generation failed:', error);
+
+      // 记录详细错误信息，包括重试次数
+      const errorMessage = error instanceof Error
+        ? `${error.message} (after ${retryCount} retries)`
+        : `Unknown error (after ${retryCount} retries)`;
+
+      console.error(`Generation ${generationId} failed: ${errorMessage}`);
 
       // Update status to failed
       await updateGenerationStatus(
         generationId,
         'failed',
         0,
-        error instanceof Error ? error.message : 'Unknown error'
+        errorMessage
       );
     }
   })();

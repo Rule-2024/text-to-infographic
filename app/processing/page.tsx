@@ -31,6 +31,36 @@ export default function ProcessingPage() {
     console.log(`Using extended processing time (${maxProcessingTime}ms) for A4 format`);
   }
 
+  // 清理过期的会话存储数据
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      try {
+        // 清理过期的会话存储数据
+        const now = Date.now();
+        for (let i = 0; i < sessionStorage.length; i++) {
+          const key = sessionStorage.key(i);
+          if (key && key.startsWith('infographic_expiry_')) {
+            const expiryTime = parseInt(sessionStorage.getItem(key) || '0', 10);
+            if (expiryTime && now > expiryTime) {
+              // 提取ID
+              const id = key.replace('infographic_expiry_', '');
+
+              // 删除相关的所有数据
+              sessionStorage.removeItem(`infographic_content_${id}`);
+              sessionStorage.removeItem(`infographic_mode_${id}`);
+              sessionStorage.removeItem(`infographic_size_${id}`);
+              sessionStorage.removeItem(key);
+
+              console.log(`Cleaned up expired session data for ID: ${id}`);
+            }
+          }
+        }
+      } catch (e) {
+        console.error('Error cleaning up session storage:', e);
+      }
+    }
+  }, []);
+
   useEffect(() => {
     if (!id) {
       router.push('/create');
@@ -83,20 +113,58 @@ export default function ProcessingPage() {
           router.push(`/preview?id=${id}`);
           return;
         } else if (data.status === 'failed') {
-          // 如果是第一次失败且尚未自动重试，尝试自动重新创建
+          // 如果是第一次失败且尚未自动重试，尝试自动重试生成
           if (!hasAutoRetried.current) {
             hasAutoRetried.current = true;
-            console.log('Generation failed, attempting automatic retry...');
+            console.log('Generation failed, attempting automatic retry without redirect...');
 
             // 显示正在重试的消息
             setProgress(0);
             setError(null);
 
-            // 等待短暂时间后重定向到创建页面
-            setTimeout(() => {
-              router.push('/create');
-            }, 2000);
-            return;
+            // 直接在后台重新提交请求，而不是重定向用户
+            try {
+              // 从URL获取原始表单数据
+              const formData = {
+                content: sessionStorage.getItem(`infographic_content_${id}`) || '',
+                mode: sessionStorage.getItem(`infographic_mode_${id}`) || 'summary',
+                size: sizeParam || '750'
+              };
+
+              console.log('Retrying generation with same parameters...');
+
+              // 调用API重新生成
+              const response = await fetch('/api/infographic', {
+                method: 'POST',
+                headers: {
+                  'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(formData)
+              });
+
+              if (!response.ok) {
+                throw new Error('Retry failed');
+              }
+
+              const retryData = await response.json();
+
+              // 使用新的生成ID更新URL，但不刷新页面
+              window.history.replaceState(
+                {},
+                '',
+                `/processing?id=${retryData.id}&size=${formData.size}`
+              );
+
+              // 重置开始时间
+              startTimeRef.current = Date.now();
+
+              // 继续轮询新的ID状态
+              timeoutId = setTimeout(checkStatus, 2000);
+              return;
+            } catch (retryError) {
+              console.error('Automatic retry failed:', retryError);
+              // 如果自动重试失败，继续显示错误
+            }
           }
 
           // 如果已经尝试过自动重试，显示错误

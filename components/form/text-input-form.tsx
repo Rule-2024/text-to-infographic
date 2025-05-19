@@ -114,8 +114,19 @@ export function TextInputForm() {
         // 提交成功后，清除保存的表单数据
         try {
           localStorage.removeItem(FORM_STORAGE_KEY);
+
+          // 同时将内容保存到会话存储，以便在处理页面可以获取用于重试
+          sessionStorage.setItem(`infographic_content_${data.id}`, formData.content);
+          sessionStorage.setItem(`infographic_mode_${data.id}`, formData.mode);
+          sessionStorage.setItem(`infographic_size_${data.id}`, formData.size);
+
+          // 设置过期时间（30分钟后自动清除）
+          const expiryTime = Date.now() + 30 * 60 * 1000;
+          sessionStorage.setItem(`infographic_expiry_${data.id}`, expiryTime.toString());
+
+          console.log('Saved form data to session storage for potential retry');
         } catch (e) {
-          console.error('Failed to clear saved form data:', e);
+          console.error('Failed to manage form data storage:', e);
         }
 
         // Redirect to processing or preview page
