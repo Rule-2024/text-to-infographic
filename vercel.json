@@ -1,8 +1,14 @@
 {
   "redirects": [
     {
-      "source": "http://:match*",
-      "destination": "https://:match*",
+      "source": "/(.*)",
+      "has": [
+        {
+          "type": "host",
+          "value": "(?<host>.*)"
+        }
+      ],
+      "destination": "https://$host/$1",
       "permanent": true
     }
   ],
