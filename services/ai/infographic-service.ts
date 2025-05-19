@@ -33,7 +33,7 @@ export async function generateInfographic(input: TextInputForm): Promise<string>
 
     // 初始化重试计数
     let retryCount = 0;
-    const maxRetries = 2; // 最大重试次数
+    const maxRetries = 3; // 增加最大重试次数，提高成功率
 
     // 创建进度更新函数
     const startProgressUpdates = () => {
@@ -80,15 +80,15 @@ export async function generateInfographic(input: TextInputForm): Promise<string>
       progressValue = 30;
       await updateGenerationStatus(generationId, 'processing', progressValue);
 
-      // 根据尺寸设置不同的超时时间
-      let timeout = 90000; // 默认90秒超时
+      // 根据尺寸设置不同的超时时间 - 增加所有超时时间
+      let timeout = 120000; // 默认120秒超时（增加30秒）
 
       // 为16:9、A4横版和A4竖版设置更长的超时时间
       if (input.size === '16-9') {
-        timeout = 180000; // 16:9格式使用180秒超时
+        timeout = 240000; // 16:9格式使用240秒超时（增加60秒）
         console.log(`Using extended timeout (${timeout}ms) for 16:9 format`);
       } else if (input.size === 'a4-l' || input.size === 'a4-p') {
-        timeout = 150000; // A4格式使用150秒超时
+        timeout = 210000; // A4格式使用210秒超时（增加60秒）
         console.log(`Using extended timeout (${timeout}ms) for A4 format`);
       }
 
@@ -98,8 +98,8 @@ export async function generateInfographic(input: TextInputForm): Promise<string>
           // 使用优化的重试策略调用AI服务
           return await withRetry(
             () => generateInfographicHtml(prompt, input.size),
-            2, // 内部重试次数
-            1500, // 初始延迟
+            3, // 增加内部重试次数，提高成功率
+            2000, // 增加初始延迟，给API更多恢复时间
             timeout // 根据尺寸设置的超时时间
           );
         } catch (error) {

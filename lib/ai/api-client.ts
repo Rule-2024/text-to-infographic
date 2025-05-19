@@ -3,6 +3,67 @@
  * Handle communication with AI services
  */
 
+// 跟踪API预热状态
+let apiWarmedUp = false;
+let lastApiCallTime = 0;
+const API_COOLDOWN_PERIOD = 5 * 60 * 1000; // 5分钟冷却期
+
+/**
+ * 预热API连接，减少第一次调用失败的概率
+ * 发送一个轻量级请求来激活API服务
+ */
+export async function warmupApiConnection(): Promise<void> {
+  // 如果API已经预热且在冷却期内，跳过
+  const now = Date.now();
+  if (apiWarmedUp && (now - lastApiCallTime < API_COOLDOWN_PERIOD)) {
+    console.log('API already warmed up recently, skipping warmup');
+    return;
+  }
+
+  try {
+    console.log('Warming up API connection...');
+    const apiKey = process.env.AI_API_KEY;
+    const baseUrl = process.env.AI_API_URL || 'https://api.lkeap.cloud.tencent.com/v1/chat/completions';
+    const model = process.env.AI_API_MODEL || 'deepseek-v3-0324';
+
+    if (!apiKey) {
+      console.log('API key not configured, skipping warmup');
+      return;
+    }
+
+    // 发送一个简单的请求来激活API连接
+    const response = await fetch(baseUrl, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${apiKey}`,
+        'X-Request-ID': `warmup-${Math.random().toString(36).substring(2, 10)}`
+      },
+      body: JSON.stringify({
+        model: model,
+        messages: [
+          { role: 'system', content: 'You are a helpful assistant.' },
+          { role: 'user', content: 'Hello' }
+        ],
+        temperature: 0.7,
+        max_tokens: 10, // 只需要很少的token
+        stream: false
+      }),
+    });
+
+    if (response.ok) {
+      console.log('API connection successfully warmed up');
+      apiWarmedUp = true;
+      lastApiCallTime = now;
+    } else {
+      console.log(`API warmup failed with status: ${response.status}`);
+    }
+  } catch (error) {
+    console.error('API warmup failed:', error);
+    // 预热失败不阻止后续操作
+  }
+}
+
 /**
  * Call AI service to generate infographic HTML
  *
@@ -14,6 +75,14 @@ export async function generateInfographicHtml(prompt: string, size?: string): Pr
   try {
     // 记录API调用开始时间（用于性能监控）
     const startTime = Date.now();
+
+    // 如果API未预热，先尝试预热
+    if (!apiWarmedUp) {
+      await warmupApiConnection().catch(err => {
+        // 预热失败不阻止主请求
+        console.log('API warmup failed, continuing with main request:', err);
+      });
+    }
 
     // Get DeepSeek API key and base URL
     const apiKey = process.env.AI_API_KEY;

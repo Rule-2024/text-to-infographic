@@ -205,6 +205,14 @@ export function TextInputForm() {
         <p className="text-xs text-muted-foreground">
           Enter your text content to convert into an infographic. You can paste articles, reports, essays, or any text up to 10000 characters.
         </p>
+        <p className="text-xs text-primary/80 mt-1">
+          <span className="flex items-center">
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-3 w-3 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+            Our system automatically retries if the first generation attempt fails. Please be patient during processing.
+          </span>
+        </p>
       </div>
 
       <div className="grid gap-5 md:gap-6 md:grid-cols-2">

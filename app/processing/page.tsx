@@ -19,15 +19,15 @@ export default function ProcessingPage() {
   // 获取尺寸参数，用于调整最大处理时间
   const sizeParam = searchParams.get('size');
 
-  // 根据尺寸设置不同的最大处理时间
-  let maxProcessingTime = 180000; // 默认最大处理时间：3分钟
+  // 根据尺寸设置不同的最大处理时间 - 增加处理时间
+  let maxProcessingTime = 240000; // 默认最大处理时间：4分钟（增加1分钟）
 
-  // 为16:9和A4格式提供更长的处理时间
+  // 为16:9和A4格式提供更长的处理时间 - 增加处理时间
   if (sizeParam === '16-9') {
-    maxProcessingTime = 300000; // 16:9格式使用5分钟
+    maxProcessingTime = 360000; // 16:9格式使用6分钟（增加1分钟）
     console.log(`Using extended processing time (${maxProcessingTime}ms) for 16:9 format`);
   } else if (sizeParam === 'a4-l' || sizeParam === 'a4-p') {
-    maxProcessingTime = 240000; // A4格式使用4分钟
+    maxProcessingTime = 300000; // A4格式使用5分钟（增加1分钟）
     console.log(`Using extended processing time (${maxProcessingTime}ms) for A4 format`);
   }
 

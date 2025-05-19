@@ -1,4 +1,5 @@
 import { TextInputForm } from '@/components/form/text-input-form';
+import { ApiWarmup } from '@/components/api-warmup';
 
 export default function CreatePage() {
   return (
@@ -8,6 +9,9 @@ export default function CreatePage() {
         <div className="absolute -top-40 -right-40 w-80 h-80 bg-primary/5 rounded-full blur-3xl"></div>
         <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-secondary/5 rounded-full blur-3xl"></div>
       </div>
+
+      {/* 添加API预热组件 */}
+      <ApiWarmup />
 
       <div className="relative z-10 w-full max-w-4xl">
         <div className="text-center mb-6 md:mb-8">
