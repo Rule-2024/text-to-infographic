@@ -34,7 +34,7 @@
 - [x] 添加导出为不同格式的功能
 
 ## 技术要点
-- 使用腾讯云DeepSeek-V3-0324或其他AI服务生成HTML格式的信息图
+- 使用DeepSeek官方API生成HTML格式的信息图
 - 根据用户选择的处理模式(全文/总结)和尺寸选择合适的提示词
 - 确保生成的信息图适合所选尺寸，且内容完整
 - 提供PNG、JPG和PDF格式导出
@@ -42,22 +42,41 @@
 ## 使用说明
 
 ### 环境变量配置
-复制`.env.example`到`.env`，并配置以下变量：
-- `AI_API_KEY`: 腾讯云DeepSeek API的密钥（在腾讯云控制台创建）
-- `AI_API_URL`: API端点（默认为`https://api.lkeap.cloud.tencent.com/v1/chat/completions`）
-- `AI_API_MODEL`: 使用的模型（可选值：`deepseek-v3-0324`, `deepseek-v3`, `deepseek-r1`，默认为`deepseek-v3-0324`）
+创建`.env`文件，并配置以下变量：
+
+```env
+# DeepSeek API 配置
+AI_API_KEY=your_deepseek_api_key_here
+AI_API_URL=https://api.deepseek.com/chat/completions
+AI_API_MODEL=deepseek-v3-0324
+USE_MOCK_SERVICE=false
+
+# Supabase 配置 (用于数据存储)
+NEXT_PUBLIC_SUPABASE_URL=your_supabase_url
+NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
+SUPABASE_SERVICE_ROLE_KEY=your_supabase_service_role_key
+```
+
+配置说明：
+- `AI_API_KEY`: DeepSeek API的密钥（在[DeepSeek平台](https://platform.deepseek.com/api_keys)创建）
+- `AI_API_URL`: API端点（默认为`https://api.deepseek.com/chat/completions`）
+- `AI_API_MODEL`: 使用的模型（可选值：`deepseek-v3-0324`, `deepseek-chat`, `deepseek-reasoner`，默认为`deepseek-v3-0324`）
 - `USE_MOCK_SERVICE`: 设为`true`使用模拟服务(开发测试用)，设为`false`使用真实AI服务
 
-### 腾讯云DeepSeek API说明
-本项目使用腾讯云DeepSeek API生成信息图。DeepSeek-V3-0324模型具有以下特点：
+### DeepSeek API说明
+本项目使用DeepSeek官方API生成信息图。DeepSeek-V3-0324模型具有以下特点：
 - 671B参数MoE模型，在编程与技术能力、上下文理解与长文本处理等方面优势突出
 - 支持128K上下文长度，最大输出16k
 - 通过OpenAI兼容接口调用，便于集成
+- 直接使用官方API，稳定性和可靠性更高
 
 ### 开发环境运行
 ```bash
 # 安装依赖
 npm install
+
+# 测试API连接（可选）
+npm run test-api
 
 # 启动开发服务器
 npm run dev

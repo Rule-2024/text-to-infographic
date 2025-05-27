@@ -35,7 +35,6 @@ Thumbs.db
 DOCS/横版提示词（原始版）.txt
 DOCS/竖版提示词（原始版）.txt
 DOCS/提示词（原始版）.txt
-.env.example
 DOCS/prompt-templates/横版提示词-精简版.md
 DOCS/prompt-templates/横版提示词.md
 DOCS/prompt-templates/A4横版提示词.md

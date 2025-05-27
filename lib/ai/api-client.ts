@@ -23,7 +23,7 @@ export async function warmupApiConnection(): Promise<void> {
   try {
     console.log('Warming up API connection...');
     const apiKey = process.env.AI_API_KEY;
-    const baseUrl = process.env.AI_API_URL || 'https://api.lkeap.cloud.tencent.com/v1/chat/completions';
+    const baseUrl = process.env.AI_API_URL || 'https://api.deepseek.com/chat/completions';
     const model = process.env.AI_API_MODEL || 'deepseek-v3-0324';
 
     if (!apiKey) {
@@ -34,11 +34,10 @@ export async function warmupApiConnection(): Promise<void> {
     // 发送一个简单的请求来激活API连接
     const response = await fetch(baseUrl, {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${apiKey}`,
-        'X-Request-ID': `warmup-${Math.random().toString(36).substring(2, 10)}`
-      },
+              headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${apiKey}`
+        },
       body: JSON.stringify({
         model: model,
         messages: [
@@ -86,7 +85,7 @@ export async function generateInfographicHtml(prompt: string, size?: string): Pr
 
     // Get DeepSeek API key and base URL
     const apiKey = process.env.AI_API_KEY;
-    const baseUrl = process.env.AI_API_URL || 'https://api.lkeap.cloud.tencent.com/v1/chat/completions';
+    const baseUrl = process.env.AI_API_URL || 'https://api.deepseek.com/chat/completions';
     const model = process.env.AI_API_MODEL || 'deepseek-v3-0324';
 
     if (!apiKey) throw new Error('AI_API_KEY not configured');
@@ -109,7 +108,7 @@ export async function generateInfographicHtml(prompt: string, size?: string): Pr
       console.log(`Using increased max_tokens (${maxTokens}) for A4 format`);
     }
 
-    // 腾讯云DeepSeek API使用OpenAI兼容接口
+    // DeepSeek官方API使用OpenAI兼容接口
     // 添加请求ID用于跟踪
     const requestId = Math.random().toString(36).substring(2, 15);
     console.log(`Starting API request ${requestId} for size: ${size || 'default'}`);
@@ -119,8 +118,7 @@ export async function generateInfographicHtml(prompt: string, size?: string): Pr
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${apiKey}`,
-          'X-Request-ID': requestId
+          'Authorization': `Bearer ${apiKey}`
         },
         body: JSON.stringify({
           model: model, // 使用环境变量中配置的模型，默认为deepseek-v3-0324
