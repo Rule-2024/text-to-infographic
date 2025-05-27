@@ -59,13 +59,15 @@ export async function htmlToDataUrl(
 
             // 确保所有图片都已加载
             const images = body.querySelectorAll('img');
-            await Promise.all(Array.from(images).map(img => {
-              if (img.complete) return Promise.resolve();
-              return new Promise<void>(resolve => {
-                img.onload = () => resolve();
-                img.onerror = () => resolve();
-              });
-            }));
+            await Promise.all(
+              Array.from(images).map(img => {
+                if (img.complete) return Promise.resolve();
+                return new Promise<void>(resolve => {
+                  img.onload = () => resolve();
+                  img.onerror = () => resolve();
+                });
+              })
+            );
 
             // 获取实际内容尺寸
             const contentWidth = body.scrollWidth;
@@ -106,7 +108,7 @@ export async function htmlToDataUrl(
               windowWidth: contentWidth,
               windowHeight: contentHeight,
               foreignObjectRendering: false, // 关闭foreignObject渲染以避免某些渲染问题
-              onclone: (clonedDoc) => {
+              onclone: clonedDoc => {
                 // 可以在这里对克隆的文档进行额外处理
                 const clonedBody = clonedDoc.body;
                 if (clonedBody) {
@@ -132,7 +134,7 @@ export async function htmlToDataUrl(
                   `;
                   clonedDoc.head.appendChild(styleEl);
                 }
-              }
+              },
             });
 
             // 转换为数据URL
@@ -150,13 +152,15 @@ export async function htmlToDataUrl(
 
           // 确保所有图片都已加载
           const images = container.querySelectorAll('img');
-          await Promise.all(Array.from(images).map(img => {
-            if (img.complete) return Promise.resolve();
-            return new Promise<void>(resolve => {
-              img.onload = () => resolve();
-              img.onerror = () => resolve();
-            });
-          }));
+          await Promise.all(
+            Array.from(images).map(img => {
+              if (img.complete) return Promise.resolve();
+              return new Promise<void>(resolve => {
+                img.onload = () => resolve();
+                img.onerror = () => resolve();
+              });
+            })
+          );
 
           // 获取容器尺寸
           const containerWidth = (container as HTMLElement).offsetWidth;
@@ -194,8 +198,10 @@ export async function htmlToDataUrl(
           const detectType = () => {
             try {
               // 检查是否是16:9尺寸信息图
-              const width = (container as HTMLElement).style.width || (container as HTMLElement).offsetWidth;
-              const height = (container as HTMLElement).style.height || (container as HTMLElement).offsetHeight;
+              const width =
+                (container as HTMLElement).style.width || (container as HTMLElement).offsetWidth;
+              const height =
+                (container as HTMLElement).style.height || (container as HTMLElement).offsetHeight;
 
               // 检查是否是16:9尺寸
               if (width === '1920px' || width === 1920 || height === '1080px' || height === 1080) {
@@ -223,7 +229,10 @@ export async function htmlToDataUrl(
           console.log(`Capturing infographic type: ${infographicType}`);
 
           // 对于16:9和A4格式，使用特殊配置
-          const scale = (infographicType === '16-9' || infographicType === 'a4-l' || infographicType === 'a4-p') ? 1 : 2;
+          const scale =
+            infographicType === '16-9' || infographicType === 'a4-l' || infographicType === 'a4-p'
+              ? 1
+              : 2;
 
           // 使用html2canvas捕获infographic-container内容
           const canvas = await html2canvas(container as HTMLElement, {
@@ -237,7 +246,7 @@ export async function htmlToDataUrl(
             windowWidth: containerWidth,
             windowHeight: containerHeight,
             foreignObjectRendering: false, // 关闭foreignObject渲染以避免某些渲染问题
-            onclone: (clonedDoc) => {
+            onclone: clonedDoc => {
               // 可以在这里对克隆的文档进行额外处理
               const clonedContainer = clonedDoc.querySelector('.infographic-container');
               if (clonedContainer) {
@@ -263,7 +272,7 @@ export async function htmlToDataUrl(
                 `;
                 clonedDoc.head.appendChild(styleEl);
               }
-            }
+            },
           });
 
           // 转换为数据URL
@@ -287,16 +296,28 @@ export async function htmlToDataUrl(
 
       // 检测信息图类型
       const detectInfographicType = (html: string) => {
-        if (html.includes('width: 1920px') || html.includes('width:1920px') ||
-            html.includes('height: 1080px') || html.includes('height:1080px')) {
+        if (
+          html.includes('width: 1920px') ||
+          html.includes('width:1920px') ||
+          html.includes('height: 1080px') ||
+          html.includes('height:1080px')
+        ) {
           return '16-9';
         }
-        if (html.includes('width: 1123px') || html.includes('width:1123px') ||
-            html.includes('height: 794px') || html.includes('height:794px')) {
+        if (
+          html.includes('width: 1123px') ||
+          html.includes('width:1123px') ||
+          html.includes('height: 794px') ||
+          html.includes('height:794px')
+        ) {
           return 'a4-l';
         }
-        if (html.includes('width: 794px') || html.includes('width:794px') ||
-            html.includes('height: 1123px') || html.includes('height:1123px')) {
+        if (
+          html.includes('width: 794px') ||
+          html.includes('width:794px') ||
+          html.includes('height: 1123px') ||
+          html.includes('height:1123px')
+        ) {
           return 'a4-p';
         }
         return 'mobile';
@@ -356,7 +377,10 @@ export async function htmlToDataUrl(
  * @param filename Output filename (without extension)
  * @returns Promise resolving when PDF is generated and downloaded
  */
-export async function htmlToPdf(htmlContent: string, filename: string = 'infographic'): Promise<void> {
+export async function htmlToPdf(
+  htmlContent: string,
+  filename: string = 'infographic'
+): Promise<void> {
   // We need to dynamically import jspdf to avoid SSR issues
   const { jsPDF } = await import('jspdf');
 
@@ -414,7 +438,7 @@ export async function htmlToPdf(htmlContent: string, filename: string = 'infogra
     const pdf = new jsPDF({
       orientation,
       unit: 'px',
-      format: [width, height]
+      format: [width, height],
     });
 
     // 添加图像到PDF
@@ -437,7 +461,9 @@ export async function htmlToPdf(htmlContent: string, filename: string = 'infogra
     console.error('PDF generation failed:', error);
 
     // 移除进度指示器（如果存在）
-    const progressIndicator = document.querySelector('div[style*="position: fixed"][style*="top: 50%"]');
+    const progressIndicator = document.querySelector(
+      'div[style*="position: fixed"][style*="top: 50%"]'
+    );
     if (progressIndicator && progressIndicator.parentNode) {
       progressIndicator.parentNode.removeChild(progressIndicator);
     }

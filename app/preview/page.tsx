@@ -62,12 +62,25 @@ export default function PreviewPage() {
 
         <div className="glass-card p-8 card-shadow max-w-md text-center relative z-10">
           <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-gradient-to-r from-primary to-secondary flex items-center justify-center">
-            <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8 text-white animate-spin" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="h-8 w-8 text-white animate-spin"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
+              />
             </svg>
           </div>
           <h2 className="mb-4 text-2xl font-bold gradient-heading">Loading Preview</h2>
-          <p className="mb-6 text-sm text-muted-foreground">Preparing your infographic for display...</p>
+          <p className="mb-6 text-sm text-muted-foreground">
+            Preparing your infographic for display...
+          </p>
           <div className="h-2 w-64 mx-auto rounded-full bg-muted overflow-hidden">
             <div className="h-full animate-pulse rounded-full bg-gradient-to-r from-primary to-secondary"></div>
           </div>
@@ -86,17 +99,36 @@ export default function PreviewPage() {
         </div>
 
         <div className="glass-card p-8 card-shadow max-w-md text-center relative z-10">
-          <svg xmlns="http://www.w3.org/2000/svg" className="h-12 w-12 mx-auto mb-4 text-destructive" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            className="h-12 w-12 mx-auto mb-4 text-destructive"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"
+            />
           </svg>
           <h2 className="mb-4 text-2xl font-bold text-destructive">Preview Error</h2>
           <p className="mb-6 text-muted-foreground">{error}</p>
-          <Link
-            href="/create"
-            className="btn-gradient inline-flex items-center gap-2"
-          >
-            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 17l-5-5m0 0l5-5m-5 5h12" />
+          <Link href="/create" className="btn-gradient inline-flex items-center gap-2">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="h-5 w-5"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M11 17l-5-5m0 0l5-5m-5 5h12"
+              />
             </svg>
             Back to Create
           </Link>
@@ -117,15 +149,28 @@ export default function PreviewPage() {
         <div className="mb-6 md:mb-8 flex flex-col md:flex-row md:items-center md:justify-between gap-3 md:gap-4">
           <div>
             <h1 className="text-2xl md:text-3xl font-bold gradient-heading">Your Infographic</h1>
-            <p className="text-sm md:text-base text-muted-foreground">Preview and export your AI-generated infographic</p>
+            <p className="text-sm md:text-base text-muted-foreground">
+              Preview and export your AI-generated infographic
+            </p>
           </div>
           <div className="flex gap-3 md:gap-4 mt-2 md:mt-0">
             <button
               className="btn-gradient flex items-center gap-1.5 md:gap-2 py-2 px-3 md:px-4 text-sm md:text-base"
               onClick={() => setShowExportDialog(true)}
             >
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 md:h-5 md:w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="h-4 w-4 md:h-5 md:w-5"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"
+                />
               </svg>
               Export
             </button>
@@ -133,8 +178,19 @@ export default function PreviewPage() {
               href="/create"
               className="gradient-border px-3 md:px-4 py-2 text-sm md:text-base font-medium transition-all duration-300 hover:shadow-md flex items-center gap-1.5"
             >
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 md:h-5 md:w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="h-4 w-4 md:h-5 md:w-5"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M12 4v16m8-8H4"
+                />
               </svg>
               <span className="hidden xs:inline">Create</span> New
             </Link>
@@ -146,7 +202,7 @@ export default function PreviewPage() {
             <div className="relative">
               <iframe
                 className="mobile-preview-iframe w-full"
-                ref={(iframe) => {
+                ref={iframe => {
                   if (iframe) {
                     // 设置初始高度 - 移动端使用更小的初始高度以避免过长的空白
                     const isMobile = window.innerWidth < 768;
@@ -161,23 +217,43 @@ export default function PreviewPage() {
                       try {
                         if (iframe.contentDocument) {
                           // 检查是否是16:9尺寸信息图
-                          const container = iframe.contentDocument.querySelector('.infographic-container');
+                          const container =
+                            iframe.contentDocument.querySelector('.infographic-container');
                           if (container) {
-                            const width = (container as HTMLElement).style.width || (container as HTMLElement).offsetWidth;
-                            const height = (container as HTMLElement).style.height || (container as HTMLElement).offsetHeight;
+                            const width =
+                              (container as HTMLElement).style.width ||
+                              (container as HTMLElement).offsetWidth;
+                            const height =
+                              (container as HTMLElement).style.height ||
+                              (container as HTMLElement).offsetHeight;
 
                             // 检查是否是16:9尺寸
-                            if (width === '1920px' || width === 1920 || height === '1080px' || height === 1080) {
+                            if (
+                              width === '1920px' ||
+                              width === 1920 ||
+                              height === '1080px' ||
+                              height === 1080
+                            ) {
                               return '16-9';
                             }
 
                             // 检查是否是A4横版
-                            if (width === '1123px' || width === 1123 || height === '794px' || height === 794) {
+                            if (
+                              width === '1123px' ||
+                              width === 1123 ||
+                              height === '794px' ||
+                              height === 794
+                            ) {
                               return 'a4-l';
                             }
 
                             // 检查是否是A4竖版
-                            if (width === '794px' || width === 794 || height === '1123px' || height === 1123) {
+                            if (
+                              width === '794px' ||
+                              width === 794 ||
+                              height === '1123px' ||
+                              height === 1123
+                            ) {
                               return 'a4-p';
                             }
 
@@ -197,7 +273,7 @@ export default function PreviewPage() {
                     // 防抖函数
                     const debounce = (func: Function, wait: number) => {
                       let timeout: NodeJS.Timeout | null = null;
-                      return function(this: any, ...args: any[]) {
+                      return function (this: any, ...args: any[]) {
                         if (timeout) clearTimeout(timeout);
                         timeout = setTimeout(() => {
                           func.apply(this, args);
@@ -211,7 +287,9 @@ export default function PreviewPage() {
                         try {
                           // 如果已经达到最大调整次数，则停止调整
                           if (resizeCount >= MAX_RESIZE_COUNT) {
-                            console.log(`Reached max resize count (${MAX_RESIZE_COUNT}), stopping adjustments`);
+                            console.log(
+                              `Reached max resize count (${MAX_RESIZE_COUNT}), stopping adjustments`
+                            );
                             resizeObserver.disconnect();
                             return;
                           }
@@ -228,21 +306,29 @@ export default function PreviewPage() {
                             const isMobile = deviceWidth < 768; // 移动设备断点
 
                             // 获取容器元素
-                            const container = iframe.contentDocument.querySelector('.infographic-container') as HTMLElement;
+                            const container = iframe.contentDocument.querySelector(
+                              '.infographic-container'
+                            ) as HTMLElement;
                             if (!container) {
                               console.warn('Infographic container not found');
                               return;
                             }
 
                             // 获取容器的原始尺寸
-                            const originalWidth = parseFloat(container.style.width) || container.offsetWidth;
-                            const originalHeight = parseFloat(container.style.height) || container.offsetHeight;
+                            const originalWidth =
+                              parseFloat(container.style.width) || container.offsetWidth;
+                            const originalHeight =
+                              parseFloat(container.style.height) || container.offsetHeight;
 
                             // 获取iframe父容器的宽度
-                            const parentWidth = iframe.parentElement?.offsetWidth || window.innerWidth * 0.9;
+                            const parentWidth =
+                              iframe.parentElement?.offsetWidth || window.innerWidth * 0.9;
 
                             // 计算缩放比例 - 为移动设备留出边距
-                            const scale = Math.min(1, (parentWidth - (isMobile ? 16 : 32)) / originalWidth);
+                            const scale = Math.min(
+                              1,
+                              (parentWidth - (isMobile ? 16 : 32)) / originalWidth
+                            );
 
                             // 设置iframe的高度为缩放后的高度
                             const scaledHeight = originalHeight * scale;
@@ -251,7 +337,11 @@ export default function PreviewPage() {
                             // 添加样式以确保内容正确缩放和居中
                             const style = document.createElement('style');
 
-                            if (infographicType === '16-9' || infographicType === 'a4-l' || infographicType === 'a4-p') {
+                            if (
+                              infographicType === '16-9' ||
+                              infographicType === 'a4-l' ||
+                              infographicType === 'a4-p'
+                            ) {
                               // 对于16:9和A4格式，使用特殊处理
                               style.textContent = `
                                 body {
@@ -268,7 +358,9 @@ export default function PreviewPage() {
                                   transform-origin: top center;
                                   margin: 0 auto;
                                 }
-                                ${isMobile ? `
+                                ${
+                                  isMobile
+                                    ? `
                                 /* 移动设备优化 */
                                 .infographic-container * {
                                   font-size: 120% !important;
@@ -281,7 +373,9 @@ export default function PreviewPage() {
                                   background: rgba(255,255,255,0.8) !important;
                                   z-index: 1000 !important;
                                 }
-                                ` : ''}
+                                `
+                                    : ''
+                                }
                               `;
                             } else {
                               // 对于移动版，使用优化的样式
@@ -324,7 +418,8 @@ export default function PreviewPage() {
                             }
 
                             // 检查是否已经添加了样式
-                            const existingStyle = iframe.contentDocument.querySelector('style[data-scale-style]');
+                            const existingStyle =
+                              iframe.contentDocument.querySelector('style[data-scale-style]');
                             if (existingStyle) {
                               existingStyle.textContent = style.textContent;
                             } else {
@@ -377,35 +472,52 @@ export default function PreviewPage() {
                     };
 
                     // 专门的函数来优化移动端显示
-                    const adjustIframeForMobile = (iframe: HTMLIFrameElement, infographicType: string, isMobile: boolean) => {
+                    const adjustIframeForMobile = (
+                      iframe: HTMLIFrameElement,
+                      infographicType: string,
+                      isMobile: boolean
+                    ) => {
                       try {
                         if (!iframe.contentDocument) return;
 
                         // 获取容器元素
-                        const container = iframe.contentDocument.querySelector('.infographic-container') as HTMLElement;
+                        const container = iframe.contentDocument.querySelector(
+                          '.infographic-container'
+                        ) as HTMLElement;
                         if (!container) {
                           console.warn('Infographic container not found');
                           return;
                         }
 
                         // 获取容器的原始尺寸
-                        const originalWidth = parseFloat(container.style.width) || container.offsetWidth;
-                        const originalHeight = parseFloat(container.style.height) || container.offsetHeight;
+                        const originalWidth =
+                          parseFloat(container.style.width) || container.offsetWidth;
+                        const originalHeight =
+                          parseFloat(container.style.height) || container.offsetHeight;
 
                         // 获取iframe父容器的宽度
-                        const parentWidth = iframe.parentElement?.offsetWidth || window.innerWidth * 0.9;
+                        const parentWidth =
+                          iframe.parentElement?.offsetWidth || window.innerWidth * 0.9;
 
                         // 计算缩放比例 - 为移动设备留出边距
                         // 增加移动设备的边距，确保内容不会太靠近屏幕边缘
-                        const scale = Math.min(1, (parentWidth - (isMobile ? 24 : 32)) / originalWidth);
+                        const scale = Math.min(
+                          1,
+                          (parentWidth - (isMobile ? 24 : 32)) / originalWidth
+                        );
 
                         // 检测是否是横版信息图
-                        const isLandscape = infographicType === '16-9' || infographicType === 'a4-l';
+                        const isLandscape =
+                          infographicType === '16-9' || infographicType === 'a4-l';
 
                         // 添加样式以确保内容正确缩放和居中
                         const style = document.createElement('style');
 
-                        if (infographicType === '16-9' || infographicType === 'a4-l' || infographicType === 'a4-p') {
+                        if (
+                          infographicType === '16-9' ||
+                          infographicType === 'a4-l' ||
+                          infographicType === 'a4-p'
+                        ) {
                           // 计算最佳缩放比例 - 横版信息图需要更多缩放
                           let optimalScale = scale;
                           if (isMobile) {
@@ -436,7 +548,9 @@ export default function PreviewPage() {
                               overflow: visible !important;
                               box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
                             }
-                            ${isMobile ? `
+                            ${
+                              isMobile
+                                ? `
                             /* 移动设备优化 */
                             .infographic-container * {
                               line-height: 1.4 !important;
@@ -451,7 +565,9 @@ export default function PreviewPage() {
                             }
 
                             /* 横版信息图提示 */
-                            ${isLandscape ? `
+                            ${
+                              isLandscape
+                                ? `
                             .landscape-hint {
                               position: fixed;
                               bottom: 70px;
@@ -468,8 +584,12 @@ export default function PreviewPage() {
                               gap: 8px;
                               box-shadow: 0 2px 10px rgba(0,0,0,0.2);
                             }
-                            ` : ''}
-                            ` : ''}
+                            `
+                                : ''
+                            }
+                            `
+                                : ''
+                            }
                           `;
 
                           // 设置iframe的高度为缩放后的高度，加上额外空间
@@ -487,7 +607,8 @@ export default function PreviewPage() {
                               if (!iframe.contentDocument.querySelector('.landscape-hint')) {
                                 const hintDiv = document.createElement('div');
                                 hintDiv.className = 'landscape-hint';
-                                hintDiv.innerHTML = '提示：横向旋转设备可获得更好体验 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12H3M3 12L8 7M3 12L8 17"></path></svg>';
+                                hintDiv.innerHTML =
+                                  '提示：横向旋转设备可获得更好体验 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12H3M3 12L8 7M3 12L8 17"></path></svg>';
                                 iframe.contentDocument.body.appendChild(hintDiv);
                               }
                             }
@@ -556,7 +677,8 @@ export default function PreviewPage() {
                         }
 
                         // 检查是否已经添加了样式
-                        const existingStyle = iframe.contentDocument.querySelector('style[data-scale-style]');
+                        const existingStyle =
+                          iframe.contentDocument.querySelector('style[data-scale-style]');
                         if (existingStyle) {
                           existingStyle.textContent = style.textContent;
                         } else {
@@ -574,7 +696,7 @@ export default function PreviewPage() {
                   border: 'none',
                   display: 'block',
                   margin: '0 auto',
-                  backgroundColor: 'transparent'
+                  backgroundColor: 'transparent',
                 }}
                 sandbox="allow-same-origin"
                 title="Infographic Preview"
@@ -584,14 +706,34 @@ export default function PreviewPage() {
                 <button
                   onClick={() => {
                     // 获取iframe元素
-                    const iframe = document.querySelector('.mobile-preview-iframe') as HTMLIFrameElement;
+                    const iframe = document.querySelector(
+                      '.mobile-preview-iframe'
+                    ) as HTMLIFrameElement;
                     if (!iframe) return;
 
                     // 检测信息图类型
-                    const infographicType = iframe.contentDocument?.querySelector('.infographic-container') ?
-                      (iframe.contentDocument?.querySelector('.infographic-container') as HTMLElement).style.width === '1920px' ? '16-9' :
-                      (iframe.contentDocument?.querySelector('.infographic-container') as HTMLElement).style.width === '1123px' ? 'a4-l' :
-                      (iframe.contentDocument?.querySelector('.infographic-container') as HTMLElement).style.width === '794px' ? 'a4-p' : 'mobile'
+                    const infographicType = iframe.contentDocument?.querySelector(
+                      '.infographic-container'
+                    )
+                      ? (
+                          iframe.contentDocument?.querySelector(
+                            '.infographic-container'
+                          ) as HTMLElement
+                        ).style.width === '1920px'
+                        ? '16-9'
+                        : (
+                              iframe.contentDocument?.querySelector(
+                                '.infographic-container'
+                              ) as HTMLElement
+                            ).style.width === '1123px'
+                          ? 'a4-l'
+                          : (
+                                iframe.contentDocument?.querySelector(
+                                  '.infographic-container'
+                                ) as HTMLElement
+                              ).style.width === '794px'
+                            ? 'a4-p'
+                            : 'mobile'
                       : 'unknown';
 
                     // 检测是否是横版信息图
@@ -631,7 +773,9 @@ export default function PreviewPage() {
                           }
 
                           /* 横版信息图的特殊处理 */
-                          ${isLandscape ? `
+                          ${
+                            isLandscape
+                              ? `
                           @media (orientation: landscape) {
                             body {
                               align-items: center;
@@ -645,15 +789,21 @@ export default function PreviewPage() {
                               margin: 0 auto;
                             }
                           }
-                          ` : ''}
+                          `
+                              : ''
+                          }
 
                           /* 竖版信息图的特殊处理 */
-                          ${!isLandscape ? `
+                          ${
+                            !isLandscape
+                              ? `
                           .infographic-container {
                             max-width: 98vw;
                             transform-origin: top center;
                           }
-                          ` : ''}
+                          `
+                              : ''
+                          }
 
                           /* 确保推广链接可见 */
                           .promo-link, .promo-link * {
@@ -681,8 +831,19 @@ export default function PreviewPage() {
                   className="bg-secondary text-white p-3 md:p-2 rounded-full md:rounded-lg shadow-md hover:shadow-lg transition-all duration-300 flex items-center justify-center md:justify-start gap-1.5 w-12 h-12 md:w-auto md:h-auto"
                   aria-label="Fullscreen"
                 >
-                  <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 md:h-5 md:w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5v-4m0 4h-4m4 0l-5-5" />
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="h-6 w-6 md:h-5 md:w-5"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5v-4m0 4h-4m4 0l-5-5"
+                    />
                   </svg>
                   <span className="hidden md:inline">全屏查看</span>
                 </button>
@@ -693,8 +854,19 @@ export default function PreviewPage() {
                   className="bg-primary text-white p-3 md:p-2 rounded-full md:rounded-lg shadow-md hover:shadow-lg transition-all duration-300 flex items-center justify-center md:justify-start gap-1.5 w-12 h-12 md:w-auto md:h-auto"
                   aria-label="Export"
                 >
-                  <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 md:h-5 md:w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="h-6 w-6 md:h-5 md:w-5"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"
+                    />
                   </svg>
                   <span className="hidden md:inline">导出</span>
                 </button>
@@ -707,16 +879,28 @@ export default function PreviewPage() {
                     if (win) {
                       // 检测信息图类型
                       const detectType = (html: string) => {
-                        if (html.includes('width: 1920px') || html.includes('width:1920px') ||
-                            html.includes('height: 1080px') || html.includes('height:1080px')) {
+                        if (
+                          html.includes('width: 1920px') ||
+                          html.includes('width:1920px') ||
+                          html.includes('height: 1080px') ||
+                          html.includes('height:1080px')
+                        ) {
                           return '16-9';
                         }
-                        if (html.includes('width: 1123px') || html.includes('width:1123px') ||
-                            html.includes('height: 794px') || html.includes('height:794px')) {
+                        if (
+                          html.includes('width: 1123px') ||
+                          html.includes('width:1123px') ||
+                          html.includes('height: 794px') ||
+                          html.includes('height:794px')
+                        ) {
                           return 'a4-l';
                         }
-                        if (html.includes('width: 794px') || html.includes('width:794px') ||
-                            html.includes('height: 1123px') || html.includes('height:1123px')) {
+                        if (
+                          html.includes('width: 794px') ||
+                          html.includes('width:794px') ||
+                          html.includes('height: 1123px') ||
+                          html.includes('height:1123px')
+                        ) {
                           return 'a4-p';
                         }
                         if (html.includes('width: 750px') || html.includes('width:750px')) {
@@ -742,7 +926,9 @@ export default function PreviewPage() {
                             overflow-x: hidden;
                           }
 
-                          ${type === '16-9' || type === 'a4-l' || type === 'a4-p' ? `
+                          ${
+                            type === '16-9' || type === 'a4-l' || type === 'a4-p'
+                              ? `
                           .infographic-container {
                             margin: ${isMobile ? '20px' : '30px'} auto;
                             width: ${type === '16-9' ? '1920px' : type === 'a4-l' ? '1123px' : '794px'} !important;
@@ -752,7 +938,9 @@ export default function PreviewPage() {
                           }
 
                           /* 横版信息图的特殊处理 */
-                          ${(type === '16-9' || type === 'a4-l') ? `
+                          ${
+                            type === '16-9' || type === 'a4-l'
+                              ? `
                           @media (orientation: portrait) {
                             .infographic-container {
                               transform: scale(${Math.min(0.95, 95 / 100)});
@@ -768,21 +956,28 @@ export default function PreviewPage() {
                               transform-origin: center;
                             }
                           }
-                          ` : `
+                          `
+                              : `
                           /* 竖版信息图的特殊处理 */
                           .infographic-container {
                             transform: scale(min(0.95, 95vw / 794));
                             transform-origin: top center;
                           }
-                          `}
+                          `
+                          }
 
-                          ${isMobile ? `
+                          ${
+                            isMobile
+                              ? `
                           /* 移动设备优化 */
                           .infographic-container * {
                             line-height: 1.4 !important;
                           }
-                          ` : ''}
-                          ` : `
+                          `
+                              : ''
+                          }
+                          `
+                              : `
                           .infographic-container {
                             width: 100% !important;
                             max-width: 100% !important;
@@ -797,7 +992,8 @@ export default function PreviewPage() {
                             height: auto !important;
                             max-width: 100% !important;
                           }
-                          `}
+                          `
+                          }
 
                           /* 确保推广链接可见 */
                           .promo-link, .promo-link * {
@@ -809,7 +1005,9 @@ export default function PreviewPage() {
                           }
 
                           /* 移动端额外优化 */
-                          ${isMobile ? `
+                          ${
+                            isMobile
+                              ? `
                           @media (max-width: 768px) {
                             body {
                               padding: 0;
@@ -826,7 +1024,9 @@ export default function PreviewPage() {
                             }
 
                             /* 横版信息图提示 */
-                            ${type === '16-9' || type === 'a4-l' ? `
+                            ${
+                              type === '16-9' || type === 'a4-l'
+                                ? `
                             .landscape-hint {
                               position: fixed;
                               bottom: 70px;
@@ -843,9 +1043,13 @@ export default function PreviewPage() {
                               gap: 8px;
                               box-shadow: 0 2px 10px rgba(0,0,0,0.2);
                             }
-                            ` : ''}
+                            `
+                                : ''
+                            }
                           }
-                          ` : ''}
+                          `
+                              : ''
+                          }
                         </style>
                       `;
 
@@ -864,8 +1068,19 @@ export default function PreviewPage() {
                   className="bg-white/90 p-3 md:p-2 rounded-full md:rounded-lg shadow-md hover:bg-white transition-all duration-300 flex items-center justify-center md:justify-start gap-1.5 w-12 h-12 md:w-auto md:h-auto"
                   aria-label="Open in new window"
                 >
-                  <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 md:h-5 md:w-5 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="h-6 w-6 md:h-5 md:w-5 text-primary"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"
+                    />
                   </svg>
                   <span className="hidden md:inline">Open</span>
                 </button>
@@ -876,8 +1091,19 @@ export default function PreviewPage() {
                   className="bg-white/90 p-3 md:p-2 rounded-full md:rounded-lg shadow-md hover:bg-white transition-all duration-300 flex items-center justify-center md:justify-start gap-1.5 w-12 h-12 md:w-auto md:h-auto"
                   aria-label="Create new"
                 >
-                  <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 md:h-5 md:w-5 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="h-6 w-6 md:h-5 md:w-5 text-primary"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M12 4v16m8-8H4"
+                    />
                   </svg>
                   <span className="hidden md:inline">New</span>
                 </Link>
@@ -892,17 +1118,16 @@ export default function PreviewPage() {
 
         <div className="text-center">
           <p className="text-sm text-muted-foreground mb-4">
-            Want to share this infographic? <span className="text-primary font-medium hover:underline cursor-pointer">Sign in</span> to unlock sharing features (coming soon)
+            Want to share this infographic?{' '}
+            <span className="text-primary font-medium hover:underline cursor-pointer">Sign in</span>{' '}
+            to unlock sharing features (coming soon)
           </p>
         </div>
       </div>
 
       {/* 导出对话框 */}
       {showExportDialog && htmlContent && (
-        <ExportDialog
-          htmlContent={htmlContent}
-          onClose={() => setShowExportDialog(false)}
-        />
+        <ExportDialog htmlContent={htmlContent} onClose={() => setShowExportDialog(false)} />
       )}
     </main>
   );

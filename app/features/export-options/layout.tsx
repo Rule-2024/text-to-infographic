@@ -3,14 +3,23 @@ import Script from 'next/script';
 
 export const metadata: Metadata = {
   title: 'Infographic Export Options | AI Text to Infographic Tool',
-  description: 'Export your AI-generated infographics in multiple formats (PNG, JPG, PDF) and sizes. Our free text to infographic tool offers flexible download options for any use case.',
-  keywords: ['ai text to infographic', 'infographic export formats', 'text to infographic ai free', 'download infographics', 'infographic size options', 'share infographics online'],
+  description:
+    'Export your AI-generated infographics in multiple formats (PNG, JPG, PDF) and sizes. Our free text to infographic tool offers flexible download options for any use case.',
+  keywords: [
+    'ai text to infographic',
+    'infographic export formats',
+    'text to infographic ai free',
+    'download infographics',
+    'infographic size options',
+    'share infographics online',
+  ],
   alternates: {
     canonical: 'https://texttoinfographic.online/features/export-options',
   },
   openGraph: {
     title: 'Infographic Export Options | AI Text to Infographic Tool',
-    description: 'Export your AI-generated infographics in multiple formats (PNG, JPG, PDF) and sizes. Our free text to infographic tool offers flexible download options for any use case.',
+    description:
+      'Export your AI-generated infographics in multiple formats (PNG, JPG, PDF) and sizes. Our free text to infographic tool offers flexible download options for any use case.',
     url: 'https://texttoinfographic.online/features/export-options',
     siteName: 'Text to Infographic',
     locale: 'en_US',
@@ -19,15 +28,12 @@ export const metadata: Metadata = {
   twitter: {
     card: 'summary_large_image',
     title: 'Infographic Export Options | AI Text to Infographic Tool',
-    description: 'Export your AI-generated infographics in multiple formats (PNG, JPG, PDF) and sizes. Our free text to infographic tool offers flexible download options for any use case.',
+    description:
+      'Export your AI-generated infographics in multiple formats (PNG, JPG, PDF) and sizes. Our free text to infographic tool offers flexible download options for any use case.',
   },
 };
 
-export default function ExportOptionsLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export default function ExportOptionsLayout({ children }: { children: React.ReactNode }) {
   return (
     <>
       <Script
@@ -38,12 +44,13 @@ export default function ExportOptionsLayout({
             '@context': 'https://schema.org',
             '@type': 'WebPage',
             name: 'Infographic Export Options',
-            description: 'Export your AI-generated infographics in multiple formats (PNG, JPG, PDF) and sizes. Our free text to infographic tool offers flexible download options for any use case.',
+            description:
+              'Export your AI-generated infographics in multiple formats (PNG, JPG, PDF) and sizes. Our free text to infographic tool offers flexible download options for any use case.',
             url: 'https://texttoinfographic.online/features/export-options',
             isPartOf: {
               '@type': 'WebSite',
               name: 'Text to Infographic',
-              url: 'https://texttoinfographic.online'
+              url: 'https://texttoinfographic.online',
             },
             mainEntity: {
               '@type': 'SoftwareApplication',
@@ -52,16 +59,16 @@ export default function ExportOptionsLayout({
               offers: {
                 '@type': 'Offer',
                 price: '0',
-                priceCurrency: 'USD'
+                priceCurrency: 'USD',
               },
               featureList: [
                 'PNG export for web use',
                 'JPG export for sharing',
                 'PDF export for printing',
-                'Multiple size options'
-              ]
-            }
-          })
+                'Multiple size options',
+              ],
+            },
+          }),
         }}
       />
       {children}

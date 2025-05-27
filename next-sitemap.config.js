@@ -9,8 +9,8 @@ module.exports = {
     ],
     policies: [
       { userAgent: '*', allow: '/' },
-      { userAgent: '*', disallow: ['/api/*', '/processing', '/preview'] }
-    ]
+      { userAgent: '*', disallow: ['/api/*', '/processing', '/preview'] },
+    ],
   },
   // 只排除处理和预览页面，确保功能页面被包含
   exclude: ['/processing', '/preview', '/api/*'],
@@ -23,7 +23,7 @@ module.exports = {
         changefreq: config.changefreq,
         priority: 0.8,
         lastmod: config.autoLastmod ? new Date().toISOString() : undefined,
-      }
+      };
     }
     // 为创建页面设置更高的优先级
     if (path === '/create') {
@@ -32,7 +32,7 @@ module.exports = {
         changefreq: config.changefreq,
         priority: 0.9,
         lastmod: config.autoLastmod ? new Date().toISOString() : undefined,
-      }
+      };
     }
     // 使用默认配置
     return {
@@ -40,11 +40,11 @@ module.exports = {
       changefreq: config.changefreq,
       priority: config.priority,
       lastmod: config.autoLastmod ? new Date().toISOString() : undefined,
-    }
+    };
   },
   changefreq: 'weekly',
   priority: 0.7,
   sitemapSize: 5000,
   // 生成单个站点地图文件而不是索引
   generateIndexSitemap: false,
-}
+};

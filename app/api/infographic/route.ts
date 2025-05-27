@@ -11,10 +11,7 @@ export async function POST(request: Request) {
 
     // Validate required fields
     if (!body.content) {
-      return NextResponse.json(
-        { error: 'Missing text content' },
-        { status: 400 }
-      );
+      return NextResponse.json({ error: 'Missing text content' }, { status: 400 });
     }
 
     // Validate text length
@@ -29,7 +26,7 @@ export async function POST(request: Request) {
     const input: TextInputForm = {
       content: body.content,
       mode: body.mode || 'summary',
-      size: body.size || '750'
+      size: body.size || '750',
     };
 
     // Call infographic generation service (automatically selects real or mock service based on environment variables)
@@ -38,14 +35,11 @@ export async function POST(request: Request) {
     // Return result
     return NextResponse.json({
       id: generationId,
-      status: 'processing'
+      status: 'processing',
     });
   } catch (error) {
     console.error('Infographic generation failed:', error);
 
-    return NextResponse.json(
-      { error: 'Error processing request' },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: 'Error processing request' }, { status: 500 });
   }
 }

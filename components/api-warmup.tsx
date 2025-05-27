@@ -9,9 +9,9 @@ export function ApiWarmup() {
     const timer = setTimeout(async () => {
       try {
         // 调用API预热端点
-        await fetch('/api/warmup', { 
+        await fetch('/api/warmup', {
           method: 'POST',
-          cache: 'no-store' 
+          cache: 'no-store',
         });
         console.log('API warmup request sent');
       } catch (error) {

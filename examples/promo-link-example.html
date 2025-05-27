@@ -1,121 +1,127 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="zh">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>推广链接示例</title>
-  <style>
-    body {
-      margin: 0;
-      padding: 0;
-      font-family: 'Arial', sans-serif;
-    }
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>推广链接示例</title>
+    <style>
+      body {
+        margin: 0;
+        padding: 0;
+        font-family: 'Arial', sans-serif;
+      }
 
-    /* 信息图容器 */
-    .infographic-container {
-      width: 1920px; /* 16:9横版宽度 */
-      height: 1080px; /* 16:9横版高度 */
-      position: relative;
-      overflow: hidden;
-      background: linear-gradient(135deg, #8B5CF6 0%, #EC4899 100%); /* 渐变背景 */
-    }
+      /* 信息图容器 */
+      .infographic-container {
+        width: 1920px; /* 16:9横版宽度 */
+        height: 1080px; /* 16:9横版高度 */
+        position: relative;
+        overflow: hidden;
+        background: linear-gradient(135deg, #8b5cf6 0%, #ec4899 100%); /* 渐变背景 */
+      }
 
-    /* 推广链接样式 - 确保始终位于最上层且不会与标题重叠 */
-    .promo-link {
-      position: absolute;
-      top: 20px;
-      left: 20px;
-      z-index: 1000; /* 确保始终位于最上层 */
-      padding: 10px 15px;
-      font-size: 14px;
-      color: rgba(255, 255, 255, 0.95);
-      text-decoration: none;
-      font-weight: 500;
-      letter-spacing: 0.3px;
-      text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
-      background-color: rgba(0, 0, 0, 0.15);
-      border-radius: 0 0 8px 0;
-      max-width: fit-content;
-      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* 添加轻微阴影增强可见性 */
-    }
+      /* 推广链接样式 - 确保始终位于最上层且不会与标题重叠 */
+      .promo-link {
+        position: absolute;
+        top: 20px;
+        left: 20px;
+        z-index: 1000; /* 确保始终位于最上层 */
+        padding: 10px 15px;
+        font-size: 14px;
+        color: rgba(255, 255, 255, 0.95);
+        text-decoration: none;
+        font-weight: 500;
+        letter-spacing: 0.3px;
+        text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+        background-color: rgba(0, 0, 0, 0.15);
+        border-radius: 0 0 8px 0;
+        max-width: fit-content;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* 添加轻微阴影增强可见性 */
+      }
 
-    .promo-link a {
-      color: rgba(255, 255, 255, 1);
-      text-decoration: none;
-      font-weight: 600;
-      border-bottom: 1px dotted rgba(255, 255, 255, 0.7);
-    }
+      .promo-link a {
+        color: rgba(255, 255, 255, 1);
+        text-decoration: none;
+        font-weight: 600;
+        border-bottom: 1px dotted rgba(255, 255, 255, 0.7);
+      }
 
-    /* 内容区域 - 确保与推广链接保持足够距离 */
-    .content-area {
-      position: absolute;
-      top: 80px; /* 从推广链接下方开始，保持至少30px的垂直间距 */
-      right: 60px; /* 安全边距 */
-      bottom: 60px; /* 安全边距 */
-      left: 60px; /* 安全边距 */
-      padding: 20px;
-      color: white;
-    }
+      /* 内容区域 - 确保与推广链接保持足够距离 */
+      .content-area {
+        position: absolute;
+        top: 80px; /* 从推广链接下方开始，保持至少30px的垂直间距 */
+        right: 60px; /* 安全边距 */
+        bottom: 60px; /* 安全边距 */
+        left: 60px; /* 安全边距 */
+        padding: 20px;
+        color: white;
+      }
 
-    /* 标题样式 - 确保与推广链接不重叠 */
-    .content-area h1 {
-      margin-top: 30px; /* 为标题添加额外的顶部边距 */
-      font-size: 48px;
-      font-weight: 700;
-      margin-bottom: 20px;
-      text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-    }
+      /* 标题样式 - 确保与推广链接不重叠 */
+      .content-area h1 {
+        margin-top: 30px; /* 为标题添加额外的顶部边距 */
+        font-size: 48px;
+        font-weight: 700;
+        margin-bottom: 20px;
+        text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+      }
 
-    .content-area h2 {
-      font-size: 24px;
-      font-weight: 400;
-      margin-bottom: 40px;
-      opacity: 0.9;
-    }
+      .content-area h2 {
+        font-size: 24px;
+        font-weight: 400;
+        margin-bottom: 40px;
+        opacity: 0.9;
+      }
 
-    /* 内容区块 */
-    .content-block {
-      background-color: rgba(255, 255, 255, 0.1);
-      border-radius: 16px;
-      padding: 30px;
-      margin-bottom: 30px;
-    }
+      /* 内容区块 */
+      .content-block {
+        background-color: rgba(255, 255, 255, 0.1);
+        border-radius: 16px;
+        padding: 30px;
+        margin-bottom: 30px;
+      }
 
-    .content-block h3 {
-      font-size: 28px;
-      margin-bottom: 15px;
-    }
+      .content-block h3 {
+        font-size: 28px;
+        margin-bottom: 15px;
+      }
 
-    .content-block p {
-      font-size: 18px;
-      line-height: 1.6;
-    }
-  </style>
-</head>
-<body>
-  <div class="infographic-container">
-    <!-- 推广链接 -->
-    <div class="promo-link">
-      <span class="promo-text">更多精美信息图请到：</span>
-      <a href="https://texttoinfographic.online" target="_blank">texttoinfographic.online</a>
-    </div>
-
-    <div class="content-area">
-      <!-- 标题区域 - 与推广链接保持足够距离 -->
-      <h1>The Mysterious Cottage in the Woods</h1>
-      <h2>A magical tale of discovery, wisdom, and the power of understanding</h2>
-
-      <!-- 内容区块 -->
-      <div class="content-block">
-        <h3>✨ The Discovery</h3>
-        <p>Emma finds an enchanted cottage deep in the whispering forest, home to Mrs. Willow, a kind witch who becomes her mentor in the magical arts.</p>
+      .content-block p {
+        font-size: 18px;
+        line-height: 1.6;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="infographic-container">
+      <!-- 推广链接 -->
+      <div class="promo-link">
+        <span class="promo-text">更多精美信息图请到：</span>
+        <a href="https://texttoinfographic.online" target="_blank">texttoinfographic.online</a>
       </div>
 
-      <div class="content-block">
-        <h3>🏠 The Cottage</h3>
-        <p>Hidden in the ancient forest, the stone cottage with vine-covered roof and colorful garden seemed straight from a fairytale.</p>
+      <div class="content-area">
+        <!-- 标题区域 - 与推广链接保持足够距离 -->
+        <h1>The Mysterious Cottage in the Woods</h1>
+        <h2>A magical tale of discovery, wisdom, and the power of understanding</h2>
+
+        <!-- 内容区块 -->
+        <div class="content-block">
+          <h3>✨ The Discovery</h3>
+          <p>
+            Emma finds an enchanted cottage deep in the whispering forest, home to Mrs. Willow, a
+            kind witch who becomes her mentor in the magical arts.
+          </p>
+        </div>
+
+        <div class="content-block">
+          <h3>🏠 The Cottage</h3>
+          <p>
+            Hidden in the ancient forest, the stone cottage with vine-covered roof and colorful
+            garden seemed straight from a fairytale.
+          </p>
+        </div>
       </div>
     </div>
-  </div>
-</body>
+  </body>
 </html>

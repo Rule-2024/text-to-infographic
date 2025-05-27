@@ -2,15 +2,15 @@
  * Infographic Generation Service
  * Used to replace mock service, implementing real AI calls with persistent storage
  */
-import { TextInputForm, GenerationStatus } from "@/lib/types/infographic";
-import { buildPrompt, processGeneratedHtml } from "@/lib/ai/prompt-builder";
-import { generateInfographicHtml, withRetry } from "@/lib/ai/api-client";
+import { TextInputForm, GenerationStatus } from '@/lib/types/infographic';
+import { buildPrompt, processGeneratedHtml } from '@/lib/ai/prompt-builder';
+import { generateInfographicHtml, withRetry } from '@/lib/ai/api-client';
 import {
   createGenerationRecord,
   updateGenerationStatus,
   saveGenerationResult,
-  getGenerationStatus
-} from "@/services/storage/supabase-service";
+  getGenerationStatus,
+} from '@/services/storage/supabase-service';
 
 /**
  * Generate infographic
@@ -137,7 +137,6 @@ export async function generateInfographic(input: TextInputForm): Promise<string>
       // 保存结果到数据库
       console.log(`Saving result for generation ${generationId}`);
       await saveGenerationResult(generationId, processedHtml);
-
     } catch (error) {
       // 停止进度更新
       stopProgressUpdates();
@@ -145,19 +144,15 @@ export async function generateInfographic(input: TextInputForm): Promise<string>
       console.error('Infographic generation failed:', error);
 
       // 记录详细错误信息，包括重试次数
-      const errorMessage = error instanceof Error
-        ? `${error.message} (after ${retryCount} retries)`
-        : `Unknown error (after ${retryCount} retries)`;
+      const errorMessage =
+        error instanceof Error
+          ? `${error.message} (after ${retryCount} retries)`
+          : `Unknown error (after ${retryCount} retries)`;
 
       console.error(`Generation ${generationId} failed: ${errorMessage}`);
 
       // Update status to failed
-      await updateGenerationStatus(
-        generationId,
-        'failed',
-        0,
-        errorMessage
-      );
+      await updateGenerationStatus(generationId, 'failed', 0, errorMessage);
     }
   })();
 

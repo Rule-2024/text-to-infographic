@@ -3,8 +3,8 @@
  * Build appropriate prompts based on user input and selections
  */
 
-import { TextInputForm } from "@/lib/types/infographic";
-import { getPromptBySize } from "./prompt-templates";
+import { TextInputForm } from '@/lib/types/infographic';
+import { getPromptBySize } from './prompt-templates';
 
 /**
  * Build prompt
@@ -58,7 +58,9 @@ export function processGeneratedHtml(html: string): string {
         processedHtml = html.substring(firstElementMatch.index);
 
         // 移除前面的说明文字
-        const introTextMatch = processedHtml.match(/^(Here's|I've created|This is|Below is|I have generated)[^<]*/i);
+        const introTextMatch = processedHtml.match(
+          /^(Here's|I've created|This is|Below is|I have generated)[^<]*/i
+        );
         if (introTextMatch) {
           processedHtml = processedHtml.substring(introTextMatch[0].length).trim();
         }

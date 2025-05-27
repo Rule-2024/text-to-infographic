@@ -8,19 +8,16 @@ import { getA4LandscapePrompt } from './a4-landscape';
 import { getA4PortraitPrompt } from './a4-portrait';
 import { getMobilePrompt } from './mobile';
 
-export {
-  getLandscape16x9Prompt,
-  getA4LandscapePrompt,
-  getA4PortraitPrompt,
-  getMobilePrompt
-};
+export { getLandscape16x9Prompt, getA4LandscapePrompt, getA4PortraitPrompt, getMobilePrompt };
 
 /**
  * Get the prompt generation function based on size identifier
  * @param size Size identifier: 'mobile', '16:9', '16-9', 'a4-l', 'a4-p', '750'
  * @returns Corresponding prompt generation function
  */
-export function getPromptBySize(size: string): (content: string, mode: 'full' | 'summary') => string {
+export function getPromptBySize(
+  size: string
+): (content: string, mode: 'full' | 'summary') => string {
   switch (size.toLowerCase()) {
     // 移动设备竖版 (750px宽)
     case 'mobile':

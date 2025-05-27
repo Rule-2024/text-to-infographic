@@ -1,0 +1,44 @@
+# 构建输出
+.next/
+out/
+build/
+dist/
+
+# 依赖
+node_modules/
+
+# 日志
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# 缓存
+.npm
+.eslintcache
+
+# 环境变量
+.env
+.env.*
+!.env.example
+
+# 锁文件
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
+
+# Vercel
+.vercel/
+
+# 生成的类型
+next-env.d.ts
+
+# PWA 文件
+public/sw.js
+public/workbox-*.js
+
+# 其他
+.DS_Store
+*.pem
+coverage/
+.vscode/
+*.log 

@@ -27,31 +27,31 @@ async function testDeepSeekAPI() {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${API_KEY}`
+        Authorization: `Bearer ${API_KEY}`,
       },
       body: JSON.stringify({
         model: MODEL,
         messages: [
           { role: 'system', content: 'You are a helpful assistant.' },
-          { role: 'user', content: 'Hello! Please respond with "API test successful"' }
+          { role: 'user', content: 'Hello! Please respond with "API test successful"' },
         ],
         temperature: 0.7,
         max_tokens: 50,
-        stream: false
-      })
+        stream: false,
+      }),
     });
 
     if (!response.ok) {
       const errorData = await response.json();
       console.error(`❌ API请求失败: HTTP ${response.status}`);
       console.error('错误详情:', JSON.stringify(errorData, null, 2));
-      
+
       if (response.status === 401) {
         console.log('💡 提示: 请检查您的API密钥是否正确');
       } else if (response.status === 429) {
         console.log('💡 提示: API调用频率过高，请稍后重试');
       }
-      
+
       process.exit(1);
     }
 
@@ -66,7 +66,6 @@ async function testDeepSeekAPI() {
       console.log('⚠️  API响应格式异常');
       console.log('响应数据:', JSON.stringify(data, null, 2));
     }
-
   } catch (error) {
     console.error('❌ 网络错误:', error.message);
     console.log('💡 请检查您的网络连接和API端点配置');
@@ -75,4 +74,4 @@ async function testDeepSeekAPI() {
 }
 
 // 运行测试
-testDeepSeekAPI(); 
+testDeepSeekAPI();

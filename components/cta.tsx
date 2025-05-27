@@ -23,13 +23,11 @@ export function Cta() {
         </div>
 
         <p className="text-lg text-muted-foreground mb-8 max-w-2xl mx-auto">
-          Transform your text into stunning infographics in seconds. Our AI handles all the design work for you.
+          Transform your text into stunning infographics in seconds. Our AI handles all the design
+          work for you.
         </p>
 
-        <Link
-          href="/create"
-          className="btn-gradient text-lg px-8 py-4 rounded-lg inline-block"
-        >
+        <Link href="/create" className="btn-gradient text-lg px-8 py-4 rounded-lg inline-block">
           Start Creating Now
         </Link>
       </div>

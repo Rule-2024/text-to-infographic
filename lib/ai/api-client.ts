@@ -15,7 +15,7 @@ const API_COOLDOWN_PERIOD = 5 * 60 * 1000; // 5分钟冷却期
 export async function warmupApiConnection(): Promise<void> {
   // 如果API已经预热且在冷却期内，跳过
   const now = Date.now();
-  if (apiWarmedUp && (now - lastApiCallTime < API_COOLDOWN_PERIOD)) {
+  if (apiWarmedUp && now - lastApiCallTime < API_COOLDOWN_PERIOD) {
     console.log('API already warmed up recently, skipping warmup');
     return;
   }
@@ -34,19 +34,19 @@ export async function warmupApiConnection(): Promise<void> {
     // 发送一个简单的请求来激活API连接
     const response = await fetch(baseUrl, {
       method: 'POST',
-              headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${apiKey}`
-        },
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${apiKey}`,
+      },
       body: JSON.stringify({
         model: model,
         messages: [
           { role: 'system', content: 'You are a helpful assistant.' },
-          { role: 'user', content: 'Hello' }
+          { role: 'user', content: 'Hello' },
         ],
         temperature: 0.7,
         max_tokens: 10, // 只需要很少的token
-        stream: false
+        stream: false,
       }),
     });
 
@@ -118,17 +118,17 @@ export async function generateInfographicHtml(prompt: string, size?: string): Pr
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${apiKey}`
+          Authorization: `Bearer ${apiKey}`,
         },
         body: JSON.stringify({
           model: model, // 使用环境变量中配置的模型，默认为deepseek-v3-0324
           messages: [
             { role: 'system', content: 'You are a professional infographic generator.' },
-            { role: 'user', content: prompt }
+            { role: 'user', content: prompt },
           ],
           temperature: 0.7,
           stream: false,
-          max_tokens: maxTokens // 根据尺寸设置的token限制
+          max_tokens: maxTokens, // 根据尺寸设置的token限制
         }),
       });
 
@@ -144,14 +144,17 @@ export async function generateInfographicHtml(prompt: string, size?: string): Pr
           errorMessage += ` - ${JSON.stringify(errorData)}`;
 
           // 检查是否是API密钥错误
-          if (response.status === 401 ||
-              (errorData.error && errorData.error.includes('key'))) {
-            throw new Error(`API authentication failed: Please check your API_API_KEY configuration (${response.status})`);
+          if (response.status === 401 || (errorData.error && errorData.error.includes('key'))) {
+            throw new Error(
+              `API authentication failed: Please check your API_API_KEY configuration (${response.status})`
+            );
           }
 
           // 检查是否是配额或限流错误
           if (response.status === 429) {
-            throw new Error(`API rate limit exceeded: The service is currently busy or you've exceeded your quota (${response.status})`);
+            throw new Error(
+              `API rate limit exceeded: The service is currently busy or you've exceeded your quota (${response.status})`
+            );
           }
         } catch (parseError) {
           // 如果无法解析JSON，使用原始错误消息
@@ -192,7 +195,9 @@ export async function generateInfographicHtml(prompt: string, size?: string): Pr
     }
   } catch (error) {
     console.error('AI service call failed:', error);
-    throw new Error(`Infographic generation failed: ${error instanceof Error ? error.message : 'Unknown error'}`);
+    throw new Error(
+      `Infographic generation failed: ${error instanceof Error ? error.message : 'Unknown error'}`
+    );
   }
 }
 
@@ -225,7 +230,9 @@ export async function withRetry<T>(
     const timeoutPromise = new Promise<never>((_, reject) => {
       setTimeout(() => {
         const elapsed = Date.now() - startTime;
-        reject(new Error(`Operation ${operationId} timed out after ${elapsed}ms (limit: ${timeout}ms)`));
+        reject(
+          new Error(`Operation ${operationId} timed out after ${elapsed}ms (limit: ${timeout}ms)`)
+        );
       }, timeout);
     });
 
@@ -243,24 +250,37 @@ export async function withRetry<T>(
 
     // 检查是否已达到最大重试次数
     if (retries <= 0) {
-      console.error(`Operation ${operationId} failed after ${elapsed}ms with no retries left:`, error);
+      console.error(
+        `Operation ${operationId} failed after ${elapsed}ms with no retries left:`,
+        error
+      );
       throw error;
     }
 
     // 判断错误是否可重试
     if (!isRetryableError(error)) {
-      console.log(`Operation ${operationId} failed with non-retryable error after ${elapsed}ms:`, error);
+      console.log(
+        `Operation ${operationId} failed with non-retryable error after ${elapsed}ms:`,
+        error
+      );
       throw error;
     }
 
     // 计算下一次延迟，但设置上限为5000ms
     const nextDelay = Math.min(delay * 1.5, 5000);
 
-    console.log(`Operation ${operationId} failed after ${elapsed}ms, retrying in ${delay}ms, remaining retries: ${retries-1}`);
+    console.log(
+      `Operation ${operationId} failed after ${elapsed}ms, retrying in ${delay}ms, remaining retries: ${retries - 1}`
+    );
     await new Promise(resolve => setTimeout(resolve, delay));
 
     // 递归调用，但保持相同的操作ID以便跟踪
-    return withRetry(fn, retries - 1, nextDelay, timeout ? Math.max(timeout - elapsed, 30000) : undefined);
+    return withRetry(
+      fn,
+      retries - 1,
+      nextDelay,
+      timeout ? Math.max(timeout - elapsed, 30000) : undefined
+    );
   }
 }
 
@@ -282,18 +302,36 @@ function isRetryableError(error: any): boolean {
 
   // 网络错误、超时、服务器繁忙等通常可以重试
   const retryablePatterns = [
-    'network', 'timeout', 'timed out', 'time out',
-    '429', '500', '502', '503', '504',  // HTTP错误码
-    'connection', 'connect',
-    'ECONNRESET', 'ETIMEDOUT', 'ECONNREFUSED', 'ENOTFOUND',
-    'temporary', 'temporarily', 'overloaded', 'busy',
-    'rate limit', 'too many requests',
-    'try again', 'retry'
+    'network',
+    'timeout',
+    'timed out',
+    'time out',
+    '429',
+    '500',
+    '502',
+    '503',
+    '504', // HTTP错误码
+    'connection',
+    'connect',
+    'ECONNRESET',
+    'ETIMEDOUT',
+    'ECONNREFUSED',
+    'ENOTFOUND',
+    'temporary',
+    'temporarily',
+    'overloaded',
+    'busy',
+    'rate limit',
+    'too many requests',
+    'try again',
+    'retry',
   ];
 
   for (const pattern of retryablePatterns) {
-    if (errorMessage.toLowerCase().includes(pattern.toLowerCase()) ||
-        errorStack.toLowerCase().includes(pattern.toLowerCase())) {
+    if (
+      errorMessage.toLowerCase().includes(pattern.toLowerCase()) ||
+      errorStack.toLowerCase().includes(pattern.toLowerCase())
+    ) {
       console.log(`Error is retryable due to pattern: ${pattern}`);
       return true;
     }
@@ -301,18 +339,33 @@ function isRetryableError(error: any): boolean {
 
   // API密钥错误、格式错误等通常不应重试
   const nonRetryablePatterns = [
-    'API key', 'apikey', 'api_key', 'key',
-    'invalid format', 'invalid input', 'invalid parameter',
-    'authentication', 'auth', 'unauthorized', 'not authorized',
-    '401', '403', '400',  // HTTP错误码
-    'permission', 'access denied',
-    'not found', '404',
-    'validation', 'invalid'
+    'API key',
+    'apikey',
+    'api_key',
+    'key',
+    'invalid format',
+    'invalid input',
+    'invalid parameter',
+    'authentication',
+    'auth',
+    'unauthorized',
+    'not authorized',
+    '401',
+    '403',
+    '400', // HTTP错误码
+    'permission',
+    'access denied',
+    'not found',
+    '404',
+    'validation',
+    'invalid',
   ];
 
   for (const pattern of nonRetryablePatterns) {
-    if (errorMessage.toLowerCase().includes(pattern.toLowerCase()) ||
-        errorStack.toLowerCase().includes(pattern.toLowerCase())) {
+    if (
+      errorMessage.toLowerCase().includes(pattern.toLowerCase()) ||
+      errorStack.toLowerCase().includes(pattern.toLowerCase())
+    ) {
       console.log(`Error is NOT retryable due to pattern: ${pattern}`);
       return false;
     }

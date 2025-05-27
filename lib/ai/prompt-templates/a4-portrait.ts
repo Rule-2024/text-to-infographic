@@ -10,9 +10,10 @@
  * @returns 完整的提示词
  */
 export function getA4PortraitPrompt(content: string, mode: 'full' | 'summary'): string {
-  const processingMode = mode === 'full'
-    ? '全文处理：提取文本70-80%的精华内容，保留原文逻辑结构和详细论述'
-    : '总结处理：仅提取文本20-30%的核心精华，聚焦关键点和重要数据';
+  const processingMode =
+    mode === 'full'
+      ? '全文处理：提取文本70-80%的精华内容，保留原文逻辑结构和详细论述'
+      : '总结处理：仅提取文本20-30%的核心精华，聚焦关键点和重要数据';
 
   return `# A4竖版信息图HTML代码生成提示词
 
@@ -406,5 +407,7 @@ ${content}
 6. **代码生成**：创建完整、高效的HTML/CSS代码
 7. **最终审核**：确保所有要求都得到满足，输出符合预期
 
-`.replace('[处理模式]', processingMode).replace('[在这里粘贴需要处理的文本内容]', content);
+`
+    .replace('[处理模式]', processingMode)
+    .replace('[在这里粘贴需要处理的文本内容]', content);
 }

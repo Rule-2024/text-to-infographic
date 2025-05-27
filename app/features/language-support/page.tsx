@@ -12,9 +12,23 @@ export default function LanguageSupportPage() {
       {/* 主要内容 */}
       <div className="relative z-10 w-full max-w-4xl">
         <div className="mb-8">
-          <Link href="/features" className="text-sm font-medium flex items-center gap-1.5 text-muted-foreground hover:text-foreground transition-colors">
-            <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+          <Link
+            href="/features"
+            className="text-sm font-medium flex items-center gap-1.5 text-muted-foreground hover:text-foreground transition-colors"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="h-4 w-4"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M10 19l-7-7m0 0l7-7m-7 7h18"
+              />
             </svg>
             Back to Features
           </Link>
@@ -24,7 +38,10 @@ export default function LanguageSupportPage() {
           Multilingual Infographic Creation
         </h1>
         <p className="mb-6 text-lg text-muted-foreground">
-          Our AI text to infographic tool supports multiple languages, allowing you to create professional infographics in your preferred language. With automatic language detection and processing, you can easily transform content from around the world into stunning visuals.
+          Our AI text to infographic tool supports multiple languages, allowing you to create
+          professional infographics in your preferred language. With automatic language detection
+          and processing, you can easily transform content from around the world into stunning
+          visuals.
         </p>
 
         {/* SEO关键词标签 */}
@@ -47,13 +64,26 @@ export default function LanguageSupportPage() {
         <div className="space-y-12 mb-16">
           <div className="glass-card p-8 card-shadow">
             <h2 className="text-2xl font-semibold mb-4 flex items-center gap-2">
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5h12M9 3v2m1.048 9.5A18.022 18.022 0 016.412 9m6.088 9h7M11 21l5-10 5 10M12.751 5C11.783 10.77 8.07 15.61 3 18.129" />
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="h-6 w-6 text-primary"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M3 5h12M9 3v2m1.048 9.5A18.022 18.022 0 016.412 9m6.088 9h7M11 21l5-10 5 10M12.751 5C11.783 10.77 8.07 15.61 3 18.129"
+                />
               </svg>
               Automatic Language Detection
             </h2>
             <p className="text-muted-foreground mb-4">
-              Our advanced AI system automatically detects the language of your input text, eliminating the need for manual language selection. Simply paste your content, and our tool will identify the language and process it accordingly.
+              Our advanced AI system automatically detects the language of your input text,
+              eliminating the need for manual language selection. Simply paste your content, and our
+              tool will identify the language and process it accordingly.
             </p>
             <div className="bg-primary/5 p-4 rounded-lg">
               <h3 className="font-medium mb-2">Key benefits:</h3>
@@ -68,13 +98,26 @@ export default function LanguageSupportPage() {
 
           <div className="glass-card p-8 card-shadow">
             <h2 className="text-2xl font-semibold mb-4 flex items-center gap-2">
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-secondary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9" />
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="h-6 w-6 text-secondary"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9"
+                />
               </svg>
               Global Language Support
             </h2>
             <p className="text-muted-foreground mb-4">
-              Our tool supports a wide range of languages from around the world, including those with non-Latin scripts and right-to-left writing systems. Create infographics in virtually any language your audience uses.
+              Our tool supports a wide range of languages from around the world, including those
+              with non-Latin scripts and right-to-left writing systems. Create infographics in
+              virtually any language your audience uses.
             </p>
             <div className="bg-secondary/5 p-4 rounded-lg">
               <h3 className="font-medium mb-2">Supported language categories:</h3>
@@ -90,13 +133,26 @@ export default function LanguageSupportPage() {
 
           <div className="glass-card p-8 card-shadow">
             <h2 className="text-2xl font-semibold mb-4 flex items-center gap-2">
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="h-6 w-6 text-green-600"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+                />
               </svg>
               Proper Text Rendering
             </h2>
             <p className="text-muted-foreground mb-4">
-              Our system ensures that all text is properly rendered in the final infographic, with correct character display, appropriate font selection, and proper text direction for languages that read right-to-left.
+              Our system ensures that all text is properly rendered in the final infographic, with
+              correct character display, appropriate font selection, and proper text direction for
+              languages that read right-to-left.
             </p>
             <div className="bg-green-50 p-4 rounded-lg">
               <h3 className="font-medium mb-2">Text rendering features:</h3>
@@ -111,13 +167,26 @@ export default function LanguageSupportPage() {
 
           <div className="glass-card p-8 card-shadow">
             <h2 className="text-2xl font-semibold mb-4 flex items-center gap-2">
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="h-6 w-6 text-blue-600"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
+                />
               </svg>
               Culturally Appropriate Design
             </h2>
             <p className="text-muted-foreground mb-4">
-              Our AI considers cultural context when generating infographics, selecting appropriate visual elements, color schemes, and design patterns that resonate with the target language and culture.
+              Our AI considers cultural context when generating infographics, selecting appropriate
+              visual elements, color schemes, and design patterns that resonate with the target
+              language and culture.
             </p>
             <div className="bg-blue-50 p-4 rounded-lg">
               <h3 className="font-medium mb-2">Cultural design considerations:</h3>
@@ -133,10 +202,7 @@ export default function LanguageSupportPage() {
 
         {/* 行动号召 */}
         <div className="text-center">
-          <Link
-            href="/create"
-            className="btn-gradient text-lg px-8 py-4 rounded-lg inline-block"
-          >
+          <Link href="/create" className="btn-gradient text-lg px-8 py-4 rounded-lg inline-block">
             Create Infographics in Any Language
           </Link>
         </div>

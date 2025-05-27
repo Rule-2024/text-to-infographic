@@ -10,17 +10,15 @@ import { TextInputForm, GenerationStatus } from '@/lib/types/infographic';
  */
 export async function createGenerationRecord(id: string, input: TextInputForm): Promise<boolean> {
   try {
-    const { error } = await adminSupabase
-      .from('generations')
-      .insert({
-        id,
-        status: 'pending',
-        progress: 0,
-        mode: input.mode,
-        size: input.size,
-        created_at: new Date().toISOString(),
-        updated_at: new Date().toISOString()
-      });
+    const { error } = await adminSupabase.from('generations').insert({
+      id,
+      status: 'pending',
+      progress: 0,
+      mode: input.mode,
+      size: input.size,
+      created_at: new Date().toISOString(),
+      updated_at: new Date().toISOString(),
+    });
 
     if (error) throw error;
     return true;
@@ -52,7 +50,7 @@ export async function updateGenerationStatus(
         status,
         progress,
         ...(error && { error }),
-        updated_at: new Date().toISOString()
+        updated_at: new Date().toISOString(),
       })
       .eq('id', id);
 
@@ -79,7 +77,7 @@ export async function saveGenerationResult(id: string, result: string): Promise<
         status: 'completed',
         progress: 100,
         result,
-        updated_at: new Date().toISOString()
+        updated_at: new Date().toISOString(),
       })
       .eq('id', id);
 
@@ -111,14 +109,14 @@ export async function getGenerationStatus(id: string): Promise<GenerationStatus>
       status: data.status,
       progress: data.progress,
       result: data.result,
-      error: data.error
+      error: data.error,
     };
   } catch (error) {
     console.error('Failed to get generation status:', error);
     return {
       status: 'failed',
       progress: 0,
-      error: 'Generation task not found'
+      error: 'Generation task not found',
     };
   }
 }

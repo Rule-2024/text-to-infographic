@@ -1,8 +1,8 @@
-'use client'
+'use client';
 
-import Link from 'next/link'
-import Image from 'next/image'
-import { useState, useEffect } from 'react'
+import Link from 'next/link';
+import Image from 'next/image';
+import { useState, useEffect } from 'react';
 
 export function MobileNav() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -88,21 +88,43 @@ export function MobileNav() {
 
         {/* Hamburger Menu Button */}
         <button
-          onClick={(e) => {
+          onClick={e => {
             e.preventDefault();
             e.stopPropagation(); // Prevent event bubbling
             setIsMenuOpen(!isMenuOpen);
           }}
           className="mobile-touch-target flex items-center justify-center p-2 rounded-lg z-[101] mobile-menu-button"
-          aria-label={isMenuOpen ? "Close menu" : "Open menu"}
+          aria-label={isMenuOpen ? 'Close menu' : 'Open menu'}
         >
           {isMenuOpen ? (
-            <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="h-6 w-6"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M6 18L18 6M6 6l12 12"
+              />
             </svg>
           ) : (
-            <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="h-6 w-6"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M4 6h16M4 12h16M4 18h16"
+              />
             </svg>
           )}
         </button>
@@ -110,19 +132,33 @@ export function MobileNav() {
 
       {/* Mobile Menu */}
       {isMenuOpen && (
-        <div className="fixed left-0 right-0 bottom-0 z-[100] bg-background mobile-menu-container" style={{ top: '64px', height: 'calc(100vh - 64px)' }}>
+        <div
+          className="fixed left-0 right-0 bottom-0 z-[100] bg-background mobile-menu-container"
+          style={{ top: '64px', height: 'calc(100vh - 64px)' }}
+        >
           <div className="px-4 py-4 flex flex-col gap-6 h-full overflow-auto mobile-menu-content">
             {/* Create Button */}
             <Link
               href="/create"
               className="bg-gradient-to-r from-primary to-secondary text-white px-4 py-3 rounded-lg shadow-md flex items-center justify-center gap-2 font-medium text-lg w-full"
-              onClick={(e) => {
+              onClick={e => {
                 e.stopPropagation();
                 closeMenu();
               }}
             >
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="h-5 w-5"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M12 4v16m8-8H4"
+                />
               </svg>
               Create Now
             </Link>
@@ -130,15 +166,26 @@ export function MobileNav() {
             {/* Features Menu */}
             <div className="border-b pb-4">
               <button
-                onClick={(e) => {
+                onClick={e => {
                   e.stopPropagation(); // Prevent event bubbling
                   setFeaturesOpen(!featuresOpen);
                 }}
                 className="flex items-center justify-between w-full py-3 text-lg mobile-touch-target"
               >
                 <div className="flex items-center gap-2">
-                  <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="h-5 w-5 text-primary"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M13 10V3L4 14h7v7l9-11h-7z"
+                    />
                   </svg>
                   Features
                 </div>
@@ -149,31 +196,85 @@ export function MobileNav() {
                   viewBox="0 0 24 24"
                   stroke="currentColor"
                 >
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M19 9l-7 7-7-7"
+                  />
                 </svg>
               </button>
 
               {featuresOpen && (
                 <div className="pl-7 flex flex-col gap-4 mt-2 mb-2">
-                  <Link href="/features/text-analysis" className="py-2 text-muted-foreground mobile-touch-target" onClick={(e) => { e.stopPropagation(); closeMenu(); }}>
+                  <Link
+                    href="/features/text-analysis"
+                    className="py-2 text-muted-foreground mobile-touch-target"
+                    onClick={e => {
+                      e.stopPropagation();
+                      closeMenu();
+                    }}
+                  >
                     Text Analysis
                   </Link>
-                  <Link href="/features/design-styles" className="py-2 text-muted-foreground mobile-touch-target" onClick={(e) => { e.stopPropagation(); closeMenu(); }}>
+                  <Link
+                    href="/features/design-styles"
+                    className="py-2 text-muted-foreground mobile-touch-target"
+                    onClick={e => {
+                      e.stopPropagation();
+                      closeMenu();
+                    }}
+                  >
                     Design Styles
                   </Link>
-                  <Link href="/features/export-options" className="py-2 text-muted-foreground mobile-touch-target" onClick={(e) => { e.stopPropagation(); closeMenu(); }}>
+                  <Link
+                    href="/features/export-options"
+                    className="py-2 text-muted-foreground mobile-touch-target"
+                    onClick={e => {
+                      e.stopPropagation();
+                      closeMenu();
+                    }}
+                  >
                     Export Options
                   </Link>
-                  <Link href="/features/size-options" className="py-2 text-muted-foreground mobile-touch-target" onClick={(e) => { e.stopPropagation(); closeMenu(); }}>
+                  <Link
+                    href="/features/size-options"
+                    className="py-2 text-muted-foreground mobile-touch-target"
+                    onClick={e => {
+                      e.stopPropagation();
+                      closeMenu();
+                    }}
+                  >
                     Size Options
                   </Link>
-                  <Link href="/features/language-support" className="py-2 text-muted-foreground mobile-touch-target" onClick={(e) => { e.stopPropagation(); closeMenu(); }}>
+                  <Link
+                    href="/features/language-support"
+                    className="py-2 text-muted-foreground mobile-touch-target"
+                    onClick={e => {
+                      e.stopPropagation();
+                      closeMenu();
+                    }}
+                  >
                     Language Support
                   </Link>
-                  <Link href="/features/no-login" className="py-2 text-muted-foreground mobile-touch-target" onClick={(e) => { e.stopPropagation(); closeMenu(); }}>
+                  <Link
+                    href="/features/no-login"
+                    className="py-2 text-muted-foreground mobile-touch-target"
+                    onClick={e => {
+                      e.stopPropagation();
+                      closeMenu();
+                    }}
+                  >
                     No Login Required
                   </Link>
-                  <Link href="/features" className="py-2 font-medium text-primary mobile-touch-target" onClick={(e) => { e.stopPropagation(); closeMenu(); }}>
+                  <Link
+                    href="/features"
+                    className="py-2 font-medium text-primary mobile-touch-target"
+                    onClick={e => {
+                      e.stopPropagation();
+                      closeMenu();
+                    }}
+                  >
                     View All Features
                   </Link>
                 </div>
@@ -183,14 +284,25 @@ export function MobileNav() {
             {/* FAQ Link */}
             <a
               href="/#faq-section"
-              onClick={(e) => {
+              onClick={e => {
                 e.stopPropagation();
                 handleFaqClick(e);
               }}
               className="flex items-center gap-2 py-3 border-b text-lg mobile-touch-target"
             >
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="h-5 w-5 text-primary"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                />
               </svg>
               FAQ
             </a>
@@ -199,13 +311,24 @@ export function MobileNav() {
             <Link
               href="/auth/sign-in"
               className="flex items-center gap-2 py-3 text-lg mobile-touch-target"
-              onClick={(e) => {
+              onClick={e => {
                 e.stopPropagation();
                 closeMenu();
               }}
             >
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1" />
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="h-5 w-5 text-primary"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1"
+                />
               </svg>
               Sign In
             </Link>
@@ -213,5 +336,5 @@ export function MobileNav() {
         </div>
       )}
     </>
-  )
+  );
 }

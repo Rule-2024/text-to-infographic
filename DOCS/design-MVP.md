@@ -234,13 +234,13 @@ text-to-infographic/
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "typescript": "^5.0.0",
-    
+
     // UI组件库
     "@radix-ui/react-icons": "^1.3.0",
     "@radix-ui/react-slot": "^1.0.2",
     "@radix-ui/react-dialog": "^1.0.4",
     "@radix-ui/react-dropdown-menu": "^2.0.5",
-    
+
     // 样式
     "tailwindcss": "^3.3.0",
     "postcss": "^8.4.24",
@@ -248,34 +248,34 @@ text-to-infographic/
     "class-variance-authority": "^0.6.0",
     "clsx": "^1.2.1",
     "tailwind-merge": "^1.13.2",
-    
+
     // 表单和验证
     "react-hook-form": "^7.45.1",
     "zod": "^3.21.4",
     "@hookform/resolvers": "^3.1.1",
-    
+
     // 状态管理
     "nuqs": "^1.8.0",
-    
+
     // 多语言支持
     "next-intl": "^3.0.0-beta.9",
     "languagedetect": "^2.0.0",
-    
+
     // 文件处理
     "react-dropzone": "^14.2.3",
     "pdf-parse": "^1.1.1",
     "mammoth": "^1.6.0",
-    
+
     // 数据库
     "@supabase/supabase-js": "^2.26.0",
-    
+
     // 工具
     "date-fns": "^2.30.0",
     "lodash": "^4.17.21",
     "uuid": "^9.0.0",
     "nanoid": "^4.0.2",
     "js-file-download": "^0.4.12",
-    
+
     // HTML到图像/PDF转换
     "puppeteer": "^21.0.0",
     "html-to-image": "^1.11.0",
@@ -304,7 +304,7 @@ text-to-infographic/
 1. **代码风格**：使用ESLint和Prettier确保一致的代码风格
 2. **组件命名**：
    - 页面组件：`page.tsx`
-   - 布局组件：`layout.tsx` 
+   - 布局组件：`layout.tsx`
    - 客户端组件：使用PascalCase并在文件顶部添加`'use client'`
    - 服务器组件：默认所有组件为服务器组件，除非明确标记
 3. **目录结构**：
@@ -325,22 +325,26 @@ text-to-infographic/
 已在当前架构中预留以下功能的扩展点：
 
 1. **用户账户系统**：
+
    - 数据库模型已预留用户相关字段
    - 身份验证页面和组件已基础搭建
    - 已准备好与匿名生成记录关联的机制
 
 2. **模板系统**：
+
    - 目录结构支持添加模板相关模块
    - 提示词系统设计为可扩展以支持模板定制
 
 3. **自定义设置**：
+
    - 组件设计考虑样式定制的扩展性
    - UI组件库选择支持主题和变体
 
 4. **高级分析**：
+
    - 数据模型支持添加分析用字段
    - 预留管理界面的集成点
 
 5. **付费功能**：
    - 架构设计考虑功能分级
-   - 用户系统支持权限管理 
+   - 用户系统支持权限管理

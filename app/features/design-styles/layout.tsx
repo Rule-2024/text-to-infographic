@@ -3,14 +3,23 @@ import Script from 'next/script';
 
 export const metadata: Metadata = {
   title: 'AI Infographic Design Styles | Text to Infographic Generator',
-  description: 'Explore the professional design styles our AI text to infographic tool offers. Create beautiful infographics with automatic color schemes, layouts, and visual elements.',
-  keywords: ['ai text to infographic', 'infographic design styles', 'text to infographic ai free', 'automatic infographic design', 'free infographic maker', 'infographic templates'],
+  description:
+    'Explore the professional design styles our AI text to infographic tool offers. Create beautiful infographics with automatic color schemes, layouts, and visual elements.',
+  keywords: [
+    'ai text to infographic',
+    'infographic design styles',
+    'text to infographic ai free',
+    'automatic infographic design',
+    'free infographic maker',
+    'infographic templates',
+  ],
   alternates: {
     canonical: 'https://texttoinfographic.online/features/design-styles',
   },
   openGraph: {
     title: 'AI Infographic Design Styles | Text to Infographic Generator',
-    description: 'Explore the professional design styles our AI text to infographic tool offers. Create beautiful infographics with automatic color schemes, layouts, and visual elements.',
+    description:
+      'Explore the professional design styles our AI text to infographic tool offers. Create beautiful infographics with automatic color schemes, layouts, and visual elements.',
     url: 'https://texttoinfographic.online/features/design-styles',
     siteName: 'Text to Infographic',
     locale: 'en_US',
@@ -19,15 +28,12 @@ export const metadata: Metadata = {
   twitter: {
     card: 'summary_large_image',
     title: 'AI Infographic Design Styles | Text to Infographic Generator',
-    description: 'Explore the professional design styles our AI text to infographic tool offers. Create beautiful infographics with automatic color schemes, layouts, and visual elements.',
+    description:
+      'Explore the professional design styles our AI text to infographic tool offers. Create beautiful infographics with automatic color schemes, layouts, and visual elements.',
   },
 };
 
-export default function DesignStylesLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export default function DesignStylesLayout({ children }: { children: React.ReactNode }) {
   return (
     <>
       <Script
@@ -38,12 +44,13 @@ export default function DesignStylesLayout({
             '@context': 'https://schema.org',
             '@type': 'WebPage',
             name: 'AI Infographic Design Styles',
-            description: 'Explore the professional design styles our AI text to infographic tool offers. Create beautiful infographics with automatic color schemes, layouts, and visual elements.',
+            description:
+              'Explore the professional design styles our AI text to infographic tool offers. Create beautiful infographics with automatic color schemes, layouts, and visual elements.',
             url: 'https://texttoinfographic.online/features/design-styles',
             isPartOf: {
               '@type': 'WebSite',
               name: 'Text to Infographic',
-              url: 'https://texttoinfographic.online'
+              url: 'https://texttoinfographic.online',
             },
             mainEntity: {
               '@type': 'SoftwareApplication',
@@ -52,16 +59,16 @@ export default function DesignStylesLayout({
               offers: {
                 '@type': 'Offer',
                 price: '0',
-                priceCurrency: 'USD'
+                priceCurrency: 'USD',
               },
               featureList: [
                 'Professional color schemes',
                 'Automatic layout selection',
                 'Visual elements and icons',
-                'Modern design templates'
-              ]
-            }
-          })
+                'Modern design templates',
+              ],
+            },
+          }),
         }}
       />
       {children}

@@ -18,4 +18,4 @@ export function getRemainingCharCount(text: string, maxLength: number = 5000): n
 export function truncateText(text: string, maxLength: number): string {
   if (text.length <= maxLength) return text;
   return text.substring(0, maxLength);
-} 
+}

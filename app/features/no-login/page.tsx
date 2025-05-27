@@ -12,9 +12,23 @@ export default function NoLoginPage() {
       {/* 主要内容 */}
       <div className="relative z-10 w-full max-w-4xl">
         <div className="mb-8">
-          <Link href="/features" className="text-sm font-medium flex items-center gap-1.5 text-muted-foreground hover:text-foreground transition-colors">
-            <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+          <Link
+            href="/features"
+            className="text-sm font-medium flex items-center gap-1.5 text-muted-foreground hover:text-foreground transition-colors"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="h-4 w-4"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M10 19l-7-7m0 0l7-7m-7 7h18"
+              />
             </svg>
             Back to Features
           </Link>
@@ -24,7 +38,9 @@ export default function NoLoginPage() {
           No Login Required - Start Creating Instantly
         </h1>
         <p className="mb-6 text-lg text-muted-foreground">
-          Our AI text to infographic tool is completely free to use with no registration or account creation required. Jump straight into creating professional infographics without any barriers.
+          Our AI text to infographic tool is completely free to use with no registration or account
+          creation required. Jump straight into creating professional infographics without any
+          barriers.
         </p>
 
         {/* SEO关键词标签 */}
@@ -47,13 +63,26 @@ export default function NoLoginPage() {
         <div className="space-y-12 mb-16">
           <div className="glass-card p-8 card-shadow">
             <h2 className="text-2xl font-semibold mb-4 flex items-center gap-2">
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="h-6 w-6 text-primary"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"
+                />
               </svg>
               Instant Access Without Barriers
             </h2>
             <p className="text-muted-foreground mb-4">
-              Unlike many design tools that require account creation, our platform lets you start creating immediately. No forms to fill out, no passwords to remember, and no verification emails to wait for.
+              Unlike many design tools that require account creation, our platform lets you start
+              creating immediately. No forms to fill out, no passwords to remember, and no
+              verification emails to wait for.
             </p>
             <div className="bg-primary/5 p-4 rounded-lg">
               <h3 className="font-medium mb-2">Benefits:</h3>
@@ -68,13 +97,26 @@ export default function NoLoginPage() {
 
           <div className="glass-card p-8 card-shadow">
             <h2 className="text-2xl font-semibold mb-4 flex items-center gap-2">
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-secondary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="h-6 w-6 text-secondary"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"
+                />
               </svg>
               Privacy-Focused Approach
             </h2>
             <p className="text-muted-foreground mb-4">
-              We respect your privacy and don't require personal information to use our tool. Your content is processed securely, and we don't store your text or infographics permanently without your consent.
+              We respect your privacy and don't require personal information to use our tool. Your
+              content is processed securely, and we don't store your text or infographics
+              permanently without your consent.
             </p>
             <div className="bg-secondary/5 p-4 rounded-lg">
               <h3 className="font-medium mb-2">Our privacy principles:</h3>
@@ -89,13 +131,25 @@ export default function NoLoginPage() {
 
           <div className="glass-card p-8 card-shadow">
             <h2 className="text-2xl font-semibold mb-4 flex items-center gap-2">
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-purple-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="h-6 w-6 text-purple-600"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                />
               </svg>
               Completely Free to Use
             </h2>
             <p className="text-muted-foreground mb-4">
-              Our tool is 100% free with no hidden costs or premium features locked behind paywalls. Everyone gets access to the full functionality without any financial commitment.
+              Our tool is 100% free with no hidden costs or premium features locked behind paywalls.
+              Everyone gets access to the full functionality without any financial commitment.
             </p>
             <div className="bg-purple-50 p-4 rounded-lg">
               <h3 className="font-medium mb-2">What's included for free:</h3>
@@ -110,13 +164,26 @@ export default function NoLoginPage() {
 
           <div className="glass-card p-8 card-shadow">
             <h2 className="text-2xl font-semibold mb-4 flex items-center gap-2">
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="h-6 w-6 text-blue-600"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M13 10V3L4 14h7v7l9-11h-7z"
+                />
               </svg>
               Optional Account Benefits (Coming Soon)
             </h2>
             <p className="text-muted-foreground mb-4">
-              While no login is required to use our tool, we're developing optional account features for users who want additional capabilities like saving designs, creating collections, and more.
+              While no login is required to use our tool, we're developing optional account features
+              for users who want additional capabilities like saving designs, creating collections,
+              and more.
             </p>
             <div className="bg-blue-50 p-4 rounded-lg">
               <h3 className="font-medium mb-2">Future account features:</h3>
@@ -132,10 +199,7 @@ export default function NoLoginPage() {
 
         {/* 行动号召 */}
         <div className="text-center">
-          <Link
-            href="/create"
-            className="btn-gradient text-lg px-8 py-4 rounded-lg inline-block"
-          >
+          <Link href="/create" className="btn-gradient text-lg px-8 py-4 rounded-lg inline-block">
             Start Creating Now - No Login Needed
           </Link>
         </div>

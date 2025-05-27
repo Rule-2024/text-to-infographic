@@ -3,14 +3,23 @@ import Script from 'next/script';
 
 export const metadata: Metadata = {
   title: 'AI Text Analysis for Infographics | Text to Infographic Tool',
-  description: 'Learn how our AI text analysis transforms your content into stunning infographics by identifying key points, data, and relationships. Free text to infographic conversion.',
-  keywords: ['ai text to infographic', 'text analysis for infographics', 'text to infographic ai free', 'convert text to visual content', 'infographic text analysis', 'key point extraction'],
+  description:
+    'Learn how our AI text analysis transforms your content into stunning infographics by identifying key points, data, and relationships. Free text to infographic conversion.',
+  keywords: [
+    'ai text to infographic',
+    'text analysis for infographics',
+    'text to infographic ai free',
+    'convert text to visual content',
+    'infographic text analysis',
+    'key point extraction',
+  ],
   alternates: {
     canonical: 'https://texttoinfographic.online/features/text-analysis',
   },
   openGraph: {
     title: 'AI Text Analysis for Infographics | Text to Infographic Tool',
-    description: 'Learn how our AI text analysis transforms your content into stunning infographics by identifying key points, data, and relationships. Free text to infographic conversion.',
+    description:
+      'Learn how our AI text analysis transforms your content into stunning infographics by identifying key points, data, and relationships. Free text to infographic conversion.',
     url: 'https://texttoinfographic.online/features/text-analysis',
     siteName: 'Text to Infographic',
     locale: 'en_US',
@@ -19,15 +28,12 @@ export const metadata: Metadata = {
   twitter: {
     card: 'summary_large_image',
     title: 'AI Text Analysis for Infographics | Text to Infographic Tool',
-    description: 'Learn how our AI text analysis transforms your content into stunning infographics by identifying key points, data, and relationships. Free text to infographic conversion.',
+    description:
+      'Learn how our AI text analysis transforms your content into stunning infographics by identifying key points, data, and relationships. Free text to infographic conversion.',
   },
 };
 
-export default function TextAnalysisLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export default function TextAnalysisLayout({ children }: { children: React.ReactNode }) {
   return (
     <>
       <Script
@@ -38,12 +44,13 @@ export default function TextAnalysisLayout({
             '@context': 'https://schema.org',
             '@type': 'WebPage',
             name: 'AI Text Analysis for Infographics',
-            description: 'Learn how our AI text analysis transforms your content into stunning infographics by identifying key points, data, and relationships. Free text to infographic conversion.',
+            description:
+              'Learn how our AI text analysis transforms your content into stunning infographics by identifying key points, data, and relationships. Free text to infographic conversion.',
             url: 'https://texttoinfographic.online/features/text-analysis',
             isPartOf: {
               '@type': 'WebSite',
               name: 'Text to Infographic',
-              url: 'https://texttoinfographic.online'
+              url: 'https://texttoinfographic.online',
             },
             mainEntity: {
               '@type': 'SoftwareApplication',
@@ -52,16 +59,16 @@ export default function TextAnalysisLayout({
               offers: {
                 '@type': 'Offer',
                 price: '0',
-                priceCurrency: 'USD'
+                priceCurrency: 'USD',
               },
               featureList: [
                 'Key point extraction',
                 'Data visualization',
                 'Multiple processing modes',
-                'Automatic content organization'
-              ]
-            }
-          })
+                'Automatic content organization',
+              ],
+            },
+          }),
         }}
       />
       {children}

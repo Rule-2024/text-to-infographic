@@ -1,4 +1,4 @@
-import { TextInputForm, GenerationStatus } from "@/lib/types/infographic";
+import { TextInputForm, GenerationStatus } from '@/lib/types/infographic';
 
 // Use mock service in MVP stage to avoid actual API calls
 export async function generateInfographic(input: TextInputForm): Promise<string> {
@@ -37,12 +37,17 @@ export async function checkGenerationStatus(id: string): Promise<GenerationStatu
   const result: GenerationStatus = {
     status,
     progress: Math.min(100, Math.round(progress)),
-    ...(status === 'completed' ? {
-      result: 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iODAwIiBoZWlnaHQ9IjYwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iODAwIiBoZWlnaHQ9IjYwMCIgZmlsbD0iI2YwZjBmMCIvPjx0ZXh0IHg9IjQwMCIgeT0iMzAwIiBmb250LWZhbWlseT0iQXJpYWwiIGZvbnQtc2l6ZT0iMjQiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZpbGw9IiMzMzMiPk1vY2sgSW5mb2dyYXBoaWM6IENvbXBsZXRlZDwvdGV4dD48L3N2Zz4='
-    } : {}),
-    ...(status === 'failed' ? {
-      error: 'Mock error message for testing'
-    } : {})
+    ...(status === 'completed'
+      ? {
+          result:
+            'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iODAwIiBoZWlnaHQ9IjYwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iODAwIiBoZWlnaHQ9IjYwMCIgZmlsbD0iI2YwZjBmMCIvPjx0ZXh0IHg9IjQwMCIgeT0iMzAwIiBmb250LWZhbWlseT0iQXJpYWwiIGZvbnQtc2l6ZT0iMjQiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZpbGw9IiMzMzMiPk1vY2sgSW5mb2dyYXBoaWM6IENvbXBsZXRlZDwvdGV4dD48L3N2Zz4=',
+        }
+      : {}),
+    ...(status === 'failed'
+      ? {
+          error: 'Mock error message for testing',
+        }
+      : {}),
   };
 
   return result;

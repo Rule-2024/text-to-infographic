@@ -10,9 +10,10 @@
  * @returns 完整的提示词
  */
 export function getLandscape16x9Prompt(content: string, mode: 'full' | 'summary'): string {
-  const processingMode = mode === 'full'
-    ? '全文处理：提取文本70-80%的精华内容，保留原文逻辑结构和详细论述'
-    : '总结处理：仅提取文本20-30%的核心精华，聚焦关键点和重要数据';
+  const processingMode =
+    mode === 'full'
+      ? '全文处理：提取文本70-80%的精华内容，保留原文逻辑结构和详细论述'
+      : '总结处理：仅提取文本20-30%的核心精华，聚焦关键点和重要数据';
 
   return `
 # 横版16:9信息图HTML代码生成提示词
