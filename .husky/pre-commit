@@ -1,0 +1,8 @@
+#!/usr/bin/env sh
+. "$(dirname -- "$0")/_/husky.sh"
+
+# 运行Prettier格式化
+npm run format
+
+# 添加格式化后的文件到暂存区
+git add . 

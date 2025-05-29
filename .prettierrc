@@ -8,7 +8,7 @@
   "arrowParens": "avoid",
   "endOfLine": "lf",
   "jsxSingleQuote": false,
-  "jsxBracketSameLine": false,
+  "bracketSameLine": false,
   "overrides": [
     {
       "files": "*.{js,jsx,ts,tsx}",
